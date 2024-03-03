@@ -1,0 +1,24 @@
+.pd-trow{
+    display: flex;
+}
+
+.order-list{
+    height: 0;
+    overflow: hidden;
+    transition: all ease-in-out 0.3s;
+}
+
+.id{
+    width: 20%;
+}
+.name{
+    width: 40%;
+}
+.price{
+    width: 30%;
+    text-align: center;
+}
+.quantity{
+    width: 10%;
+    text-align: center;
+}

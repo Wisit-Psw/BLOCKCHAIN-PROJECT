@@ -1,0 +1,66 @@
+.menu-container{
+    width: 75dvw;
+    margin: 1rem auto;
+    padding: 1rem ;
+    background-color: var(--white);
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+
+    border-radius: 0.5rem;
+    box-shadow: 1px 3px 5px var(--light-gray);
+}
+
+.menu-wrap{
+    text-align: center;
+    color: var(--light-gray);
+}
+
+.menu-focus{
+    text-align: center;
+    color: var(--text-team);
+}
+
+.menu-wrap:hover{
+    scale: 1.1;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: fit-content;
+}
+
+.menu-icon{
+    font-size: 1.5rem;
+}
+
+.menu-label{
+    font-size: 1rem;
+}
+
+@media screen and (max-width:800px) {
+    .menu-container{
+        width: 90dvw;
+    }
+    .menu-icon{
+        font-size: 1.35rem;
+    }
+    
+    .menu-label{
+        font-size: 0.9rem;
+    }
+}
+
+
+@media screen and (max-width:500px) {
+    .menu-container{
+        width: 90dvw;
+    }
+    .menu-icon{
+        font-size: 1.2rem;
+    }
+    
+    .menu-label{
+        font-size: 0.8rem;
+    }
+}
