@@ -1,0 +1,37 @@
+.product-container {
+    display: block;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    border-radius:0.5rem ;
+    transition: all 0.2s;
+    background-color: var(--white);
+    box-shadow: 1px 3px 5px var(--light-gray);
+}
+
+.product-container:hover {
+    scale: 1.05;
+    cursor: pointer;
+}
+
+
+.product-image-wrap {
+    height: 7rem;
+    min-width: 10rem;
+}
+
+.product-image {
+    height: 100%;
+}
+
+.product-name{
+    font-size: 1.2rem;
+    color: var(--text-team);
+    width: 100%;
+}
+
+.product-price{
+    width: 100%;
+    text-align: right;
+    font-size: 1.2rem;
+    color: var(--text-team);
+}

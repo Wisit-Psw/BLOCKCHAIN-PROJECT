@@ -1,0 +1,7 @@
+.page-header{
+    height: fit-content;
+}
+.page-body{
+    height: 80dvh;
+    overflow-y: auto;
+}

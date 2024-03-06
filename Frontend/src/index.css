@@ -5,7 +5,7 @@
   --white: #ffffff;
   --light: #f4f6f9;
   --white-smoke: rgb(238, 238, 245);
-  --light-gray: #ababab;
+  --light-gray: #7c7c7c;
   --light-gray-70: #ababab70;
   --light-gray-20: #e9ecef;
   --shadows: #b4b4b4b3;
@@ -29,6 +29,7 @@
 
   --text-team:#36438D;
   --team-bg:#F1F3FF;
+  --team-text:#b7bdd1;
   --team-text-content:#8A92A6;
 
   /* --team-bg: #161d31;
@@ -737,7 +738,7 @@ a {
   width: fit-content;
   margin-right: 0.5rem;
   padding: 0.1rem 0.25rem;
-  border: 2px solid #e3e6f0;
+  border: 2px solid #b7bdd1;
   border-radius: 0.3rem;
   display: flex;
   align-items: center;
@@ -759,7 +760,7 @@ a {
 }
 
 .search-input {
-  width: 10rem;
+  width: 100%;
   outline: none;
   border: none;
 }
