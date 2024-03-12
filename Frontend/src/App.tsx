@@ -1,33 +1,61 @@
 import './App.css';
-import { useEffect } from 'react';
-import { UserCliend } from './user-data/UserData';
-import { environment } from './environment/environment';
+import { useState, useEffect } from 'react';
+import { userCliend } from './user-data/UserData';
 import CustomerApp from './components/customer/CustomerApp';
 import SupplierApp from './components/supplier/SupplierApp';
 import { Routes, Route } from 'react-router-dom';
+import LoginPage from './components/commons/login/Login';
+import SupRegister from './components/supplier/register/Register';
+import CusRegister from './components/customer/register/Register';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { environments } from './environment/environment';
 
 function App() {
-  const userData = new UserCliend();
-  const environments = new environment();
-
+  const [userCliendData, setUserCliendData] = useState(userCliend.userData);
+  const navigate = useNavigate()
   useEffect(() => {
-    console.log(environments.paths.getProduct)
-    if (!userData.isSessionActive()) {
-      return
+    // userCliend.isSessionActive()
+    // setUserCliendData(userCliend.userData)
+  }, [])
+
+  const onLoginClick = async (email: string, password: string) => {
+
+    try {
+      const response = await axios.post(environments.paths.login, {
+        email: email,
+        password: password
+      }, { withCredentials: true });
+
+      const userData = response.data;
+      setUserCliendData(userData);
+      navigate('/');
+
+    } catch (error) {
+      console.error('Login error:', (error as Error).message || 'An error occurred');
     }
-  })
+  };
 
   return (
     <>
-      {userData.isCustomer() && (
+      {userCliendData?.isCustomer && !userCliendData?.isSupplier && (
         <Routes>
-          <Route path="/customer/*" element={<CustomerApp />} />
+          <Route path="/*" element={<CustomerApp />} />
         </Routes>
       )}
 
-      {userData.isSupplier() && (
+      {userCliendData?.isSupplier && !userCliendData?.isCustomer && (
         <Routes>
-          <Route path="/supplier/*" element={<SupplierApp />} />
+          <Route path="/*" element={<SupplierApp />} />
+        </Routes>
+      )}
+
+      {!userCliendData?.isSupplier && !userCliendData?.isCustomer && (
+        <Routes>
+          <Route path="*" element={<LoginPage onLoginClick={onLoginClick} />} />
+          <Route path="/customer/register" element={<CusRegister />} />
+          <Route path="/supplier/register" element={<SupRegister />} />
+
         </Routes>
       )}
 

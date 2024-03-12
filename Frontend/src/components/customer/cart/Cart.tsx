@@ -50,7 +50,7 @@ function Cart() {
             <div className="table">
                 <div className="thead">
                     <div className="trow">
-                        <div className="th order">Order</div>
+                        <div className="th product">Product</div>
                         <div className="th unit-price">Unit Price</div>
                         <div className="th quantity">Quantity</div>
                         <div className="th total-price">Total Price</div>
@@ -59,7 +59,7 @@ function Cart() {
                 </div>
                 <div className="tbody">
                     {cartList.map((cart: cartData, index: number) => (
-                        <ProductRow key={index} index={index} cart={cart} />
+                        <ProductRow key={index} indexProps={index} cartProps={cart} />
                     ))}
                 </div>
             </div>

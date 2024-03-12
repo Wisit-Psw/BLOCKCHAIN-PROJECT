@@ -3,6 +3,7 @@ declare interface shopData{
 }
 
 declare interface productData{
+    id:number;
     image:string;
     name:string;
     price:number;

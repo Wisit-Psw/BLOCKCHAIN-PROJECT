@@ -41,3 +41,9 @@
     padding: 0.5rem 2rem;
     color: var(--team-text-content);
 }
+
+.shop-infomations{
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--text-team);
+}

@@ -4,8 +4,8 @@ function Setting() {
     const [isEditState, setEditState] = useState(false);
     return (
         <div className='setting-page-container'>
-            <div className="page-header">
-                User Infomations
+            <div className="page-header shop-infomations">
+                Shop Infomations
             </div>
             <div className="page-content">
                 <div className="info-container">
@@ -14,11 +14,11 @@ function Setting() {
                             <>
                                 <div className="feild-wrap">
                                     <div className="feild-name">Email</div>
-                                    <div className="feild-data">Wisit@gmail.com</div>
+                                    <div className="feild-data">shop1@gmail.com</div>
                                 </div>
                                 <div className="feild-wrap">
-                                    <div className="feild-name">Name</div>
-                                    <div className="feild-data">Wisit Poonsawat</div>
+                                    <div className="feild-name">Shop Name</div>
+                                    <div className="feild-data">shop1</div>
                                 </div>
                                 <div className="feild-wrap">
                                     <div className="feild-name">Phone</div>

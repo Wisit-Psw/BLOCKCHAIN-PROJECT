@@ -1,0 +1,51 @@
+.quantityButtonBox {
+  height: fit-content;
+  display: flex;
+  max-width: 80px;
+}
+
+.quantityButtonBox {
+  border: 1px solid var(--light-gray);
+}
+
+.minus-btn {
+  width: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-right: 1px solid var(--light-gray);
+  cursor: pointer;
+  color: var(--light-gray);
+}
+
+.quan-btn-value {
+  width: 50%;
+  border: none;
+  text-align: center;
+  color: var(--light-gray);
+}
+
+.quan-btn-value::-webkit-inner-spin-button{
+  display: none;
+}
+
+.add-btn {
+  width: 25%;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  color: var(--light-gray);
+  justify-content: space-around;
+  border-left: 1px solid var(--light-gray);
+}
+
+.delete-btn {
+  color: red;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: all 0.3s;
+}
+
+.delete-btn:hover {
+  font-size: 1.1rem;
+}

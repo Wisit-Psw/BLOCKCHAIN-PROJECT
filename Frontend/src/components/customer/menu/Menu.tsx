@@ -6,7 +6,7 @@ import { faHouse, faTruck, faHistory, faWallet, faGear, faCartShopping, } from "
 function Menu() {
     return (
         <div className="menu-container">
-            <Link to="/customer" >
+            <Link to="/" >
                 <div className="menu-wrap">
                     <div className="menu-icon">
                         <FontAwesomeIcon icon={faHouse} />
@@ -14,7 +14,7 @@ function Menu() {
                     <div className="menu-label">Home</div>
                 </div>
             </Link>
-            <Link to="/customer/delivery" >
+            <Link to="/delivery" >
                 <div className="menu-wrap">
                     <div className="menu-icon">
                         <FontAwesomeIcon icon={faTruck} />
@@ -22,7 +22,7 @@ function Menu() {
                     <div className="menu-label">Delivery</div>
                 </div>
             </Link>
-            <Link to="/customer/history" >
+            <Link to="/history" >
                 <div className="menu-wrap">
                     <div className="menu-icon">
                         <FontAwesomeIcon icon={faHistory} />
@@ -30,7 +30,7 @@ function Menu() {
                     <div className="menu-label">History</div>
                 </div>
             </Link>
-            <Link to="/customer/wallet" >
+            <Link to="/wallet" >
                 <div className="menu-wrap">
                     <div className="menu-icon">
                         <FontAwesomeIcon icon={faWallet} />
@@ -38,7 +38,7 @@ function Menu() {
                     <div className="menu-label">Wallet</div>
                 </div>
             </Link>
-            <Link to="/customer/settings" >
+            <Link to="/settings" >
                 <div className="menu-wrap">
                     <div className="menu-icon">
                         <FontAwesomeIcon icon={faGear} />
@@ -46,7 +46,7 @@ function Menu() {
                     <div className="menu-label">Setting</div>
                 </div>
             </Link>
-            <Link to="/customer/cart" >
+            <Link to="/cart" >
                 <div className="menu-wrap">
                     <div className="menu-icon">
                         <FontAwesomeIcon icon={faCartShopping} />

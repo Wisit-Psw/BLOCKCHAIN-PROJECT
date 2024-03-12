@@ -1,10 +1,8 @@
 // import axios from 'axios';
-import { environment } from '../environment/environment';
+// import { environments } from '../environment/environment';
 
-export class UserCliend {
+class UserCliend {
     userData: UserCliendDataInterface | null = null;
-    environments = new environment();
-
     constructor() {
         this.isSessionActive()
     }
@@ -13,14 +11,14 @@ export class UserCliend {
         try {
             // const user: UserCliendDataInterface = await axios.get(this.environments.paths.checkSession, { withCredentials: true });
             const user: UserCliendDataInterface = {} as UserCliendDataInterface;
-            if (user) {
+            if (!user) return false
 
-                //dev
-                user.isSupplier = true;
+            //dev
+            // user.isSupplier = true;
+            // user.isCustomer = true;
 
-                this.userData = user;
-                return true
-            }
+            this.userData = user;
+            return true
         } catch (err) {
             console.error(err)
         }
@@ -41,4 +39,10 @@ export class UserCliend {
         return this.userData?.isCustomer || false;
     }
 
+    setUserData(userData: UserCliendDataInterface) {
+        this.userData = userData
+    }
+
 }
+
+export const userCliend = new UserCliend();

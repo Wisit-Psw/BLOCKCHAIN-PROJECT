@@ -77,7 +77,7 @@
 
 .modal-shop-name{
     font-size: 1.2rem;
-    color: var(--text-team);
+    font-weight: bold;
     color: var(--text-team);
 }
 
@@ -86,4 +86,10 @@
 }
 .card-body{
     margin: 0 auto;
+}
+.home-card-body{
+    width: 100% !important;
+}
+.home-input-container{
+    padding: 0 !important;
 }

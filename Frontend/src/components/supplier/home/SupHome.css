@@ -1,0 +1,19 @@
+.sup-home-page-container{
+    width: 75dvw;
+    margin: 0 auto;
+    /* display: flex; */
+    border-radius: 0.5rem;
+}
+
+
+.sup-product-list{
+    width: 100%;
+    overflow-y: auto;
+    max-height: 70dvh;
+    justify-content: space-around;
+}
+
+.sup-product-header{
+    text-align: center;
+    align-items: center;
+}

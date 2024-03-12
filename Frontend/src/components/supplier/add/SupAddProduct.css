@@ -1,0 +1,117 @@
+.add-product-page-container {
+  width: 70dvw;
+  height: 65dvh;
+  margin: 0 auto;
+  border-radius: 0.5rem;
+  background-color: var(--white);
+  box-shadow: 1px 3px 5px var(--light-gray);
+  color: var(--dark);
+  padding: 3rem 2rem;
+}
+
+.add-product-data {
+  width: 100%;
+  height: 95%;
+  overflow-y: auto;
+  display: flex;
+  justify-content: space-around;
+}
+
+.add-product-img-wrap {
+  width: 40%;
+  position: relative;
+}
+.add-product-img-wrap > img {
+  width: 100%;
+}
+.close-icon {
+  font-size: 1.25rem;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.close-icon:hover {
+  font-size: 1.4rem;
+}
+
+.add-product-img {
+  width: 100%;
+}
+
+.product-img-input {
+  height: fit-content;
+  display: none;
+}
+
+.insert-img-btn {
+  width: 100%;
+  display: flex;
+  cursor: pointer;
+  font-size: 4rem;
+  aspect-ratio: 16/9;
+  align-items: center;
+  transition: all 0.2s;
+  border-radius: 0.5rem;
+  color: var(--text-team);
+  justify-content: space-around;
+  border: 5px solid var(--text-team);
+}
+
+.insert-img-btn:hover {
+    font-size: 4.5rem;
+    background-color: var(--light-gray-20);
+  }
+.add-product-info {
+  width: 50%;
+}
+
+.add-product-detail {
+  width: 100%;
+  text-wrap: wrap;
+  overflow-wrap: break-word;
+}
+
+.add-product-info-wrap {
+  width: 100%;
+  display: flex;
+  height: fit-content;
+  padding: 0.5rem 0;
+}
+
+.add-product-info-label {
+  width: 25%;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.add-product-input-wrap {
+  width: 70%;
+}
+
+.add-product-input-wrap > textarea {
+  width: 100% !important;
+  height: 30dvh !important;
+  font-size: 1.1rem;
+  color: var(--dark);
+  resize: none;
+  border-radius: 0.3rem;
+  padding: 0.5rem;
+}
+.add-product-input-wrap > input {
+  font-size: 1.1rem;
+  color: var(--dark);
+}
+.quantity-btn {
+  margin-top: 1rem;
+  width: fit-content;
+  min-width: 100px;
+}
+
+.add-product-btn-wrap {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+}

@@ -1,12 +1,12 @@
 import "./Menu.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faTruck, faHistory, faWallet, faGear, faCartShopping, } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faTruck, faGear, faClipboardList, faAdd , faCreditCard} from "@fortawesome/free-solid-svg-icons";
 
 function Menu() {
     return (
         <div className="menu-container">
-            <Link to="/supplier" >
+            <Link to="/" >
                 <div className="menu-wrap">
                     <div className="menu-icon">
                         <FontAwesomeIcon icon={faHouse} />
@@ -14,7 +14,7 @@ function Menu() {
                     <div className="menu-label">Home</div>
                 </div>
             </Link>
-            <Link to="/supplier/delivery" >
+            <Link to="/delivery" >
                 <div className="menu-wrap">
                     <div className="menu-icon">
                         <FontAwesomeIcon icon={faTruck} />
@@ -22,23 +22,23 @@ function Menu() {
                     <div className="menu-label">Delivery</div>
                 </div>
             </Link>
-            <Link to="/supplier/history" >
+            <Link to="/add" >
                 <div className="menu-wrap">
                     <div className="menu-icon">
-                        <FontAwesomeIcon icon={faHistory} />
+                        <FontAwesomeIcon icon={faAdd} />
                     </div>
-                    <div className="menu-label">History</div>
+                    <div className="menu-label">Add</div>
                 </div>
             </Link>
-            <Link to="/supplier/wallet" >
+            <Link to="/credit" >
                 <div className="menu-wrap">
                     <div className="menu-icon">
-                        <FontAwesomeIcon icon={faWallet} />
+                        <FontAwesomeIcon icon={faCreditCard} />
                     </div>
-                    <div className="menu-label">Wallet</div>
+                    <div className="menu-label">Credit</div>
                 </div>
             </Link>
-            <Link to="/supplier/settings" >
+            <Link to="/settings" >
                 <div className="menu-wrap">
                     <div className="menu-icon">
                         <FontAwesomeIcon icon={faGear} />
@@ -46,12 +46,12 @@ function Menu() {
                     <div className="menu-label">Setting</div>
                 </div>
             </Link>
-            <Link to="/supplier/cart" >
+            <Link to="/cart" >
                 <div className="menu-wrap">
                     <div className="menu-icon">
-                        <FontAwesomeIcon icon={faCartShopping} />
+                        <FontAwesomeIcon icon={faClipboardList} />
                     </div>
-                    <div className="menu-label">Cart</div>
+                    <div className="menu-label">Order</div>
                 </div>
             </Link>
         </div>
