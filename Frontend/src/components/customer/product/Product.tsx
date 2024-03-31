@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import QuantityButton from '../../commons/quantity-button/QuantityButton';
 function Product() {
     const { productId } = useParams();
-    const [productData, setProductData] = useState({} as productData);
+    const [productData, setProductData] = useState({} as ProductData);
     const [quantity, setQuantity] = useState(1);
 
     const change = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -12,7 +12,7 @@ function Product() {
     }
 
     const add = () => {
-        if (quantity + 1 <= productData.quantity ) {
+        if (quantity + 1 <= productData.quantity) {
             setQuantity(quantity + 1);
         }
     }
@@ -43,25 +43,27 @@ function Product() {
                 <div className="product-prod-info">
                     <div className="product-prod-info-wrap">
                         {/* <div className="product-prod-info">{productData.name}</div> */}
-                        <div className="product-prod-name text-team">{productData.name}</div>
+                        <div className="product-prod-name">{productData.name}</div>
                     </div>
                     <div className="product-prod-info-wrap">
-                        <div className="product-prod-info-label">Price : </div>
+                        <div className="product-prod-info-label">ราคา : </div>
                         <div className="product-prod-price">{productData.price}</div>
                     </div>
                     <div className="product-prod-info-wrap">
-                        <div className="product-prod-info-label">Detail : </div>
+                        <div className="product-prod-info-label">รายละเอียด : </div>
                         <div className="product-prod-detail">{productData.detail}</div>
                     </div>
-                    <div className="product-prod-info-wrap">
-                        <div className="quantity-btn">
-                            <QuantityButton quantity={quantity} add={add} minus={minus} change={change} />
-                        </div>
-                    </div>
+
                 </div>
             </div>
             <div className="product-prod-btn-wrap">
-                <div className="btn bg-team-blue text-white">Add to cart</div>
+                <div className="product-prod-info-wrap product-btm-menu">
+                    <div className="product-prod-info-label">จำนวน : </div>
+                    <div className="quantity-btn">
+                        <QuantityButton quantity={quantity} add={add} minus={minus} change={change} />
+                    </div>
+                </div>
+                <div className="btn text-white atc-btn">Add</div>
             </div>
         </div>
     )

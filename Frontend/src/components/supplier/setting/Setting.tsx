@@ -55,13 +55,13 @@ function Setting() {
                 </div>
                 {!isEditState && (
                     <div className="btn-container">
-                        <div className="btn bg-team-blue text-white" onClick={() => { setEditState(!isEditState) }}>Update</div>
+                        <div className="btn team-btn text-white" onClick={() => { setEditState(!isEditState) }}>Update</div>
                     </div>
                 )}
                 {isEditState && (
                     <div className="btn-container">
                         <div className="btn bg-light-gray text-white" onClick={() => { setEditState(!isEditState) }}>Cancel</div>
-                        <div className="btn bg-team-blue text-white" onClick={() => { setEditState(!isEditState) }}>Update</div>
+                        <div className="btn team-btn text-white" onClick={() => { setEditState(!isEditState) }}>Update</div>
                     </div>
                 )}
             </div>

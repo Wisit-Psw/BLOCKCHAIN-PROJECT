@@ -3,11 +3,11 @@ import { useState } from 'react'
 
 interface ProductRowProps {
     index: number,
-    cart: cartData
+    order: OrderData
 }
 
 function ProductRow(props: ProductRowProps) {
-    const { index, cart } = props;
+    const { index, order } = props;
     const [isProductListShow, setProductListShow] = useState(true as boolean);
 
     const showProductList = () => {
@@ -28,14 +28,16 @@ function ProductRow(props: ProductRowProps) {
     return (
         <>
             <div className="trow" onClick={showProductList}>
-                <div className="td order">{cart.shopName}</div>
+                <div className="td order">{order.orderId}</div>
                 {/* <div className="td price">{order.orderData.price}</div> */}
-                {/* <div className="td status">{order.status}</div> */}
+                <div className="td status">{order.status}</div>
             </div>
             <div className="order-list" id={"orderList" + index}>
-                {cart.productList.map((product: orderProductData, id: number) => (
+                {order.productList.map((product: orderProductData, id: number) => (
                     <div className="pd-trow" key={id}>
-                        <div className="td id">{product.id}</div>
+                        <div className="td pd-trow-image">
+                            <img className='pd-row-image' src={product.image} alt="" />
+                            </div>
                         <div className="td name">{product.name}</div>
                         <div className="td price">{product.price}</div>
                         <div className="td quantity">{product.quantity}</div>

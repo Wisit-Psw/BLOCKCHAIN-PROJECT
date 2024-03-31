@@ -2,6 +2,9 @@
     height: fit-content;
 }
 .page-body{
+    width: 93dvw !important;
     height: 80dvh;
-    overflow-y: auto;
+    max-width:1200px;
+    margin: 0 auto;
+    overflow-y: scroll;
 }

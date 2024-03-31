@@ -2,7 +2,7 @@
     width: 75dvw;
     margin: 1rem auto;
     padding: 1rem ;
-    background-color: var(--white);
+    background-color: var(--team-ele-bg);
 
     display: flex;
     flex-wrap: wrap;
@@ -10,17 +10,17 @@
     justify-content: space-around;
 
     border-radius: 0.5rem;
-    box-shadow: 1px 3px 5px var(--light-gray);
+    /* box-shadow: 1px 3px 5px var(--light-gray); */
 }
 
 .menu-wrap{
     text-align: center;
-    color: var(--light-gray);
+    color: var(--team-text);
 }
 
 .menu-focus{
     text-align: center;
-    color: var(--text-team);
+    color: var(--team-text);
 }
 
 .menu-wrap:hover{
@@ -31,7 +31,7 @@
 }
 
 .menu-icon{
-    font-size: 1.5rem;
+    font-size: 1.25rem;
 }
 
 .menu-label{
@@ -41,26 +41,5 @@
 @media screen and (max-width:800px) {
     .menu-container{
         width: 90dvw;
-    }
-    .menu-icon{
-        font-size: 1.35rem;
-    }
-    
-    .menu-label{
-        font-size: 0.9rem;
-    }
-}
-
-
-@media screen and (max-width:500px) {
-    .menu-container{
-        width: 90dvw;
-    }
-    .menu-icon{
-        font-size: 1.2rem;
-    }
-    
-    .menu-label{
-        font-size: 0.8rem;
     }
 }

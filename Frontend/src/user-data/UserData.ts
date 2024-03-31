@@ -1,5 +1,5 @@
-// import axios from 'axios';
-// import { environments } from '../environment/environment';
+import axios, { AxiosResponse } from 'axios';
+import { environments } from '../environment/environment';
 
 class UserCliend {
     userData: UserCliendDataInterface | null = null;
@@ -9,15 +9,9 @@ class UserCliend {
 
     async isSessionActive() {
         try {
-            // const user: UserCliendDataInterface = await axios.get(this.environments.paths.checkSession, { withCredentials: true });
-            const user: UserCliendDataInterface = {} as UserCliendDataInterface;
+            const user:AxiosResponse<UserCliendDataInterface, UserCliendDataInterface>  = await axios.get(environments.paths.checkSession, { withCredentials: true });
             if (!user) return false
-
-            //dev
-            // user.isSupplier = true;
-            // user.isCustomer = true;
-
-            this.userData = user;
+            this.userData = user.data;
             return true
         } catch (err) {
             console.error(err)

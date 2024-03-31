@@ -3,10 +3,19 @@ class environment {
 
     paths = {
         cusRegister:this.baseUrl+'/customer/register',
+        supRegister:this.baseUrl+'/supplier/register',
+
         login:this.baseUrl+'/auth/login',
-        checkSession:this.baseUrl+'/auth/check-session',
-        
-        getProduct:this.baseUrl+'/product',
+        checkSession:this.baseUrl+'/auth/get-session',
+
+        getProduct:this.baseUrl + '/product',
+        addProduct:this.baseUrl + '/product/add',
+        updateProduct:this.baseUrl + '/product/update',
+        deleteProduct:this.baseUrl + '/product/delete',
+
+        getShopList:this.baseUrl + '/customer/get-shop'
+
+
     }
 }
 

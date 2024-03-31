@@ -14,6 +14,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      productImage: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       productDescription: {
         type: Sequelize.STRING,
         allowNull: false
@@ -25,6 +29,16 @@ module.exports = {
       productQuantity: {
         type: Sequelize.INTEGER,
         allowNull: false
+      },
+      supEmail: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        references: {
+          model: 'Supplier',
+          key: 'email' 
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       }
     });
   },

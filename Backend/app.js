@@ -14,7 +14,10 @@ class App {
     this.app = express();
 
     this.app.use(cors({
-      origin: ['/^http:\/\/localhost($|:\d+$)/', 'http://localhost:5173'],
+      origin: [
+      /^http:\/\/localhost($|:\d+$)/,
+      /^http:\/\/192\.168\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)($|:\d+$)/,
+    ],
       methods: ['GET', 'POST'],
       allowedHeaders: ['Content-Type', 'Authorization'],
       credentials: true
@@ -56,7 +59,10 @@ class App {
   setupRoutes() {
     this.app.use('/auth', require('./src/controller/Auth.controller'));
     this.app.use('/customer', require('./src/controller/Customer.controller'));
-    // this.app.use('/product', require('./src/controller/Product.controller'));
+    this.app.use('/supplier', require('./src/controller/Suppiler.controller'));
+    this.app.use('/product', require('./src/controller/Product.controller'));
+    this.app.use('/cart-product', require('./src/controller/CartPorduct.controller'));
+
   }
 
   start() {

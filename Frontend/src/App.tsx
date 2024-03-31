@@ -38,26 +38,26 @@ function App() {
 
   return (
     <>
-      {userCliendData?.isCustomer && !userCliendData?.isSupplier && (
-        <Routes>
+      {/* {userCliendData?.isCustomer && !userCliendData?.isSupplier && ( */}
+        {/* <Routes>
           <Route path="/*" element={<CustomerApp />} />
-        </Routes>
-      )}
+        </Routes> */}
+      {/* )} */}
 
-      {userCliendData?.isSupplier && !userCliendData?.isCustomer && (
+      {/* {userCliendData?.isSupplier && !userCliendData?.isCustomer && ( */}
         <Routes>
           <Route path="/*" element={<SupplierApp />} />
         </Routes>
-      )}
+      {/* )} */}
 
-      {!userCliendData?.isSupplier && !userCliendData?.isCustomer && (
+      {/* {!userCliendData?.isSupplier && !userCliendData?.isCustomer && (
         <Routes>
           <Route path="*" element={<LoginPage onLoginClick={onLoginClick} />} />
           <Route path="/customer/register" element={<CusRegister />} />
           <Route path="/supplier/register" element={<SupRegister />} />
 
         </Routes>
-      )}
+      )} */}
 
     </>
   );

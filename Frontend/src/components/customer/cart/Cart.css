@@ -1,14 +1,15 @@
 .cart-page-container {
-    width: 70dvw;
+    /* width: 70dvw;
     margin: 0 auto;
     border-radius: 0.5rem;
     background-color: var(--white);
     box-shadow: 1px 3px 5px var(--light-gray);
-    padding: 1rem 2rem;
+    padding: 1rem 2rem; */
+    width: 100% !important;
 }
 
 .table {
-    color: var(--team-text-content);
+    color: var(--team-text);
     width: 100%;
     padding: 1rem;
 }
@@ -22,7 +23,7 @@
     width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
-    border-bottom: 1px solid var(--team-text-content);
+    border-bottom: 1px solid var(--team-text);
 }
 
 .tbody {

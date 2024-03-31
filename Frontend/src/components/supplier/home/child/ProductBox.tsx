@@ -1,7 +1,7 @@
 import './ProductBox.css'
 
 interface ProductProps {
-    product: productData;
+    product: ProductData;
 }
 
 function ProductBox({ product } : ProductProps) {

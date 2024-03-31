@@ -1,0 +1,63 @@
+.cart-page-container {
+  width: 75dvw;
+  margin: 1rem auto;
+  border-radius: 0.5rem;
+  background-color: var(--team-ele-bg);
+  color: var(--team-text);
+  padding: 1rem 2rem;
+}
+.table {
+  color: var(--team-text-content);
+  width: 100%;
+  padding: 1rem;
+}
+
+.thead {
+  width: 100%;
+  text-align: center;
+}
+.trow {
+  width: 100%;
+  border-bottom: 1px solid var(--team-text-content);
+}
+
+.tbody {
+  height: 65dvh;
+  overflow-y: auto;
+}
+
+.th,
+.td {
+  padding: 0.2rem;
+}
+.pd-trow-image {
+  overflow: hidden;
+  height: 3rem;
+  aspect-ratio: 1/1;
+  border-radius: 0.2rem;
+  text-align: center;
+}
+
+.pd-row-image {
+  height: 100%;
+  transform: translate(-25%, 0);
+}
+
+.order {
+  width: 40%;
+}
+.unit-price {
+  width: 20%;
+  text-align: center;
+}
+.quantity {
+  width: 20%;
+}
+.total-price {
+  width: 20%;
+  text-align: center;
+}
+.status {
+  width: 20%;
+  text-align: center;
+}

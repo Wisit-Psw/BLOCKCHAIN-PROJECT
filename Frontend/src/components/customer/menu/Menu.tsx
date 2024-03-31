@@ -1,8 +1,8 @@
 import "./Menu.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faTruck, faHistory, faWallet, faGear, faCartShopping, } from "@fortawesome/free-solid-svg-icons";
-
+import { faHouse, faHistory, faWallet, faCartShopping, } from "@fortawesome/free-solid-svg-icons";
+// faTruck
 function Menu() {
     return (
         <div className="menu-container">
@@ -11,15 +11,7 @@ function Menu() {
                     <div className="menu-icon">
                         <FontAwesomeIcon icon={faHouse} />
                     </div>
-                    <div className="menu-label">Home</div>
-                </div>
-            </Link>
-            <Link to="/delivery" >
-                <div className="menu-wrap">
-                    <div className="menu-icon">
-                        <FontAwesomeIcon icon={faTruck} />
-                    </div>
-                    <div className="menu-label">Delivery</div>
+                    <div className="menu-label">หน้าหลัก</div>
                 </div>
             </Link>
             <Link to="/history" >
@@ -27,7 +19,7 @@ function Menu() {
                     <div className="menu-icon">
                         <FontAwesomeIcon icon={faHistory} />
                     </div>
-                    <div className="menu-label">History</div>
+                    <div className="menu-label">ประวัติ</div>
                 </div>
             </Link>
             <Link to="/wallet" >
@@ -35,23 +27,16 @@ function Menu() {
                     <div className="menu-icon">
                         <FontAwesomeIcon icon={faWallet} />
                     </div>
-                    <div className="menu-label">Wallet</div>
+                    <div className="menu-label">กระเป๋า</div>
                 </div>
             </Link>
-            <Link to="/settings" >
-                <div className="menu-wrap">
-                    <div className="menu-icon">
-                        <FontAwesomeIcon icon={faGear} />
-                    </div>
-                    <div className="menu-label">Setting</div>
-                </div>
-            </Link>
+
             <Link to="/cart" >
                 <div className="menu-wrap">
                     <div className="menu-icon">
                         <FontAwesomeIcon icon={faCartShopping} />
                     </div>
-                    <div className="menu-label">Cart</div>
+                    <div className="menu-label">ตะกล้า</div>
                 </div>
             </Link>
         </div>

@@ -13,6 +13,7 @@ const CusRegister = () => {
     const [passwordInputValue, setPasswordInputValue] = useState('');
     const [confirmPasswordInputValue, setConfirmPasswordInputValue] = useState('');
     const navigate = useNavigate();
+    
     const onRegisterClick = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -52,6 +53,7 @@ const CusRegister = () => {
                 <div className="card bg-white" id="loginbox">
                     <div className="card-header">
                         <div className="header-text">Sign up</div>
+                        <label className="header-detail">Customer</label>
                     </div>
                     <form onSubmit={onRegisterClick}>
                         <div className="form-group">

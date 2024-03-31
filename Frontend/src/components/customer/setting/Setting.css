@@ -1,17 +1,19 @@
 .setting-page-container{
-    width: 75dvw;
     margin: 0 auto;
     border-radius: 0.5rem;
-    background-color: var(--white);
-    box-shadow: 1px 3px 5px var(--light-gray);
-    padding: 1rem 2rem;
+    /* background-color: var(--white); */
+    /* box-shadow: 1px 3px 5px var(--light-gray); */
+    padding: 1rem 0;
+    /* width: 100% !important; */
+    color: var(--team-text) ;
+    font-size: 1.4rem;
 }
 
-.info-container{
-    display: flex;
-    padding: 1rem 2rem;
-    width: 80%;
-    margin: 0 auto;
+.setting-page-header{
+    margin: 1rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+    font-weight: 600;
 }
 
 .btn-container{
@@ -23,15 +25,17 @@
 
 .btn{
     margin: 0 1rem !important;
+    font-size: 1.4rem !important;
 }   
 
 .feild-wrap{
     display: flex;
+    border-bottom: 1px solid var(--team-text);
 }
 
 .feild-name{
-    width: 20%;
-    min-width: 120px;
+    width: 10%;
+    min-width: 80px;
     padding: 0.5rem 2rem;
     color: var(--text-team);
 }
@@ -40,4 +44,7 @@
     width: 80%;
     padding: 0.5rem 2rem;
     color: var(--team-text-content);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-wrap: nowrap;
 }

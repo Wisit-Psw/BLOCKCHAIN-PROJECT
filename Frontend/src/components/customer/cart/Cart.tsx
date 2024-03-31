@@ -48,7 +48,7 @@ function Cart() {
     return (
         <div className='cart-page-container'>
             <div className="table">
-                <div className="thead">
+                {/* <div className="thead">
                     <div className="trow">
                         <div className="th product">Product</div>
                         <div className="th unit-price">Unit Price</div>
@@ -56,7 +56,7 @@ function Cart() {
                         <div className="th total-price">Total Price</div>
                         <div className="th action">Action</div>
                     </div>
-                </div>
+                </div> */}
                 <div className="tbody">
                     {cartList.map((cart: cartData, index: number) => (
                         <ProductRow key={index} indexProps={index} cartProps={cart} />

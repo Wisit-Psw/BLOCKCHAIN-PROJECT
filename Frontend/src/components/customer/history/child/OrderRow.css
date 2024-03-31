@@ -6,6 +6,7 @@
     height: 0;
     overflow: hidden;
     transition: all ease-in-out 0.3s;
+    color: var(--team-text);
 }
 
 .id{
@@ -21,4 +22,11 @@
 .quantity{
     width: 10%;
     text-align: center;
+}
+.image{
+    width: 20%;
+}
+
+.image > img{
+    width: 80%;
 }

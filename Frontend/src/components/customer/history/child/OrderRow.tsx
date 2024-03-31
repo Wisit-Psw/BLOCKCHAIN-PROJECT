@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 interface OrderProps {
     index: number,
-    order: historyData
+    order: HistoryData
 }
 
 function OrderRow(props: OrderProps) {
@@ -28,14 +28,18 @@ function OrderRow(props: OrderProps) {
     return (
         <>
             <div className="trow" onClick={showProductList}>
-                <div className="td order">{order.orderData.orderId}</div>
-                <div className="td price">{order.orderData.price}</div>
-                <div className="td status">{order.status}</div>
+                <div className="td image">
+                    <img src={order.orderData.productList[0].image} alt="" />
+                </div>
+                {/* <div className="td price">{order.orderData.price}</div>
+                <div className="td status">{order.status}</div> */}
             </div>
             <div className="order-list" id={"orderList" + index}>
                 {order.orderData.productList.map((product: orderProductData, id: number) => (
                     <div className="pd-trow" key={id}>
-                        <div className="td id">{product.id}</div>
+                        <div className="td image">
+                            <img src={product.image} alt="" />
+                        </div>
                         <div className="td name">{product.name}</div>
                         <div className="td price">{product.price}</div>
                         <div className="td quantity">{product.quantity}</div>

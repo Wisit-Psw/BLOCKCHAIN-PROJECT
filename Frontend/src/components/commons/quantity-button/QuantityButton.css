@@ -2,10 +2,16 @@
   height: fit-content;
   display: flex;
   max-width: 80px;
+  background-color: transparent;
 }
 
 .quantityButtonBox {
   border: 1px solid var(--light-gray);
+}
+
+
+.number{
+  background-color: transparent;
 }
 
 .minus-btn {
@@ -13,16 +19,17 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  border-right: 1px solid var(--light-gray);
   cursor: pointer;
-  color: var(--light-gray);
+  color: var(--text-team);
+  border-right: 1px solid var(--light-gray);
 }
 
 .quan-btn-value {
   width: 50%;
   border: none;
   text-align: center;
-  color: var(--light-gray);
+  color: var(--text-team);
+  transition: all 0.3s;
 }
 
 .quan-btn-value::-webkit-inner-spin-button{
@@ -34,7 +41,7 @@
   display: flex;
   cursor: pointer;
   align-items: center;
-  color: var(--light-gray);
+  color: var(--text-team);
   justify-content: space-around;
   border-left: 1px solid var(--light-gray);
 }

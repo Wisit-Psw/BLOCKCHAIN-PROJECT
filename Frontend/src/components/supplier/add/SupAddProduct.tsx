@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { faCircleXmark, faAdd } from '@fortawesome/free-solid-svg-icons';
 function AddProduct() {
     const [prodImage, setprodImage] = useState('');
-    
+
 
     const handleInsertImage = () => {
         document.getElementById('product-img-input')?.click()
@@ -56,33 +56,34 @@ function AddProduct() {
                 </div>
                 <div className="add-product-info">
                     <div className="add-product-info-wrap">
-                        <div className="add-product-info-label">Name : </div>
+                        <div className="add-product-info-label">ชื่อ : </div>
                         <div className="add-product-input-wrap">
                             <input type="text" name="" id="" />
                         </div>
                     </div>
                     <div className="add-product-info-wrap">
-                        <div className="add-product-info-label">Price : </div>
+                        <div className="add-product-info-label">ราคา : </div>
                         <div className="add-product-input-wrap">
                             <input type="number" name="" id="" />
                         </div>
                     </div>
                     <div className="add-product-info-wrap">
-                        <div className="add-product-info-label">Detail : </div>
-                        <div className="add-product-input-wrap">
-                            <textarea name="" id="" />
-                        </div>
-                    </div>
-                    <div className="add-product-info-wrap">
-                        <div className="add-product-info-label">Quantity : </div>
+                        <div className="add-product-info-label">จำนวน : </div>
                         <div className="add-product-input-wrap">
                             <input type="number" name="" id="" step={1} value={1} />
                         </div>
                     </div>
+                    <div className="add-product-info-wrap">
+                        <div className="add-product-info-label">รายละเอียด : </div>
+                        <div className="add-product-input-wrap">
+                            <textarea name="" id="" />
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <div className="add-product-btn-wrap">
-                <div className="btn bg-team-blue text-white">Add Product</div>
+                <div className="btn team-btn text-white">Add Product</div>
             </div>
         </div>
     )

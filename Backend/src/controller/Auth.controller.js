@@ -1,19 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const mysql = require('mysql');
-let env = (require('dotenv').config()).parsed
+const dbConnection  = require('../module/dbConection')
 
 class Auth {
-    dbConnection = mysql.createConnection({
-        host: env.DB_HOST,
-        user: env.DB_USERNAME,
-        password: env.DB_PASSWORD,
-        database: env.DB_NAME,
-        waitForConnections: true,
-        connectionLimit: 10,
-        queueLimit: 0
-      });
+
     constructor() {
         this.router = router;
         this.setupRoutes();
@@ -35,9 +26,8 @@ class Auth {
     
             const [customerResults, supplierResults] = await Promise.all([
                 new Promise((resolve, reject) => {
-                    this.dbConnection.query('SELECT * FROM customers WHERE email = ?', [email], (error, results) => {
+                    dbConnection.query('SELECT * FROM customers WHERE email = ?', [email], (error, results) => {
                         if (error) {
-                            console.error('Error fetching user from customers:', error);
                             reject(error);
                         } else {
                             resolve(results);
@@ -45,9 +35,8 @@ class Auth {
                     });
                 }),
                 new Promise((resolve, reject) => {
-                    this.dbConnection.query('SELECT * FROM supplier WHERE email = ?', [email], (error, results) => {
+                    dbConnection.query('SELECT * FROM supplier WHERE email = ?', [email], (error, results) => {
                         if (error) {
-                            console.error('Error fetching user from suppliers:', error);
                             reject(error);
                         } else {
                             resolve(results);
@@ -80,10 +69,9 @@ class Auth {
                     address: user.address,
                 }
             };
-    
+            req.session.user = userData;
             return res.status(200).json(userData);
         } catch (error) {
-            console.error('Login error:', error);
             return res.status(500).json({ error: 'Internal server error.' });
         }
     };

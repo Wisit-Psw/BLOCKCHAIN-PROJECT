@@ -1,47 +1,60 @@
-.history-page-container{
-    width: 75dvw;
-    display: flex;
-    margin: 0 auto;
-    border-radius: 0.5rem;
-    background-color: var(--white);
-    box-shadow: 1px 3px 5px var(--light-gray);
+.history-page-container {
+  width: 100% !important;
 }
 
-.table{
-    color: var(--team-text-content);
-    width: 100%;
-    padding: 1rem;
+.history-list{
+  background-color: var(--team-ele-bg);
+  border-radius: 0.3rem;
+  padding: 0.5rem 0;
+  margin: 0.5rem auto;
+  width: 100%;
 }
 
-.thead{
-    width: 100%;
-    text-align: center;
-}
-.trow{
-    width: 100%;
-    border-bottom: 1px solid var(--team-text-content);
-}
-
-.tbody{
-    height: 65dvh;
-    overflow-y: auto;
+.history-list-shop-name{
+    margin: 0 1rem 0.5rem 1rem;
+    color: var(--team-text);
+    font-size: 1.2rem;
+    border-bottom: 1px solid var(--team-text);
+    
 }
 
-.th,.td{
-    padding: 0.2rem;
+.history-list-shop-detail{
+    margin: 0.5rem 1rem 0rem 1rem;
+    color: var(--team-text);
+    font-size: 1.2rem;
+    border-top: 1px solid var(--team-text);
+    text-align: right;
+    text-decoration: underline;
 }
 
-.order{
-    width: 30%;
+.history-list-row {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  width: 100%;
 }
-.price{
-    width: 15%;
-    text-align: center;
+.history-image-wrap {
+  width: 35%;
+  max-width: 8rem;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 1rem;
+  display: flex;
+  flex-wrap: wrap;
 }
-.address{
-    width: 40%;
+.history-image {
+  height: 100%;
+  transform: translate(-25%, 0%);
 }
-.status{
-    width: 15%;
-    text-align: center;
+
+.history-info {
+  width: 65%;
+  height: 100%;
+  margin: 0 auto;
+  color: var(--team-text);
+}
+
+.history-topic {
+  min-width: 100px;
 }

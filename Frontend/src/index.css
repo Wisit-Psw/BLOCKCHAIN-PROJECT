@@ -27,32 +27,46 @@
   --dark-2: #495057;
   --secondary-text: #65676B;
 
-  --text-team:#36438D;
-  --team-bg:#F1F3FF;
-  --team-text:#b7bdd1;
-  --team-text-content:#8A92A6;
+  /* --team-text-topic:#36438D;
+  --team-bg:#f1f3ff;
+  --team-ele-bg: #fff;
+  --team-text: rgb(148, 148, 148);
+  --team-btn:#36438D; */
 
-  /* --team-bg: #161d31;
+  /* --team-text-topic:#fff;
+  --team-bg: #161d31;
   --team-ele-bg: #283046;
-  --team-text: #b4b7bd; */
+  --team-text: #cdd0d8;
+  --team-btn:#36438D; */
 
-  /* --team-bg: #18191A;
+
+  --team-text-topic:#fff;
+  --team-bg: #18191A;
   --team-ele-bg: #343536;
   --team-text: #E4E6EB;
+  --team-btn:#36438D;
 
+  /* --team-text-topic:#ff6f61;
+  --team-bg: #fcf1f1;
+  --team-ele-bg: #fff;
+  --team-text: #ff6f61;
+  --team-btn:#ff6f61; */
+
+  /* --team-text-topic:#36438D;
   --team-bg: rgb(240, 240, 248);
   --team-ele-bg: #fff;
-  --team-text: rgb(102, 102, 102); */
+  --team-text: rgb(150, 150, 150);
+  --team-btn:#36438D; */
 
 }
 
-.bg-team {
-  background-color: var(--team-bg);
-  color: var(--team-text);
+.team-btn {
   transition: all 0.3s;
+  color: var(--team-text);
+  background-color: var(--team-btn);
 }
 
-.bg-team-topic {
+.team-btn-topic {
   background-color: var(--team-topic-text);
 }
 
@@ -60,10 +74,6 @@
   background-color: var(--team-ele-bg);
   color: var(--team-text);
   transition: all 0.3s;
-}
-
-.bg-team-blue {
-  background-color: #36438D;
 }
 
 .bg-non {
@@ -184,6 +194,10 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #6d6d6d;
+}
+
+::-webkit-scrollbar{
+  display: none;
 }
 
 body {
@@ -733,19 +747,22 @@ a {
   border: none;
   cursor: pointer;
 }
+.search-container-wrap{
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
 
-.search-container {
-  width: fit-content;
-  margin-right: 0.5rem;
-  padding: 0.1rem 0.25rem;
-  border: 2px solid #b7bdd1;
-  border-radius: 0.3rem;
+.search-input{
+  font-size: 1.2rem;
   display: flex;
   align-items: center;
 }
 
+
 .search-icon {
-  margin: 0 0.2rem;
+  margin: 0 0.5rem 0 0.5rem;
 }
 
 .delete-icon {

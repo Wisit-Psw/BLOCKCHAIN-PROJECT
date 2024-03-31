@@ -1,19 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const mysql = require('mysql');
-let env = (require('dotenv').config()).parsed
+const dbConnection = require('../module/dbConection')
+const rolesGuard = require('../guard/roles.guards')
+
 
 class PrductController {
-
-  dbConnection = mysql.createConnection({
-    host: env.DB_HOST,
-    user: env.DB_USERNAME,
-    password: env.DB_PASSWORD,
-    database: env.DB_NAME,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-  });
 
   constructor() {
     this.router = router;
@@ -21,13 +12,23 @@ class PrductController {
   }
 
   setupRoutes() {
-    this.router.get('', this.getProduct);
+    this.router.get('/', rolesGuard.isAsuthenticated, this.getProduct);
+    this.router.post('/add', rolesGuard.isSupplier, this.addProduct);
+    this.router.post('/update', rolesGuard.isSupplier, this.updateProduct);
+    this.router.put('/delete', rolesGuard.isSupplier, this.deleteProduct);
   }
 
   getProduct = (req, res) => {
     try {
-      const query = "SELECT * FROM `product`";
-      this.dbConnection.query(query, (err, result) => {
+      const user = req.session.user
+      let query = "SELECT * FROM `product` ";
+      if (user.isSupplier) {
+        query += `WHERE supEmail LIKE '${user.userData.email}'`;
+      } else {
+        query += `WHERE supEmail LIKE '${atob(req.query.supId)}'`;
+      }
+
+      dbConnection.query(query, (err, result) => {
         if (err) {
           res.status(500).send(err);
         }
@@ -37,6 +38,49 @@ class PrductController {
       res.status(500).send(e);
     }
   }
+
+  addProduct = async (req, res) => {
+    const { productName, productDescription, productPrice, productQuantity } = req.body
+    const sql = `INSERT INTO product (productName, productDescription, productPrice, productQuantity, supEmail) VALUES ('${productName}','${productDescription}','${productPrice}','${productQuantity}')`;
+    dbConnection.query(sql, (error, results) => {
+      if (error) {
+        let statusCode = 500;
+        if (error.code === 'ER_DUP_ENTRY') {
+          statusCode = 409;
+        }
+        return res.status(statusCode).json({ error: error.message });
+      } else {
+        return res.status(201).json({ message: 'Data inserted successfully' });
+      }
+    });
+  }
+
+  updateProduct = (req, res) => {
+    const { productId, productName, productDescription, productPrice, productQuantity } = req.body
+    const sql = `UPDATE product SET productName='${productName}',productDescription='${productDescription}',productPrice='${productPrice}',productQuantity='${productQuantity}' WHERE productId = ${productId}`;
+
+    dbConnection.query(sql, (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: error.message });
+      } else {
+        return res.status(200).json({ message: 'Data inserted successfully' });
+      }
+    });
+  }
+
+  deleteProduct = (req, res) => {
+    const productId = req.query.productId
+    const sql = `DELETE FROM product  WHERE productId = ${productId}`;
+
+    dbConnection.query(sql, (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: error.message });
+      } else {
+        return res.status(200).json({ message: 'Data inserted successfully' });
+      }
+    });
+  }
+
 }
 
 module.exports = (new PrductController()).router;

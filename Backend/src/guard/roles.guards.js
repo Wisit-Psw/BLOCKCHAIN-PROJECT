@@ -1,7 +1,16 @@
 class RolesGuard {
+    isAsuthenticated = (req, res, next) => {
+        if (req.session.user?.isCustomer || req.session?.isLogin) {
+            next();
+        } else {
+            const error = new Error('Forbidden');
+            error.status = 403;
+            throw error
+        }
+    }
     
-    customer = (req, res, next) => {
-        if (req.session.isLogin) {
+    isCustomer = (req, res, next) => {
+        if (req.session.user?.isCustomer) {
             next();
         } else {
             const error = new Error('Forbidden');
@@ -10,8 +19,8 @@ class RolesGuard {
         }
     }
 
-    supplier = (req, res, next) => {
-        if (req.session.isAdmin) {
+    isSupplier = (req, res, next) => {
+        if (req.session.user?.isSupplier) {
             next();
         } else {
             const error = new Error('Forbidden');
@@ -20,3 +29,5 @@ class RolesGuard {
         }
     }
 }
+
+module.exports = new RolesGuard();
