@@ -29,7 +29,7 @@ function ProductRow(props: ProductRowProps) {
         <>
             <div className="trow" onClick={showProductList}>
                 <div className="td order">{order.orderId}</div>
-                {/* <div className="td price">{order.orderData.price}</div> */}
+                <div className="td customer">{order.cusEmail}</div>
                 <div className="td status">{order.status}</div>
             </div>
             <div className="order-list" id={"orderList" + index}>

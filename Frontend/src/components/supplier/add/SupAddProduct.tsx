@@ -76,14 +76,14 @@ function AddProduct() {
                     <div className="add-product-info-wrap">
                         <div className="add-product-info-label">รายละเอียด : </div>
                         <div className="add-product-input-wrap">
-                            <textarea name="" id="" />
+                            <textarea name="" id=""/>
                         </div>
                     </div>
 
                 </div>
             </div>
             <div className="add-product-btn-wrap">
-                <div className="btn team-btn text-white">Add Product</div>
+                <div className="btn team-btn text-white ap-btn">Add Product</div>
             </div>
         </div>
     )

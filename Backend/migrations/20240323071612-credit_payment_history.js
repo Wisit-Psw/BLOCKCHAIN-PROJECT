@@ -1,4 +1,5 @@
 'use strict';
+const { Sequelize } = require('sequelize');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -12,7 +13,7 @@ module.exports = {
         autoIncrement: true
       },
       creditId: {
-        type: Sequelize.STRING,
+        type: Sequelize.BIGINT,
         allowNull: false,
         references: {
           model: 'Credit',
@@ -36,7 +37,7 @@ module.exports = {
       date: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP + INTERVAL 7 HOUR')
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       txId: {
         type: Sequelize.STRING,
@@ -44,6 +45,10 @@ module.exports = {
         defaultValue: null
       }
     });
+
+    await queryInterface.sequelize.query(
+      'ALTER TABLE `Credit_Payment_History` MODIFY COLUMN `date` DATETIME NOT NULL DEFAULT DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR)'
+    );
   },
 
   async down(queryInterface, Sequelize) {

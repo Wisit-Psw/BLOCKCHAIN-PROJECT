@@ -2,9 +2,9 @@
 import './Wallet.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
-
 import { useEffect, useState } from 'react'
 // import Walletwallet from './child/Walletwallet';
+
 function Wallet() {
     const [walletList, setWalletList] = useState([] as WalletData[]);
 
@@ -83,9 +83,7 @@ function Wallet() {
                             <div className='wallet-topic'><FontAwesomeIcon icon={faAngleRight} /></div>
                         </div>
                     </div>
-
                 </div>
-
             ))}
         </div>
     )

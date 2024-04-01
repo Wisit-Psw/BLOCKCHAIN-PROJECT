@@ -16,7 +16,7 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'Supplier',
-          key: 'email' 
+          key: 'email'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
@@ -25,8 +25,8 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
         references: {
-          model: 'Customer',
-          key: 'email' 
+          model: 'Customers',
+          key: 'email'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
@@ -34,15 +34,15 @@ module.exports = {
       creditTotal: {
         type: Sequelize.FLOAT,
         allowNull: false,
-        defaultValue:0
+        defaultValue: 0
       },
       creditAmount: {
         type: Sequelize.FLOAT,
         allowNull: false,
-        defaultValue:0
+        defaultValue: 0
       },
-      dateUpdate:{
-        type:Sequelize.DATE,
+      dateUpdate: {
+        type: Sequelize.DATE,
         allowNull: false,
       },
     });

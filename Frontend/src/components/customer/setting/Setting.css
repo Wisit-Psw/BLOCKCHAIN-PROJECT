@@ -30,6 +30,8 @@
 
 .feild-wrap{
     display: flex;
+    align-items: center;
+    font-size: 1.1rem;
     border-bottom: 1px solid var(--team-text);
 }
 
@@ -47,4 +49,10 @@
     text-overflow: ellipsis;
     overflow: hidden;
     text-wrap: nowrap;
+}
+
+
+.setting-update-btn{
+    font-size: 1.1rem !important;
+    background-color: var(--team-btn);
 }

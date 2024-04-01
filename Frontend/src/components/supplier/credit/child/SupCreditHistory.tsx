@@ -27,10 +27,10 @@ function SupCreditHistory(props: SupCreditProps) {
     return (
         <>
             <div className="trow" onClick={showSupCreditList}>
-                <div className="td supplier">{supCredit.from}</div>
-                <div className="td used">{supCredit.used}</div>
-                <div className="td amount">{supCredit.amount}</div>
-                <div className="td total">{supCredit.total}</div>
+                <div className="td supplier">{supCredit.cusEmail}</div>
+                {/* <div className="td used">{supCredit.}</div> */}
+                <div className="td amount">{supCredit.creditAmount}</div>
+                <div className="td total">{supCredit.creditTotal}</div>
             </div>
             <div className="order-list" id={"orderList" + index}>
                 {supCredit.history.map((supCreditHistory: SupCreditHistoryData, id: number) => (

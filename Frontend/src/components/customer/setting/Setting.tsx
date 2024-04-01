@@ -55,13 +55,13 @@ function Setting() {
                 </div>
                 {!isEditState && (
                     <div className="btn-container">
-                        <div className="btn team-btn text-white" onClick={() => { setEditState(!isEditState) }}>อัพเดท</div>
+                        <div className="btn setting-update-btn text-white" onClick={() => { setEditState(!isEditState) }}>อัพเดท</div>
                     </div>
                 )}
                 {isEditState && (
                     <div className="btn-container">
                         <div className="btn bg-light-gray text-white" onClick={() => { setEditState(!isEditState) }}>ยกเลิก</div>
-                        <div className="btn team-btn text-white" onClick={() => { setEditState(!isEditState) }}>อัพเดท</div>
+                        <div className="btn setting-update-btn text-white" onClick={() => { setEditState(!isEditState) }}>อัพเดท</div>
                     </div>
                 )}
             </div>

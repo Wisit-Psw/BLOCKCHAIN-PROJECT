@@ -7,6 +7,7 @@ declare interface orderProductData{
 declare interface OrderData{
     orderId: number;
     cusEmail: string;
+    cusName: string;
     shopName: string;
     totalPrice: number;
     createDate: string;

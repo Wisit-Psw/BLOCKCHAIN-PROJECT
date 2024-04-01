@@ -1,8 +1,8 @@
 'use strict';
+const { Sequelize } = require('sequelize');
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Order', {
       orderId: {
         type: Sequelize.BIGINT,
@@ -11,12 +11,12 @@ module.exports = {
         unique: true,
         autoIncrement: true
       },
-      cusEmail:{
+      cusEmail: {
         type: Sequelize.STRING,
         allowNull: false,
         references: {
           model: 'Customers',
-          key: 'email' 
+          key: 'email'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
@@ -26,53 +26,59 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'Supplier',
-          key: 'email' 
+          key: 'email'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      totalPrice:{
+      totalPrice: {
         type: Sequelize.FLOAT,
         allowNull: false,
       },
-      createDate:{
-        type:Sequelize.DATE,
+      createDate: {
+        type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP + INTERVAL 7 HOUR')
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      createTxId:{
+      createTxId: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      sendDate:{
-        type:Sequelize.DATE,
+      sendDate: {
+        type: Sequelize.DATE,
         allowNull: true,
         defaultValue: null
       },
-      sendTxId:{
+      sendTxId: {
         type: Sequelize.STRING,
-        allowNull: true,
-        defaultValue:null
-      },
-      approvDate:{
-        type:Sequelize.DATE,
         allowNull: true,
         defaultValue: null
       },
-      approvTxId:{
+      approvDate: {
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: null
+      },
+      approvTxId: {
         type: Sequelize.STRING,
         allowNull: true,
-        defaultValue:null
+        defaultValue: null
       },
-      status:{
-        type:"Success"|"Sending"|"Waiting"|"Reject",
+      status: {
+        type: Sequelize.STRING, //"Success"|"Sending"|"Waiting"|"Reject"
         allowNull: false,
-        defaultValue:"Waiting"
+        defaultValue: "Waiting"
       }
     });
+
+    // Add interval to createDate after table creation
+    await queryInterface.sequelize.query(
+      'ALTER TABLE `Order` MODIFY COLUMN `createDate` DATETIME NOT NULL DEFAULT DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR)'
+    );
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Order');
   }
 };
+
