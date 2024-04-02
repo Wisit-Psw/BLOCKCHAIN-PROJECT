@@ -68,19 +68,11 @@ function SupCredit() {
                 </div>
             </div> */}
              {supCreditList.map((credit: SupCreditData, index: number) => (
-                // <OrderRow key={index} index={index} order={order} />
                 <div className='credit-list'>
                     <div className="credit-list-shop-name">
                         {credit.cusName}
                     </div>
                     <div key={index} className='credit-list-info'>
-{/* 
-                        <div className="credit-shop-info">
-                            <div className="credit-image-wrap">
-                                <img className='credit-image' src={credit.shopImage} alt="" />
-                            </div>
-
-                        </div> */}
                         <div className="credit-info">
                             <div className="credit-create-date row">
                                 <div className='credit-topic'>เครดิตทั้งหมด : </div>
