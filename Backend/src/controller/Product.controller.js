@@ -72,8 +72,8 @@ class PrductController {
   }
 
   updateProduct = (req, res) => {
-    const { productId, productName, productDescription, productPrice, productQuantity } = req.body
-    const sql = `UPDATE product SET productName='${productName}',productDescription='${productDescription}',productPrice='${productPrice}',productQuantity='${productQuantity}' WHERE productId = ${productId}`;
+    const { productId, productName,productImage, productDescription, productPrice, productQuantity } = req.body
+    const sql = `UPDATE product SET productName='${productName}',productImage='${productImage}',productDescription='${productDescription}',productPrice='${productPrice}',productQuantity='${productQuantity}' WHERE productId = ${productId}`;
 
     dbConnection.query(sql, (error, results) => {
       if (error) {

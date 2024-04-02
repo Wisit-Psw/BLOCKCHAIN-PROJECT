@@ -14,7 +14,7 @@ function Product() {
 
     const [isEditing, setIsEditing] = useState(false);
     const [productData, setProductData] = useState({} as ProductData);
-    const [productImage, setproductImage] = useState('');
+    const [productImage, setProductImage] = useState('');
     const [productName, setProductName] = useState('');
     const [productPrice, setProductPrice] = useState(0);
     const [productQuantity, setProductQuantity] = useState(1);
@@ -34,7 +34,7 @@ function Product() {
             const response = await axios.get<ProductData>(`${environments.paths.getProductData}/${productId}`, { withCredentials: true });
             if (response.data) {
                 setProductData(response.data);
-                setproductImage(productData.productImage);
+                setProductImage(productData.productImage);
                 setProductName(productData.productName);
                 setProductPrice(productData.productPrice);
                 setProductQuantity(productData.productQuantity);
@@ -48,7 +48,7 @@ function Product() {
     const handleIsEditing = () => {
         setIsEditing(!isEditing);
         if (!isEditing) {
-            setproductImage(productData.productImage);
+            setProductImage(productData.productImage);
             setProductName(productData.productName);
             setProductPrice(productData.productPrice);
             setProductQuantity(productData.productQuantity);
@@ -139,9 +139,9 @@ function Product() {
                 reader.onloadend = () => {
                     const base64String = reader.result;
                     if (base64String) {
-                        setproductImage(String(base64String));
+                        setProductImage(String(base64String));
                     } else {
-                        setproductImage('');
+                        setProductImage('');
                     }
                 };
                 reader.readAsDataURL(file);
@@ -194,7 +194,7 @@ function Product() {
                                         <img src={productImage} alt="" className="product-prod-img" />
                                     </div>
                                     <div className="close-icon" onClick={() => {
-                                        setproductImage('');
+                                        setProductImage('');
                                     }}>
                                         <FontAwesomeIcon icon={faCircleXmark} />
                                     </div>
