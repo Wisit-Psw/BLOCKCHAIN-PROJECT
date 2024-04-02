@@ -4,34 +4,34 @@ import ProductBox from './child/ProductBox'
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import { environments } from '../../../environment/environment';
+// import { userCliend } from '../../../user-data/UserData';
 
 function SupHome() {
 
     const [productList, setProductList] = useState([] as ProductData[]);
 
-    useEffect(() => {
-        const tempProdList: ProductData[] = [];
-        for (let index = 0; index < 100; index++) {
-            const element: ProductData = {
-                id: index,
-                image: 'https://www.mountaingoatsoftware.com/uploads/blog/2016-09-06-what-is-a-product.png',
-                name: 'Product' + index,
-                detail: '',
-                quantity: 0,
-                price: 9999,
-            };
-            tempProdList.push(element);
+    const getProductList = async () => {
+        try {
+            const response = await axios.get<ProductData[]>(`${environments.paths.getProduct}`, { withCredentials: true });
+            if (response.data) {
+                setProductList(response.data);
+            }
+        } catch (error) {
+            console.error(error);
         }
-        setProductList(tempProdList);
+    };
 
-
+    useEffect(() => {
+        getProductList();
     }, []);
 
 
     return (
         <>
             <div className='sup-home-page-container'>
-                <div className="search-container cus-home-search text-light-gray">
+                <div className="search-container cus-home-search">
                     <div className="search-icon">
                         <FontAwesomeIcon icon={faSearch} />
                     </div>
@@ -59,7 +59,7 @@ function SupHome() {
                 </div>
                 <div className="sup-product-list">
                     {productList.map((product, index) => (
-                        <Link to={'/product/' + product.id} key={index}><ProductBox product={product} /></Link>
+                        <Link to={'/product/' + product.productId} key={index}><ProductBox product={product} /></Link>
                     ))}
                 </div>
             </div>

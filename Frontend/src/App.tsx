@@ -12,7 +12,7 @@ import axios from 'axios';
 import { environments } from './environment/environment';
 
 function App() {
-  const [userCliendData, setUserCliendData] = useState(userCliend.userData);
+  // const [userCliendData, setUserCliendData] = useState(userCliend.userData);
   const navigate = useNavigate()
   useEffect(() => {
     // userCliend.isSessionActive()
@@ -26,9 +26,8 @@ function App() {
         email: email,
         password: password
       }, { withCredentials: true });
-
-      const userData = response.data;
-      setUserCliendData(userData);
+      
+      userCliend.setUserData(response.data);
       navigate('/');
 
     } catch (error) {
@@ -38,27 +37,25 @@ function App() {
 
   return (
     <>
-      {/* {userCliendData?.isCustomer && !userCliendData?.isSupplier && ( */}
-        {/* <Routes>
+      {userCliend.userData?.isCustomer && !userCliend.userData?.isSupplier && (
+        <Routes>
           <Route path="/*" element={<CustomerApp />} />
-        </Routes> */}
-      {/* )} */}
+        </Routes>
+      )}
 
-      {/* {userCliendData?.isSupplier && !userCliendData?.isCustomer && ( */}
+      {userCliend.userData?.isSupplier && !userCliend.userData?.isCustomer && (
         <Routes>
           <Route path="/*" element={<SupplierApp />} />
         </Routes>
-      {/* )} */}
+      )}
 
-      {/* {!userCliendData?.isSupplier && !userCliendData?.isCustomer && (
+      {!userCliend.userData?.isSupplier && !userCliend.userData?.isCustomer && (
         <Routes>
           <Route path="*" element={<LoginPage onLoginClick={onLoginClick} />} />
           <Route path="/customer/register" element={<CusRegister />} />
           <Route path="/supplier/register" element={<SupRegister />} />
-
         </Routes>
-      )} */}
-
+      )}
     </>
   );
 }

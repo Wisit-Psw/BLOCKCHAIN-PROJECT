@@ -12,25 +12,25 @@ function Product() {
     }
 
     const add = () => {
-        if (quantity + 1 <= productData.quantity) {
+        if (quantity + 1 <= productData.productQuantity) {
             setQuantity(quantity + 1);
         }
     }
 
     const minus = () => {
-        if (productData.quantity > 1) {
+        if (productData.productQuantity > 1) {
             setQuantity(quantity - 1);
         }
     }
 
     useEffect(() => {
         setProductData({
-            id: Number(productId),
-            image: 'https://www.mountaingoatsoftware.com/uploads/blog/2016-09-06-what-is-a-product.png',
-            name: 'Product' + productId,
-            detail: 'apgapagapgapgpapagpagapagapapgapgapgpagpagapgapgapgapgapgagpagpagpagapgapgapgagpapgapagapgapgpapagpagapagapapgapgapgpagpagapgapgapgapgapgagpagpagpagapgapgapgagp',
-            quantity: 9,
-            price: 9999,
+            productId: Number(productId),
+            productImage: 'https://www.mountaingoatsoftware.com/uploads/blog/2016-09-06-what-is-a-product.png',
+            productName: 'Product' + productId,
+            productDescription: 'apgapagapgapgpapagpagapagapapgapgapgpagpagapgapgapgapgapgagpagpagpagapgapgapgagpapgapagapgapgpapagpagapagapapgapgapgpagpagapgapgapgapgapgagpagpagpagapgapgapgagp',
+            productQuantity: 9,
+            productPrice: 9999,
         })
     }, [productId])
 
@@ -38,20 +38,20 @@ function Product() {
         <div className='product-prod-page-container'>
             <div className="product-prod-data">
                 <div className="product-prod-img-wrap">
-                    <img src={productData.image} alt="" className="product-prod-img" />
+                    <img src={productData.productImage} alt="" className="product-prod-img" />
                 </div>
                 <div className="product-prod-info">
                     <div className="product-prod-info-wrap">
                         {/* <div className="product-prod-info">{productData.name}</div> */}
-                        <div className="product-prod-name">{productData.name}</div>
+                        <div className="product-prod-name">{productData.productName}</div>
                     </div>
                     <div className="product-prod-info-wrap">
                         <div className="product-prod-info-label">ราคา : </div>
-                        <div className="product-prod-price">{productData.price}</div>
+                        <div className="product-prod-price">{productData.productPrice}</div>
                     </div>
                     <div className="product-prod-info-wrap">
                         <div className="product-prod-info-label">รายละเอียด : </div>
-                        <div className="product-prod-detail">{productData.detail}</div>
+                        <div className="product-prod-detail">{productData.productDescription}</div>
                     </div>
 
                 </div>

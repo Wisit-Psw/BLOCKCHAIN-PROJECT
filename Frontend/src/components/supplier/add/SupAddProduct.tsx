@@ -2,12 +2,33 @@ import './SupAddProduct.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from 'react';
 import { faCircleXmark, faAdd } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import { environments } from '../../../environment/environment';
 function AddProduct() {
     const [prodImage, setprodImage] = useState('');
-
+    const [productName, setProductName] = useState('');
+    const [productPrice, setProductPrice] = useState(0);
+    const [productQuantity, setProductQuantity] = useState(1);
+    const [productDescription, setProductDescription] = useState('');
 
     const handleInsertImage = () => {
         document.getElementById('product-img-input')?.click()
+    }
+
+    const handleProductNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setProductName(event.target.value);
+    }
+
+    const handleProductPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setProductPrice(Number(event.target.value));
+    }
+
+    const handleProductQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setProductQuantity(Number(event.target.value));
+    }
+
+    const handleProductDescriptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setProductDescription(event.target.value);
     }
 
     const handleImageInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,6 +49,28 @@ function AddProduct() {
         }
 
     };
+
+    const addProduct = async () => {
+        if (prodImage.trim() === '' || productName.trim() === '' || productPrice === 0 || productQuantity <= 0 || productDescription.trim() === '') {
+            alert("กรุณากรอกข้อมูลให้ถูกต้อง")
+            return
+        }
+        console.log(prodImage)
+        const response = await axios.post(environments.paths.addProduct, {
+            productImage: prodImage,
+            productName: productName,
+            productDescription: productDescription,
+            productPrice: productPrice,
+            productQuantity: productQuantity
+        }, { withCredentials: true })
+
+        if (response.status !== 201) {
+            alert('มีข้อผิดพลาดเกิดขึ้น');
+            return
+        }
+        alert('เพิ่มสินค้าเสร็จสิ้น')
+    }
+
     useEffect(() => {
         setprodImage('')
     }, [])
@@ -58,32 +101,32 @@ function AddProduct() {
                     <div className="add-product-info-wrap">
                         <div className="add-product-info-label">ชื่อ : </div>
                         <div className="add-product-input-wrap">
-                            <input type="text" name="" id="" />
+                            <input type="text" name="" id="" value={productName} onChange={handleProductNameChange} />
                         </div>
                     </div>
                     <div className="add-product-info-wrap">
                         <div className="add-product-info-label">ราคา : </div>
                         <div className="add-product-input-wrap">
-                            <input type="number" name="" id="" />
+                            <input type="number" name="" id="" value={productPrice} onChange={handleProductPriceChange} />
                         </div>
                     </div>
                     <div className="add-product-info-wrap">
                         <div className="add-product-info-label">จำนวน : </div>
                         <div className="add-product-input-wrap">
-                            <input type="number" name="" id="" step={1} value={1} />
+                            <input type="number" name="" id="" step={1} value={productQuantity} onChange={handleProductQuantityChange} />
                         </div>
                     </div>
                     <div className="add-product-info-wrap">
                         <div className="add-product-info-label">รายละเอียด : </div>
                         <div className="add-product-input-wrap">
-                            <textarea name="" id=""/>
+                            <textarea name="" id="" value={productDescription} onChange={handleProductDescriptionChange} />
                         </div>
                     </div>
 
                 </div>
             </div>
             <div className="add-product-btn-wrap">
-                <div className="btn team-btn text-white ap-btn">Add Product</div>
+                <div className="btn team-btn text-white ap-btn" onClick={addProduct}>Add Product</div>
             </div>
         </div>
     )

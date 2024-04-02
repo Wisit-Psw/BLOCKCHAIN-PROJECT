@@ -39,7 +39,7 @@ class App {
     this.app.use('/api', swaggerUi.serve, swaggerUi.setup(specs));
     
 
-    this.app.use(bodyParser.json());
+    this.app.use(bodyParser.json({ limit: '10mb' }));
     this.app.use(session({
       secret: 'mysecret',
       resave: false,

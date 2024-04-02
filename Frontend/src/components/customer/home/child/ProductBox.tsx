@@ -1,20 +1,20 @@
 import './ProductBox.css'
 
 interface ProductProps {
-    product: productData;
+    product: ProductData;
 }
 
 function ProductBox({ product } : ProductProps) {
     return (
         <div className='product-container'>
             <div className="product-image-wrap">
-                <img className='product-image' src={product.image} alt="" />
+                <img className='product-image' src={product.productImage} alt="" />
             </div>
             <div className="product-name">
-                <label>{product.name}</label>
+                <label>{product.productName}</label>
             </div>
             <div className="product-price">
-                <label>{product.price}</label>
+                <label>{product.productPrice}</label>
             </div>
         </div>
     )

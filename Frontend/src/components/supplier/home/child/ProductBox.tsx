@@ -8,16 +8,16 @@ function ProductBox({ product } : ProductProps) {
     return (
         <div className='sup-product-container'>
             <div className="sup-product-image-wrap">
-                <img className='sup-product-image' src={product.image} alt="" />
+                <img className='sup-product-image' src={product.productImage} alt="" />
             </div>
             <div className="sup-product-name">
-                <label>{product.name}</label>
+                <label>{product.productName}</label>
             </div>
             <div className="sup-product-price">
-                <label>{product.price}</label>
+                <label>{product.productPrice}</label>
             </div>
             <div className="sup-product-quantity">
-                <label>{product.quantity}</label>
+                <label>{product.productQuantity}</label>
             </div>
         </div>
     )

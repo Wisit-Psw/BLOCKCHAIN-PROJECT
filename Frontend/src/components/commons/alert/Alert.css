@@ -1,0 +1,38 @@
+.alert-modal{
+    background-color: var(--team-ele-bg) !important;
+    color: var(--team-text) !important;
+    max-width: 450px;
+    margin: 0 auto;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 90% !important;
+    opacity: 1 !important;
+}
+
+.alert-modal-body{
+    width: 80%;
+    margin: 2rem auto !important;
+    padding: 0 !important;
+    text-wrap: wrap;
+    word-wrap: break-word;
+    text-align: center;
+}
+
+.btn-wrap{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.alert-submit-btn{
+    font-size: 1.1rem !important;
+    background-color: var(--team-btn);
+}
+
+.alert-cancel-btn{
+    font-size: 1.1rem !important;
+    background-color: var(--light-gray);
+}

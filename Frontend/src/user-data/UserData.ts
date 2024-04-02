@@ -19,6 +19,14 @@ class UserCliend {
         return false
     }
 
+    setUserData(userData: UserCliendDataInterface) {
+        this.userData = userData
+    }
+
+    async clearUserData(){
+        this.userData = null
+    }
+
     isSupplier() {
         if (!this.userData) {
             new Promise(() => { this.isSessionActive() });
@@ -32,11 +40,6 @@ class UserCliend {
         }
         return this.userData?.isCustomer || false;
     }
-
-    setUserData(userData: UserCliendDataInterface) {
-        this.userData = userData
-    }
-
 }
 
 export const userCliend = new UserCliend();

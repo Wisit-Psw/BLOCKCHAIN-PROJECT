@@ -1,4 +1,5 @@
 'use strict';
+const { Sequelize } = require('sequelize');
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -15,7 +16,7 @@ module.exports = {
         allowNull: false
       },
       productImage: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false
       },
       productDescription: {
@@ -41,6 +42,10 @@ module.exports = {
         onDelete: 'CASCADE'
       }
     });
+
+    await queryInterface.sequelize.query(
+      'ALTER TABLE `Product` MODIFY COLUMN `productImage` LONGTEXT;'
+    );
   },
 
   async down(queryInterface, Sequelize) {

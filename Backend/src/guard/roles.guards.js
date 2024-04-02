@@ -1,6 +1,6 @@
 class RolesGuard {
     isAsuthenticated = (req, res, next) => {
-        if (req.session.user?.isCustomer || req.session?.isLogin) {
+        if (req.session.user?.isCustomer || req.session.user?.isSupplier) {
             next();
         } else {
             const error = new Error('Forbidden');

@@ -1,5 +1,5 @@
 .sup-home-page-container {
-  width: 75dvw;
+  width: 100%;
   margin: 0 auto;
   border-radius: 0.5rem;
 }
@@ -12,7 +12,7 @@
   align-items: center;
   background-color: var(--team-ele-bg);
   .search-input {
-    width: 100dvw;
+    width: 100%;
   }
 }
 
@@ -22,6 +22,7 @@
   overflow-x: auto;
   margin: 0.5rem auto !important;
   background-color: var(--team-ele-bg);
+  color: var(--team-text);
   border: none !important;
 }
 
@@ -53,7 +54,6 @@
 
 @media screen and (max-width: 800px) {
   .sup-home-page-container {
-    width: 100dvw;
     padding: 0;
   }
 }

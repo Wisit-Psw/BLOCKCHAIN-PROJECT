@@ -6,12 +6,12 @@ declare interface ShopData{
 }
 
 declare interface ProductData{
-    id:number;
-    image:string;
-    name:string;
-    price:number;
-    detail:string;
-    quantity:number;
+    productId?:number;
+    productImage:string;
+    productName:string;
+    productPrice:number;
+    productDescription:string;
+    productQuantity:number;
 }
 
 declare interface CreditData{
