@@ -1,5 +1,5 @@
 import './Product.css'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { environments } from '../../../environment/environment';
@@ -9,8 +9,8 @@ import Alert from '../../commons/alert/Alert';
 
 
 function Product() {
+    const navigate = useNavigate()
     const { productId } = useParams();
-
 
     const [isEditing, setIsEditing] = useState(false);
     const [productData, setProductData] = useState({} as ProductData);
@@ -56,6 +56,29 @@ function Product() {
         }
     }
 
+    const handleDeleting = () => {
+        handleAlert(
+            {
+                headerText: 'ลบสินค้า',
+                contentText: 'คุณต้องการลบสินค้าใช่ไหม',
+                btn1: {
+                    btnText: 'ยืนยัน',
+                    btnFunc: async () => {
+                        await deleteProduct();
+                        // setisAlert(false);
+                    }
+                },
+                btn2: {
+                    btnText: 'ยกเลิก',
+                    btnFunc: () => {
+                        setisAlert(false);
+                    }
+                }
+            }
+        )
+        setisAlert(!isAlert);
+    }
+
     const updateProduct = async () => {
         if (productImage.trim() === '' || productName.trim() === '' || productPrice <= 0 || productQuantity <= 0 || productDescription.trim() === '') {
             // alert("กรุณากรอกข้อมูลให้ถูกต้อง")
@@ -65,7 +88,7 @@ function Product() {
                     contentText: 'กรุณากรอกข้อมูลให้ถูกต้อง',
                     btn1: {
                         btnText: 'ยืนยัน',
-                        btnFunc: () => { setisAlert(false)}
+                        btnFunc: () => { setisAlert(false) }
                     }
                 }
             )
@@ -88,8 +111,8 @@ function Product() {
                     contentText: 'มีข้อผิดพลาดเกิดขึ้น',
                     btn1: {
                         btnText: 'ยืนยัน',
-                        btnFunc: () => { 
-                            setisAlert(false);  
+                        btnFunc: () => {
+                            setisAlert(false);
                         }
                     }
                 }
@@ -109,6 +132,42 @@ function Product() {
             }
         )
         handleIsEditing();
+    }
+
+    const deleteProduct = async () => {
+
+        const response = await axios.delete(environments.paths.deleteProduct + `/${productData.productId}`, { withCredentials: true })
+
+        if (response.status !== 200) {
+            handleAlert(
+                {
+                    headerText: 'ลบสินค้า',
+                    contentText: 'มีข้อผิดพลาดเกิดขึ้น',
+                    btn1: {
+                        btnText: 'ยืนยัน',
+                        btnFunc: () => {
+                            setisAlert(false);
+                        }
+                    }
+                }
+            )
+            return
+        }
+
+        handleAlert(
+            {
+                headerText: 'ลบสินค้า',
+                contentText: 'ลบสินค้าเสร็จสิ้น',
+                btn1: {
+                    btnText: 'ยืนยัน',
+                    btnFunc: () => {
+                        setisAlert(false);
+                        navigate('/');
+                    }
+                }
+            }
+        )
+        // setisAlert(true);
     }
 
     const handleInsertImage = () => {
@@ -249,7 +308,7 @@ function Product() {
                     )}
                     {!isEditing && (
                         <>
-                            <div className="btn text-white bg-red atc-btn" onClick={handleIsEditing}>ลบสินค้า</div>
+                            <div className="btn text-white bg-red atc-btn" onClick={handleDeleting}>ลบสินค้า</div>
                             <div className="btn text-white atc-btn" onClick={handleIsEditing}>อัพเดท</div>
                         </>
                     )}

@@ -18,7 +18,7 @@ class App {
       /^http:\/\/localhost($|:\d+$)/,
       /^http:\/\/192\.168\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)($|:\d+$)/,
     ],
-      methods: ['GET', 'POST'],
+      methods: ['GET', 'POST','PUT','DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization'],
       credentials: true
     }));

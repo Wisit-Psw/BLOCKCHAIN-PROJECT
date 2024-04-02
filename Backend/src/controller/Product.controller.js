@@ -16,7 +16,7 @@ class PrductController {
     this.router.get('/info/:id', rolesGuard.isAsuthenticated, this.getProductData);
     this.router.post('/add', rolesGuard.isSupplier, this.addProduct);
     this.router.post('/update', rolesGuard.isSupplier, this.updateProduct);
-    this.router.put('/delete', rolesGuard.isSupplier, this.deleteProduct);
+    this.router.delete('/delete/:id', rolesGuard.isSupplier, this.deleteProduct);
   }
 
   getProduct = (req, res) => {
@@ -59,7 +59,7 @@ class PrductController {
   addProduct = async (req, res) => {
     const user = req.session.user;
 
-    const { productImage,productName, productDescription, productPrice, productQuantity } = req.body
+    const { productImage, productName, productDescription, productPrice, productQuantity } = req.body
     const sql = `INSERT INTO product (productName,productImage, productDescription, productPrice, productQuantity, supEmail) VALUES ('${productName}','${productImage}','${productDescription}','${productPrice}','${productQuantity}','${user.userData.email}')`;
     dbConnection.query(sql, (error, results) => {
       if (error) {
@@ -72,7 +72,7 @@ class PrductController {
   }
 
   updateProduct = (req, res) => {
-    const { productId, productName,productImage, productDescription, productPrice, productQuantity } = req.body
+    const { productId, productName, productImage, productDescription, productPrice, productQuantity } = req.body
     const sql = `UPDATE product SET productName='${productName}',productImage='${productImage}',productDescription='${productDescription}',productPrice='${productPrice}',productQuantity='${productQuantity}' WHERE productId = ${productId}`;
 
     dbConnection.query(sql, (error, results) => {
@@ -85,7 +85,7 @@ class PrductController {
   }
 
   deleteProduct = (req, res) => {
-    const productId = req.query.productId
+    const productId = req.params.id;
     const sql = `DELETE FROM product  WHERE productId = ${productId}`;
 
     dbConnection.query(sql, (error, results) => {
