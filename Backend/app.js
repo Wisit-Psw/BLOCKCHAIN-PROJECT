@@ -61,6 +61,7 @@ class App {
     this.app.use('/customer', require('./src/controller/Customer.controller'));
     this.app.use('/supplier', require('./src/controller/Suppiler.controller'));
     this.app.use('/product', require('./src/controller/Product.controller'));
+    this.app.use('/cart', require('./src/controller/Cart.controller'));
     this.app.use('/cart-product', require('./src/controller/CartPorduct.controller'));
 
   }

@@ -62,7 +62,7 @@ class SupplierController {
     });
 
     const hashPass = await bcrypt.hash(password, 10)
-    const sql = `INSERT INTO supplier (email, shop_name, phone, address, password) VALUES ('${email}','${name}','${phone}','${address}','${hashPass}')`;
+    const sql = `INSERT INTO supplier (email, shopName, phone, address, password) VALUES ('${email}','${name}','${phone}','${address}','${hashPass}')`;
 
     dbConnection.query(sql, (error, results) => {
       if (error) {

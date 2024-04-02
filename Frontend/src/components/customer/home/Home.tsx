@@ -4,6 +4,9 @@ import ProductBox from './child/ProductBox';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import { environments } from '../../../environment/environment';
+import Alert from '../../commons/alert/Alert';
 
 function Home() {
     const [isRequestModalShow, setRequestModalShow] = useState<boolean>(false);
@@ -11,77 +14,99 @@ function Home() {
     const [currentShop, setCurrentShop] = useState<ShopData>();
     const [productList, setProductList] = useState<ProductData[]>([]);
     const [changeShopState, setChangeShopState] = useState<boolean>(true);
-    // const [credit, setCredit] = useState<CreditData | null>(null);
+    const [creditAmount, setCreditAmount] = useState<number>(0);
+
+    const [alertProps, setAlertProps] = useState<AlertStructure>({} as AlertStructure);
+    const [isAlert, setisAlert] = useState(false);
+
+    const handleAlert = (structure: AlertStructure) => {
+        if (!isAlert) {
+            setAlertProps(structure)
+        }
+        setisAlert(!isAlert)
+    }
 
     const selectShop = (shop: ShopData) => {
-        // setCredit({
-        //     shopName: shop.shop_name,
-        //     creditAmount: shop.creditAmount
-        // });
         setChangeShopState(!changeShopState)
         setCurrentShop(shop)
+        getProductList(shop.email);
     };
 
-    // const getShopList = async () => {
-    //     try {
-    //         const response = await axios.get<ShopData[]>(environments.paths.getShopList, { withCredentials: true });
-    //         if (response) {
-    //             setShopList([...response.data])
-    //             setCredit({
-    //                 shopName: response.data[0].shop_name,
-    //                 creditAmount: response.data[0].creditAmount
-    //             })
-    //             getProductList(response.data[0].email);
-    //         }
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
+    const getShopList = async () => {
+        try {
+            const response = await axios.get<ShopData[]>(environments.paths.getShopList, { withCredentials: true });
+            if (response) {
+                console.log(response.data)
+                const tmp = [...response.data];
+                setShopList(tmp)
+                console.log(shopList)
+            }
 
-    // const getProductList = async (supId: string) => {
-    //     try {
-    //         const response = await axios.get<ProductData[]>(`${environments.paths.getProduct}?supId=${btoa(supId)}`, { withCredentials: true });
-    //         if (response.data) {
-    //             setProductList(response.data);
-    //         }
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
+            const queryString = window.location.search;
+            const params = new URLSearchParams(queryString);
+
+            const supEmail = params.get('supEmail');
+            // console.log(supEmail)
+            if (supEmail) {
+                for (let index = 0; index < shopList.length; index++) {
+                    console.log(shopList[index].email, supEmail)
+                    if (shopList[index].email === supEmail) {
+                        selectShop(shopList[index]);
+                    }
+                    break;
+                }
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const getProductList = async (supId: string) => {
+        try {
+            const response = await axios.get<ProductData[]>(`${environments.paths.getProduct}?supId=${supId}`, { withCredentials: true });
+            if (response.data) {
+                setProductList(response.data);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const reqCredit = async () => {
+
+        try {
+            console.log(currentShop)
+            const response = await axios.post(environments.paths.requestsCredit, {
+                supEmail: currentShop?.email,
+                creditAmount: creditAmount
+            }, {
+                withCredentials: true
+            });
+
+            if (response.status === 200) {
+                if (currentShop) {
+                    selectShop(currentShop)
+                }
+                setRequestModalShow(false);
+                handleAlert({
+                    headerText: "ขอเครดิต",
+                    contentText: "รอการอนุมัติจากเจ้าของร้าน",
+                    btn1: {
+                        btnText: "ยืนยัน",
+                        btnFunc: () => { setisAlert(false) }
+                    }
+                })
+                return
+            }
+        } catch (error) {
+            alert('Registration Error: ' + (error as Error).message);
+            console.error('Registration error:', (error as Error).message);
+            return
+        }
+    }
 
     useEffect(() => {
-        const tempProdList: ProductData[] = [];
-        for (let index = 0; index < 100; index++) {
-            const element: ProductData = {
-                productId: index,
-                productImage: 'https://www.mountaingoatsoftware.com/uploads/blog/2016-09-06-what-is-a-product.png',
-                productName: 'Product' + index,
-                productDescription: '',
-                productQuantity: 0,
-                productPrice: 9999,
-            };
-            tempProdList.push(element);
-        }
-        setProductList(tempProdList);
-
-        const tempShopList: ShopData[] = [];
-        for (let index = 0; index < 100; index++) {
-            const elementShop: ShopData = {
-                image: 'https://www.mountaingoatsoftware.com/uploads/blog/2016-09-06-what-is-a-product.png',
-                shop_name: 'Shop' + index,
-                email: 'Shop' + index,
-                creditAmount: 999
-            };
-            tempShopList.push(elementShop);
-        }
-        setShopList(tempShopList);
-        // setCredit({
-        //     shopName: tempShopList[0].shop_name,
-        //     creditAmount: tempShopList[0].creditAmount,
-        // });
-        // setCurrentShop(tempShopList[0])
-
-        // getShopList();
+        getShopList();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -103,12 +128,10 @@ function Home() {
                 currentShop && (
                     <>
                         <div className="current-shop">
-                            <div className="shop-image-wrap">
-                                <img className='shop-image' src={"" + currentShop?.image} alt="" />
-                            </div>
                             <div className="shop-info">
-                                <div className="shop-name">ชื่อร้าน : {currentShop.shop_name}</div>
-                                <div className="shop-credit">เครดิตคงเหลือ : {currentShop.creditAmount}</div>
+                                <div className="shop-name">ชื่อร้าน : {currentShop.shopName}</div>
+                                <div className="shop-credit">เครดิตคงเหลือ : {currentShop.creditAmount || 0}</div>
+                                <div className="req-credit" onClick={() => setRequestModalShow(true)}>ขอเครดิตเพิ่ม</div>
                             </div>
                             <div className="change-btn" onClick={() => { setChangeShopState(!changeShopState) }}>
                                 เปลี่ยน
@@ -131,19 +154,19 @@ function Home() {
                         {shopList && shopList.map((shop, index) => (
                             // <div className='shop-list-order' key={index} onClick={() => {
                             //     selectShop(shop)
-                            // }}>{shop.shop_name}</div>
+                            // }}>{shop.shopName}</div>
                             <div
                                 className="shop-list-order"
                                 key={index}
                                 onClick={() => {
                                     selectShop(shop)
                                 }}>
-                                <div className="shop-image-wrap">
+                                {/* <div className="shop-image-wrap">
                                     <img className='shop-image' src={"" + shop?.image} alt="" />
-                                </div>
+                                </div> */}
                                 <div className="shop-info">
-                                    <div className="shop-name">ชื่อร้าน : {shop.shop_name}</div>
-                                    <div className="shop-credit">เครดิตคงเหลือ : {shop.creditAmount}</div>
+                                    <div className="shop-name">ชื่อร้าน : {shop.shopName}</div>
+                                    <div className="shop-credit">เครดิตคงเหลือ : {shop.creditAmount || 0}</div>
                                 </div>
 
                                 <div className="change-btn">
@@ -161,7 +184,6 @@ function Home() {
             }
 
 
-            {/* </div> */}
             <div className="product-list" style={
                 (currentShop && !changeShopState) ? {
                     height: '60dvh'
@@ -172,23 +194,41 @@ function Home() {
                     <Link to={'/product/' + product.productId} key={index}><ProductBox product={product} /></Link>
                 ))}
             </div>
-            {/* <div className="credit-box">
-                {credit && (
-                    <>
-                        <div className='credit-shop-name'>{credit.shopName}</div>
-                        <div className='credit-credit-amount'><label>Credit:</label> <label>{credit.creditAmount}</label></div>
-                    </>
-                )}
-                <div className='request-credit' onClick={() => setRequestModalShow(true)}>Request Credit</div>
-            </div> */}
 
             {isRequestModalShow && (
                 <>
-                    <div className="card alert-container bg-ele-team">
-                        {/* Modal Content */}
+                    <div className="alert-container">
+                        <div className="modal-header-text modal-shop-name">{currentShop?.shopName}</div>
+                        <div className="modal-body">
+                            <div className="form-container">
+                                <div className="home-input-container">
+                                    <div className="input-wrap">
+                                        <input type="number" className="input-controller" placeholder="จำนวนเครดิตที่ต้องการ"
+                                            value={creditAmount}
+                                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                                setCreditAmount(Number(event.target.value))
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="btn-wrap">
+                            <button className="btn bg-light-gray text-white" onClick={() => setRequestModalShow(false)}>ยกเลิก</button>
+                            <button className="btn text-white req-btn" onClick={() => reqCredit()}>ขอเครดิต</button>
+                        </div>
                     </div>
                     <div className="backdrop" onClick={() => setRequestModalShow(false)}></div>
                 </>
+            )}
+
+            {isAlert && (
+                <Alert
+                    headerText={alertProps?.headerText || ''}
+                    contentText={alertProps?.contentText || ''}
+                    btn1={alertProps?.btn1}
+                    btn2={alertProps?.btn2}
+                />
             )}
         </div>
     );

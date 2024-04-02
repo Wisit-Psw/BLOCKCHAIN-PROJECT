@@ -1,14 +1,19 @@
 declare interface cartProductData{
-    id:number;
-    image:string;
-    name:string;
-    price:number;
-    quantity:number;
-    sumPrice:number;
+    cartProdId: number;
+    cartId: number;
+    productId: number;
+    quantity: number;
+    productName: string;
+    productImage: string;
+    productDescription: string;
+    productPrice: number;
+    productQuantity: number;
+    supEmail: string
 }
 
-declare interface cartData{
-    shopId:number;
+declare interface CartData{
+    cartId:number;
+    supEmail?:string;
     shopName:string;
     totalQuantity:number;
     totalPrice:number;

@@ -3,6 +3,18 @@ const router = express.Router();
 const dbConnection = require('../module/dbConection')
 const rolesGuard = require('../guard/roles.guards')
 
+const executeQuery = (sql) => {
+    return new Promise((resolve, reject) => {
+        dbConnection.query(sql, (error, result) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+};
+
 class CartProductController {
 
     constructor() {
@@ -12,8 +24,9 @@ class CartProductController {
 
     setupRoutes() {
         this.router.get('/', rolesGuard.isAsuthenticated, this.getProductInCart);
-        this.router.post('/add', this.addProductToCart);
-        this.router.put('/delete', rolesGuard.isSupplier, this.deleteProduct);
+        this.router.post('/add', rolesGuard.isCustomer, this.addProductToCart);
+        // this.router.post('/update', rolesGuard.isCustomer, this.updateProductInCart);
+        this.router.delete('/delete', rolesGuard.isCustomer, this.deleteProductInCart);
     }
 
     getProductInCart = (req, res) => {
@@ -26,7 +39,7 @@ class CartProductController {
                 if (err) {
                     return res.status(500).send(err);
                 }
-                return res.status(200).send(result);
+                return result;
             });
         } catch (e) {
             return res.status(500).send(e);
@@ -34,73 +47,94 @@ class CartProductController {
     }
 
     addProductToCart = async (req, res) => {
-        let { cartId, productId, quantity, supEmail } = req.body
-        const user = req.session.user
+        try {
+            let { cartId, productId, quantity, supEmail } = req.body;
+            const user = req.session.user;
 
-        let count = 0;
-        let sql = '';
+            let cart;
+            let sql = '';
 
-        if (!cartId) {
-            sql = `SELECT COUNT(*) as counter  FROM cart WHERE cusEmail = ${user.userData.email} and supEmail = ${supEmail}`;
-            dbConnection.query(sql, (err, result) => {
-                if (err) {
-                    return res.status(500).send(err);
+            let query = `SELECT * FROM product WHERE productId = ${productId}`;
+            const product = (await executeQuery(query))[0];
+
+            if (!cartId) {
+                sql = `SELECT * FROM cart WHERE cusEmail LIKE '${user.userData.email}' and supEmail LIKE '${supEmail}'`;
+                const cartQueryResult = await executeQuery(sql);
+                cart = (cartQueryResult && cartQueryResult[0]) ? cartQueryResult[0] : undefined;
+                if (cart) {
+                    cartId = cart.cartId;
                 }
-                count = result[0]?.counter
-            });
-        }
-
-        if (!count && !cartId) {
-            sql = `INSERT INTO cart( cusEmail, supEmail) VALUES ('${user.userData.email}','${supEmail}')`;
-            dbConnection.query(sql, (err, result) => {
-                if (err) {
-                    return res.status(500).send(err);
-                }
-            });
-        }
-
-        count = 0;
-        sql = `SELECT COUNT(*) as counter FROM cart_product WHERE cartId = ${cartId} and productId = ${productId}`;
-        dbConnection.query(sql, (err, result) => {
-            if (err) {
-                return res.status(500).send(err);
             }
-            count = result[0]?.counter
-        });
 
-        if (!count) {
-            sql = `INSERT INTO cart_product(cartId, productId, quantity) VALUES ('${cartId}','[${productId}]','[${quantity}]')`;
-            dbConnection.query(sql, (err, result) => {
-                if (err) {
-                    return res.status(500).send(err);
+            if (!cart && !cartId) {
+                if (product.productQuantity < quantity) {
+                    return res.status(409).send("สินค้าไม่เพียงพอ");
                 }
-                return res.status(201).send("Insert success")
-            });
-        } else {
-            sql = `UPDATE cart_product SET quantity='${quantity}' WHERE cartId = ${cartId} and productId = ${productId}`;
-            dbConnection.query(sql, (err, result) => {
-                if (err) {
-                    return res.status(500).send(err);
+                sql = `INSERT INTO cart(cusEmail, supEmail) VALUES ('${user.userData.email}','${supEmail}')`;
+                const cartInsertResult = await executeQuery(sql);
+                cartId = cartInsertResult.insertId;
+            }
+
+            let cartProd;
+            sql = `SELECT * FROM cart_product WHERE cartId = ${cartId} AND productId = ${productId}`;
+            const cartProdQueryResult = await executeQuery(sql);
+            cartProd = (cartProdQueryResult && cartProdQueryResult[0]) ? cartProdQueryResult[0] : undefined;
+
+            if (!cartProd) {
+                if (product.productQuantity < quantity) {
+                    return res.status(409).send("สินค้าไม่เพียงพอ");
                 }
-                return res.status(201).send("Insert success")
-            });
+                sql = `INSERT INTO cart_product(cartId, productId, quantity) VALUES (${cartId},${productId},${quantity})`;
+            } else {
+                const updatedQuantity = cartProd.quantity + quantity;
+                if (product.productQuantity < updatedQuantity) {
+                    return res.status(409).send("สินค้าไม่เพียงพอ");
+                }
+                sql = `UPDATE cart_product SET quantity=${updatedQuantity} WHERE cartId = ${cartId} and productId = ${productId}`;
+            }
+            await executeQuery(sql);
+            return res.status(201).send("Insert success");
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).send(error.message);
         }
-        
     }
 
+    deleteProductInCart = (req, res) => {
+        const cartProdId = req.query.cartProdId;
+        const cartId = req.query.cartId;
 
-    deleteProduct = (req, res) => {
-        const productId = req.query.productId
-        const sql = `DELETE FROM cart_product WHERE productId = ${productId}`;
+        let sql = `DELETE FROM cart_product WHERE cartProdId = ${cartProdId}`;
 
         dbConnection.query(sql, (error, results) => {
             if (error) {
                 return res.status(500).json({ error: error.message });
             } else {
-                return res.status(200).json({ message: 'Data deleted'});
+                sql = `SELECT COUNT(*) as counter FROM cart_product WHERE cartId = ${cartId}`;
+                dbConnection.query(sql, (error, results) => {
+                    if (error) {
+                        return res.status(500).json({ error: error.message });
+                    } else {
+                        const counter = results[0].counter;
+                        if (counter === 0) {
+                            sql = `DELETE FROM cart WHERE cartId = ${cartId}`;
+                            dbConnection.query(sql, (error, results) => {
+                                if (error) {
+                                    return res.status(500).json({ error: error.message });
+                                } else {
+                                    return res.status(200).json({ message: 'Cart deleted' });
+                                }
+                            });
+                        } else {
+                            return res.status(200).json({ message: 'Product deleted from cart' });
+                        }
+                    }
+                });
             }
         });
-    }
+    };
+
 
 }
 

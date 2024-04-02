@@ -1,7 +1,7 @@
 declare interface ShopData{
-    image:string;
+    // image:string;
     email:string;
-    shop_name:string;
+    shopName:string;
     creditAmount:number;
 }
 
@@ -12,6 +12,7 @@ declare interface ProductData{
     productPrice:number;
     productDescription:string;
     productQuantity:number;
+    supEmail?:string;
 }
 
 declare interface CreditData{

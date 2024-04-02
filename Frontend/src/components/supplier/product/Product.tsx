@@ -29,7 +29,7 @@ function Product() {
         setisAlert(!isAlert)
     }
 
-    const getProductList = async () => {
+    const getProductData = async () => {
         try {
             const response = await axios.get<ProductData>(`${environments.paths.getProductData}/${productId}`, { withCredentials: true });
             if (response.data) {
@@ -167,7 +167,6 @@ function Product() {
                 }
             }
         )
-        // setisAlert(true);
     }
 
     const handleInsertImage = () => {
@@ -212,7 +211,7 @@ function Product() {
 
 
     useEffect(() => {
-        getProductList();
+        getProductData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

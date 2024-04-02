@@ -1,9 +1,11 @@
-declare interface orderProductData{
-    id:number;
-    image:string;
-    name:string;
-    price:number;
-    quantity:number;
+declare interface OrderProductData{
+    productId?:number;
+    productImage:string;
+    productName:string;
+    productPrice:number;
+    productDescription:string;
+    productQuantity:number;
+    supEmail?:string;
 }
 declare interface orderData{
     orderId:number;

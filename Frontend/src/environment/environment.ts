@@ -11,11 +11,20 @@ class environment {
 
         getProduct:this.baseUrl + '/product',
         getProductData:this.baseUrl + '/product/info',
+
         addProduct:this.baseUrl + '/product/add',
         updateProduct:this.baseUrl + '/product/update',
         deleteProduct:this.baseUrl + '/product/delete',
 
-        getShopList:this.baseUrl + '/customer/get-shop'
+        addProductToCart:this.baseUrl + "/cart-product/add",
+        updateProductInCart:this.baseUrl + "/cart-product/update",
+        deleteProductInCart:this.baseUrl + "/cart-product/delete",
+
+        getCartData:this.baseUrl + "/cart",
+
+
+        getShopList:this.baseUrl + '/customer/get-shop',
+        requestsCredit:this.baseUrl + '/customer/requests-credit'
 
 
     }

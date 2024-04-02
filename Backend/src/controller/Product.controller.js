@@ -26,7 +26,7 @@ class PrductController {
       if (user.isSupplier) {
         query += `WHERE supEmail LIKE '${user.userData.email}'`;
       } else {
-        query += `WHERE supEmail LIKE '${atob(req.query.supId)}'`;
+        query += `WHERE supEmail LIKE '${req.query.supId}'`;
       }
 
       dbConnection.query(query, (err, result) => {

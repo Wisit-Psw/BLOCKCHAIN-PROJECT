@@ -63,7 +63,7 @@ const CusRegister = () => {
                                 value={emailInputValue}
                                 onChange={(e) => setEmailInputValue(e.target.value)}
                                 name="email"
-                                type="email"
+                                // type="email"
                                 placeholder="Email"
                             />
                         </div>
