@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { userCliend } from './user-data/UserData';
 import CustomerApp from './components/customer/CustomerApp';
 import SupplierApp from './components/supplier/SupplierApp';
@@ -12,11 +12,8 @@ import axios from 'axios';
 import { environments } from './environment/environment';
 
 function App() {
-  // const [userCliendData, setUserCliendData] = useState(userCliend.userData);
   const navigate = useNavigate()
   useEffect(() => {
-    // userCliend.isSessionActive()
-    // setUserCliendData(userCliend.userData)
   }, [])
 
   const onLoginClick = async (email: string, password: string) => {
@@ -26,7 +23,7 @@ function App() {
         email: email,
         password: password
       }, { withCredentials: true });
-      
+
       userCliend.setUserData(response.data);
       navigate('/');
 

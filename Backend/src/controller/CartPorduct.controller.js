@@ -25,7 +25,7 @@ class CartProductController {
     setupRoutes() {
         this.router.get('/', rolesGuard.isAsuthenticated, this.getProductInCart);
         this.router.post('/add', rolesGuard.isCustomer, this.addProductToCart);
-        // this.router.post('/update', rolesGuard.isCustomer, this.updateProductInCart);
+        this.router.post('/update', rolesGuard.isCustomer, this.updateProductInCart);
         this.router.delete('/delete', rolesGuard.isCustomer, this.deleteProductInCart);
     }
 
@@ -87,13 +87,39 @@ class CartProductController {
                 sql = `INSERT INTO cart_product(cartId, productId, quantity) VALUES (${cartId},${productId},${quantity})`;
             } else {
                 const updatedQuantity = cartProd.quantity + quantity;
+                console.log(product.productQuantity, updatedQuantity)
                 if (product.productQuantity < updatedQuantity) {
                     return res.status(409).send("สินค้าไม่เพียงพอ");
                 }
                 sql = `UPDATE cart_product SET quantity=${updatedQuantity} WHERE cartId = ${cartId} and productId = ${productId}`;
             }
             await executeQuery(sql);
-            return res.status(201).send("Insert success");
+            return res.status(200).send("Insert success");
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).send(error.message);
+        }
+    }
+
+    updateProductInCart = async (req, res) => {
+        try {
+            let { cartId, productId, quantity } = req.body;
+            let sql = '';
+
+            let query = `SELECT * FROM product WHERE productId = ${productId}`;
+            const product = (await executeQuery(query))[0];
+
+            if (!cartId) {
+                return res.status(404).send("หมายเลขตะกร้าไม่ถูกต้อง");
+            }
+
+            if (product.productQuantity < quantity) {
+                return res.status(409).send("สินค้าไม่เพียงพอ");
+            }
+            sql = `UPDATE cart_product SET quantity=${quantity} WHERE cartId = ${cartId} and productId = ${productId}`;
+            await executeQuery(sql);
+            return res.status(200).send("Insert success");
 
         } catch (error) {
             console.error(error);

@@ -10,12 +10,12 @@ import { environments } from '../../../../environment/environment';
 interface ProductRowProps {
     indexProps: number,
     cartProps: CartData,
-    getCartData:() => void
+    getCartData: () => void
 }
 
 function ProductRow(props: ProductRowProps) {
 
-    const { indexProps, cartProps ,getCartData} = props;
+    const { indexProps, cartProps, getCartData } = props;
 
     const [index, setIndex] = useState(indexProps);
     const [cart, setCart] = useState(cartProps);
@@ -23,7 +23,11 @@ function ProductRow(props: ProductRowProps) {
     const [isDelState, setDelState] = useState(false);
     const [alertProps, setAlertProps] = useState<AlertStructure>({} as AlertStructure);
 
-    const change = (event: React.ChangeEvent<HTMLInputElement>, index?: number) => {
+    // const updateProductIncart = async () => {
+
+    // }
+
+    const change = async (event: React.ChangeEvent<HTMLInputElement>, index?: number) => {
         if (index !== undefined) {
             const updatedCart = { ...cart };
 
@@ -38,11 +42,21 @@ function ProductRow(props: ProductRowProps) {
             updatedCart.productList[index].quantity = Number(event?.target?.value);
             updatedCart.totalQuantity += Number(event?.target?.value);
             updatedCart.totalPrice += updatedCart.productList[index].productPrice * Number(event?.target?.value);
-            setCart(updatedCart);
+
+            const res = await axios.post<ProductData>(`${environments.paths.updateProductInCart}`, {
+                cartId: cart.cartId,
+                productId: updatedCart.productList[index].productId,
+                quantity: updatedCart.productList[index].quantity,
+                supEmail: updatedCart.productList[index].supEmail
+            }, { withCredentials: true });
+
+            if (res.status === 200) {
+                setCart(updatedCart);
+            }
         }
     }
 
-    const add = (index?: number) => {
+    const add = async (index?: number) => {
         if (index !== undefined) {
             const updatedCart = { ...cart };
 
@@ -54,22 +68,41 @@ function ProductRow(props: ProductRowProps) {
             updatedCart.productList[index].quantity += 1;
             updatedCart.totalQuantity += 1;
             updatedCart.totalPrice += updatedCart.productList[index].productPrice;
-            setCart(updatedCart);
+
+            const res = await axios.post<ProductData>(`${environments.paths.updateProductInCart}`, {
+                cartId: cart.cartId,
+                productId: updatedCart.productList[index].productId,
+                quantity: updatedCart.productList[index].quantity,
+                supEmail: updatedCart.productList[index].supEmail
+            }, { withCredentials: true });
+
+            if (res.status === 200) {
+                setCart(updatedCart);
+            }
         }
     }
 
-    const minus = (index?: number) => {
+    const minus = async (index?: number) => {
         if (index !== undefined && cart.productList[index].quantity > 1) {
             const updatedCart = { ...cart };
             updatedCart.productList[index].quantity -= 1;
             updatedCart.totalQuantity -= 1;
             updatedCart.totalPrice -= updatedCart.productList[index].productPrice;
 
-            setCart(updatedCart);
+            const res = await axios.post<ProductData>(`${environments.paths.updateProductInCart}`, {
+                cartId: cart.cartId,
+                productId: updatedCart.productList[index].productId,
+                quantity: updatedCart.productList[index].quantity,
+                supEmail: updatedCart.productList[index].supEmail
+            }, { withCredentials: true });
+
+            if (res.status === 200) {
+                setCart(updatedCart);
+            }
         }
     }
 
-    const handleDelBtn = (cartProdId:number) => {
+    const handleDelBtn = (cartProdId: number) => {
         if (!isDelState) {
             setAlertProps({
                 headerText: 'ออกจากระบบ',
@@ -80,15 +113,15 @@ function ProductRow(props: ProductRowProps) {
                 },
                 btn2: {
                     btnText: 'ยกเลิก',
-                    btnFunc: () => { setDelState(false)}
+                    btnFunc: () => { setDelState(false) }
                 }
             })
         }
         setDelState(!isDelState)
     }
-    const submitDel = async (cartProdId:number) => {
+    const submitDel = async (cartProdId: number) => {
         try {
-            const response = await axios.delete(environments.paths.deleteProductInCart+`?cartId=${cart.cartId}&cartProdId=${cartProdId}`, { withCredentials: true });
+            const response = await axios.delete(environments.paths.deleteProductInCart + `?cartId=${cart.cartId}&cartProdId=${cartProdId}`, { withCredentials: true });
             if (response.status === 200) {
                 setDelState(false);
                 getCartData()
@@ -123,7 +156,7 @@ function ProductRow(props: ProductRowProps) {
 
                             {/* <div className="td total-price">{product.price * product.quantity}</div> */}
                         </div>
-                        <div className="td delete-btn" onClick={()=>{handleDelBtn(product.cartProdId)}}>
+                        <div className="td delete-btn" onClick={() => { handleDelBtn(product.cartProdId) }}>
                             {/* delete */}
                             <FontAwesomeIcon icon={faTrashCan} />
 
