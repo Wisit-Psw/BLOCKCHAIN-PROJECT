@@ -1,0 +1,76 @@
+.credit-req-page-container {
+    width: 100% !important;
+  }
+  
+  .credit-req-list {
+    background-color: var(--team-ele-bg);
+    border-radius: 0.3rem;
+    padding: 0.5rem 0;
+    margin: 0.5rem auto;
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .credit-req-shop-info {
+    width: 35%;
+    text-align: center;
+  }
+  
+  .credit-req-list-shop-name {
+    margin: 0 1rem 0.5rem 1rem;
+    color: var(--team-text);
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  .credit-req-list-info {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  .credit-req-image-wrap {
+    width: 70%;
+    max-width: 6rem;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto;
+    /* display: flex; */
+  }
+  .credit-req-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .credit-req-info {
+    width: 80%;
+    height: 100%;
+    margin: 0 1rem;
+    text-align: center;
+    color: var(--team-text);
+  }
+  
+  .credit-req-topic {
+    min-width: 100px;
+  }
+  
+  .credit-req-list-shop-detail {
+    color: var(--team-text);
+    font-size: 1.5rem;
+    text-align: right;
+    margin-right: 2rem;
+  }
+
+  .accept-btn{
+    color: white;
+    background-color: var(--team-btn);
+  }
+
+  .reject-btn{
+    color: white;
+    background-color:red;
+  }
+  

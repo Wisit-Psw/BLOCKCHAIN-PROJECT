@@ -52,7 +52,7 @@ module.exports = {
         allowNull: false,
       },
       status: {
-        type: Sequelize.STRING,//"Aeccept"|"Reject"|"Waiting",
+        type: Sequelize.STRING,//"Accept"|"Reject"|"Waiting",
         allowNull: false,
         defaultValue: "Waiting"
       },

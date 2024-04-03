@@ -5,12 +5,12 @@ import { useEffect } from 'react';
 import NavBar from './navbar/Navbar';
 import Menu from './menu/Menu';
 import SupHome from './home/SupHome';
-// import Delivery from './delivery/Delivery';
 import SupCredit from './credit/SupCredit';
 import Setting from './setting/Setting';
 import SupOrder from './order/SupOrder';
 import Product from './product/Product';
 import SupAdd from './add/SupAddProduct';
+import CreditReq from './credit-req/CreditReq';
 
 
 function SupplierApp() {
@@ -26,8 +26,8 @@ function SupplierApp() {
                 <Routes>
                     <Route path="/" element={<SupHome />} />
                     <Route path="/add" element={<SupAdd />} />
-                    {/* <Route path="/delivery" element={<Delivery />} /> */}
                     <Route path="/credit" element={<SupCredit />} />
+                    <Route path="/credit-req" element={<CreditReq />} />
                     <Route path="/settings" element={<Setting />} />
                     <Route path="/order" element={<SupOrder />} />
                     <Route path="/product/:productId" element={<Product />} />

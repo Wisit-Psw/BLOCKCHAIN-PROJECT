@@ -73,9 +73,7 @@ function Home() {
     };
 
     const reqCredit = async () => {
-
         try {
-            console.log(currentShop)
             const response = await axios.post(environments.paths.requestsCredit, {
                 supEmail: currentShop?.email,
                 creditAmount: creditAmount
@@ -86,6 +84,7 @@ function Home() {
             if (response.status === 200) {
                 if (currentShop) {
                     selectShop(currentShop)
+                    setCreditAmount(0)
                 }
                 setRequestModalShow(false);
                 handleAlert({

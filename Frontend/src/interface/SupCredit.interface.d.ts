@@ -5,6 +5,22 @@ declare interface SupCreditHistoryData{
     total: number;
 }
 
+
+declare interface SupCreditReq {
+    creditHisId: number;
+    creditId: number;
+    creditTotal: number;
+    creditUpdate: number;
+    creditAmount: number;
+    requestsDate: string;
+    approvDate: string;
+    updateType: string;
+    status: string;
+    txId: string;
+    cusEmail: string;
+    cusName:string;
+}
+
 declare interface SupCreditData {
     id: number;
     cusEmail?: string;

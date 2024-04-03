@@ -36,3 +36,13 @@
     font-size: 1.1rem !important;
     background-color: var(--light-gray);
 }
+
+.alert-input-wrap{
+    display: flex;
+    align-self: center;
+    height: fit-content;
+    input{
+        height: fit-content;
+        margin-left: 0.5rem;
+    }
+}

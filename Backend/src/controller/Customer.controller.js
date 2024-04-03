@@ -144,7 +144,6 @@ class UserController {
           credit = results[0];
           insertCreditHistory(credit);
         } else {
-          // Insert new credit record if not exists
           sql = `INSERT INTO Credit(cusEmail, supEmail, dateUpdate) VALUES ('${user.userData.email}', '${body.supEmail}', '${currentDate}')`;
           dbConnection.query(sql, (insertError, insertResults) => {
             if (insertError) {
@@ -166,7 +165,7 @@ class UserController {
 
     const  insertCreditHistory = (credit) => {
       const creditUpdate = credit.creditAmount + body.creditAmount;
-      sql = `INSERT INTO Credit_History(creditId, creditTotal, creditUpdate, creditAmount, updateType) VALUES (${credit.creditId}, ${credit.creditTotal}, ${creditUpdate}, ${body.creditAmount}, 'Add')`;
+      sql = `INSERT INTO Credit_History(creditId, creditTotal, creditUpdate, creditAmount, updateType) VALUES (${credit.creditId}, ${credit.creditTotal}, ${body.creditAmount}, ${creditUpdate}, 'Add')`;
       dbConnection.query(sql, (historyError, historyResult) => {
         if (historyError) {
           return res.status(500).send(historyError);

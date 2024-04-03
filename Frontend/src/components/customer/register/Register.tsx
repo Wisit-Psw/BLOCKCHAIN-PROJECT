@@ -44,7 +44,6 @@ const CusRegister = () => {
             console.error('Registration error:', (error as Error).message);
             return
         }
-
     }
 
     return (

@@ -10,7 +10,6 @@
     justify-content: space-around;
 
     border-radius: 0.5rem;
-    /* box-shadow: 1px 3px 5px var(--light-gray); */
 }
 
 .menu-wrap{
@@ -32,6 +31,14 @@
 
 .menu-icon{
     font-size: 1.25rem;
+    position: relative;
+}
+
+.add-icon{
+    font-size: 0.8rem;
+    top: 0.1rem;
+    right: 1.3rem;
+    position: absolute;
 }
 
 .menu-label{

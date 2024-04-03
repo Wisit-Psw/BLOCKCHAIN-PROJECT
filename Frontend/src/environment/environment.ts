@@ -24,9 +24,10 @@ class environment {
 
 
         getShopList:this.baseUrl + '/customer/get-shop',
-        requestsCredit:this.baseUrl + '/customer/requests-credit'
+        requestsCredit:this.baseUrl + '/customer/requests-credit',
 
-
+        getCreditReq:this.baseUrl + '/supplier/credit-req',
+        creditApproval:this.baseUrl + '/supplier/credit-approval',
     }
 }
 
