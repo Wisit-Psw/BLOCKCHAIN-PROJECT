@@ -4,7 +4,10 @@ const router = express.Router();
 const mysql = require('mysql');
 let env = (require('dotenv').config()).parsed
 const dbConnection = require('../module/dbConection')
-const rolesGuard = require('../guard/roles.guards')
+const rolesGuard = require('../guard/roles.guards');
+const stringToByte = require('../util/byte');
+const hashSha256 = require('../util/hash');
+const contract = require('../contract/trade.contract');
 
 class SupplierController {
   constructor() {

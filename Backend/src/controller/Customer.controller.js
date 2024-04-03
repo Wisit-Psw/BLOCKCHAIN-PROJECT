@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 const dbConnection = require('../module/dbConection')
-const rolesGuard = require('../guard/roles.guards')
+const rolesGuard = require('../guard/roles.guards');
 
 class UserController {
 
