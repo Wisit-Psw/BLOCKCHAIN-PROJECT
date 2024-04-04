@@ -53,20 +53,20 @@ function Setting() {
                         {!isEditState && (
                             <>
                                 <div className="feild-wrap">
-                                    <div className="feild-name">Email</div>
-                                    <div className="feild-data">shop1@gmail.com</div>
+                                    <div className="feild-name">อีเมล</div>
+                                    <div className="feild-data">{userCliend.userData?.userData.email}</div>
                                 </div>
                                 <div className="feild-wrap">
-                                    <div className="feild-name">Shop Name</div>
-                                    <div className="feild-data">shop1</div>
+                                    <div className="feild-name">ชื่อร้าน</div>
+                                    <div className="feild-data">{userCliend.userData?.userData.name}</div>
                                 </div>
                                 <div className="feild-wrap">
-                                    <div className="feild-name">Phone</div>
-                                    <div className="feild-data">061407780</div>
+                                    <div className="feild-name">เบอร์</div>
+                                    <div className="feild-data">{userCliend.userData?.userData.phone}</div>
                                 </div>
                                 <div className="feild-wrap">
-                                    <div className="feild-name">Address</div>
-                                    <div className="feild-data">1/1 bankok 10100</div>
+                                    <div className="feild-name">ที่อยู่</div>
+                                    <div className="feild-data">{userCliend.userData?.userData.address}</div>
                                 </div>
                             </>
                         )
@@ -95,7 +95,7 @@ function Setting() {
                 </div>
                 {!isEditState && (
                     <div className="btn-container">
-                        <div className="btn text-white setting-update-btn" onClick={() => { setEditState(!isEditState) }}>Update</div>
+                        {/* <div className="btn text-white setting-update-btn" onClick={() => { setEditState(!isEditState) }}>Update</div> */}
                         <div className="btn bg-red text-white setting-update-btn" onClick={() => { handleLogoutBtn() }}>Logout</div>
                     </div>
                 )}

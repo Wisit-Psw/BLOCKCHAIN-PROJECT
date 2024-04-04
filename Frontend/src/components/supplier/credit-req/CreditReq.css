@@ -21,6 +21,9 @@
     color: var(--team-text);
     font-size: 1rem;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   
   .credit-req-list-info {
@@ -54,14 +57,16 @@
   }
   
   .credit-req-topic {
-    min-width: 100px;
+    min-width: 120px;
+    text-align: left;
   }
   
   .credit-req-list-shop-detail {
+    width: 90%;
     color: var(--team-text);
     font-size: 1.5rem;
     text-align: right;
-    margin-right: 2rem;
+    margin: 1rem auto;
   }
 
   .accept-btn{

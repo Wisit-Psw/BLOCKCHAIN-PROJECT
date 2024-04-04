@@ -28,17 +28,10 @@
   --secondary-text: #65676B;
 
   /* --team-text-topic:#36438D;
-  --team-bg:#f1f3ff;
+  --team-bg:#dee0eb;
   --team-ele-bg: #fff;
-  --team-text: rgb(148, 148, 148);
+  --team-text: rgb(87, 87, 87);
   --team-btn:#36438D; */
-
-  /* --team-text-topic:#fff;
-  --team-bg: #161d31;
-  --team-ele-bg: #283046;
-  --team-text: #cdd0d8;
-  --team-btn:#36438D; */
-
 
   --team-text-topic:#fff;
   --team-bg: #18191A;
@@ -46,18 +39,23 @@
   --team-text: #E4E6EB;
   --team-btn:#36438D;
 
+  /* --team-text-topic:#fff;
+  --team-bg: #161d31;
+  --team-ele-bg: #283046;
+  --team-text: #cdd0d8;
+  --team-btn:#36438D; */
+
+  /* --team-text-topic:#fff;
+  --team-bg: #ffffff;
+  --team-ele-bg: #00aa9f;
+  --team-text: #121212c4;
+  --team-btn:#ff7e39; */
+
   /* --team-text-topic:#ff6f61;
   --team-bg: #fcf1f1;
   --team-ele-bg: #fff;
   --team-text: #ff6f61;
   --team-btn:#ff6f61; */
-
-  /* --team-text-topic:#36438D;
-  --team-bg: rgb(240, 240, 248);
-  --team-ele-bg: #fff;
-  --team-text: rgb(150, 150, 150);
-  --team-btn:#36438D; */
-
 }
 
 .team-btn {

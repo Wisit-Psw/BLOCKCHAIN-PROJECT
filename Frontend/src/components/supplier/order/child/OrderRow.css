@@ -22,3 +22,7 @@
     width: 10%;
     text-align: center;
 }
+
+.acc-btn{
+    background-color: var(--team-btn);
+}

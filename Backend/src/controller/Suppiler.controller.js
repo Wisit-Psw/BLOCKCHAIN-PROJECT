@@ -2,12 +2,36 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 const mysql = require('mysql');
-let env = (require('dotenv').config()).parsed
 const dbConnection = require('../module/dbConection')
 const rolesGuard = require('../guard/roles.guards');
 const stringToByte = require('../util/byte');
 const hashSha256 = require('../util/hash');
 const contract = require('../contract/trade.contract');
+
+const executeQuery = (sql) => {
+  return new Promise((resolve, reject) => {
+    dbConnection.query(sql, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
+const formatDate = () => {
+  const date = new Date();
+  // date.setMinutes(date.getMinutes() + (7 * 60));
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
 
 class SupplierController {
   constructor() {
@@ -18,6 +42,10 @@ class SupplierController {
   setupRoutes() {
     this.router.post('/register', this.register);
     this.router.get('/credit-req', rolesGuard.isSupplier, this.getCreditReq);
+    this.router.get('/order', rolesGuard.isSupplier, this.getOrder);
+    // this.router.get('/order-info', rolesGuard.isSupplier, this.getOrderInfo);
+    this.router.get('/credit', rolesGuard.isSupplier, this.getCredit);
+    this.router.get('/credit-info/:id', rolesGuard.isSupplier, this.getCreditInfo);
     this.router.post('/credit-approval', rolesGuard.isSupplier, this.creditApproval);
     this.router.post('/update-credit', rolesGuard.isSupplier, this.updateCredit);
     this.router.post('/submit-order', rolesGuard.isSupplier, this.submitOrder);
@@ -79,7 +107,7 @@ class SupplierController {
         return res.status(200).json({ message: 'Data inserted successfully' });
       }
     });
-  };
+  }
 
   getCreditReq = async (req, res) => {
     try {
@@ -97,10 +125,12 @@ class SupplierController {
       credit_history.status, 
       credit_history.txId,
       customers.email as cusEmail,
-      customers.fullname as cusName 
+      customers.fullname as cusName,
+      payment_slip.slipImage as slipImage
       FROM credit_history 
       INNER JOIN credit ON credit_history.creditId = credit.creditId 
       INNER JOIN customers ON credit.cusEmail = customers.email  
+      LEFT JOIN payment_slip ON credit_history.creditHisId = payment_slip.creditHisId  
       WHERE supEmail LIKE '${user.userData.email}' AND status LIKE 'Waiting'`;
       dbConnection.query(sql, (error, results) => {
         if (error) {
@@ -113,16 +143,76 @@ class SupplierController {
     }
   }
 
+  getCredit = (req, res) => {
+    const user = req.session.user;
+    try {
+      const query = `SELECT 
+      credit.creditId, 
+      credit.supEmail, 
+      credit.cusEmail, 
+      credit.creditTotal, 
+      credit.creditAmount, 
+      credit.dateUpdate,
+      customers.fullname as cusName
+      FROM credit INNER JOIN customers ON credit.cusEmail = customers.email 
+      WHERE credit.supEmail LIKE '${user.userData.email}'`;
+      dbConnection.query(query, (err, result) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+        return res.status(200).send(result);
+      });
+    } catch (e) {
+      return res.status(500).send(e);
+    }
+  };
+
+  getCreditInfo = (req, res) => {
+    const user = req.session.user;
+    const creditId = req.params.id;
+    try {
+      const query = `SELECT 
+      credit.creditId, 
+      credit.supEmail, 
+      credit.cusEmail, 
+      credit.creditTotal, 
+      credit.creditAmount, 
+      credit.dateUpdate,
+      customers.fullname as cusName
+      FROM credit INNER JOIN customers ON credit.cusEmail = customers.email 
+      WHERE credit.supEmail LIKE '${user.userData.email}'
+      AND credit.creditId = ${creditId}`;
+
+      dbConnection.query(query, (err, result) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+        const query2 = `SELECT * FROM credit_history WHERE creditId = ${creditId}`;
+        dbConnection.query(query2, (err, result2) => {
+          if (err) {
+            return res.status(500).send(err);
+          }
+          return res.status(200).send({
+            ...result[0],
+            history: result2
+          });
+        });
+      });
+    } catch (e) {
+      return res.status(500).send(e);
+    }
+  };
+
   creditApproval(req, res) {
     try {
       const body = req.body;
       const user = req.session.user;
-  
-      const currentDate = new Date();
-      currentDate.setMinutes(currentDate.getMinutes() + (7 * 60));
-  
+
+      const currentDate = formatDate();
+
       let credit;
       let sql = `SELECT * FROM credit WHERE creditId = ${body.creditId} AND supEmail LIKE '${user.userData.email}'`;
+
       dbConnection.query(sql, (error, results) => {
         if (error) {
           return res.status(500).json({ error: error.message });
@@ -131,7 +221,7 @@ class SupplierController {
           return res.status(409).send("Invalid creditId.");
         }
         credit = results[0];
-  
+
         if (body.status === 'Reject') {
           sql = `UPDATE Credit_History SET approvDate='${currentDate}', status='Reject', creditAmount='${credit.creditAmount}' WHERE creditHisId = ${body.creditHisId}`;
           dbConnection.query(sql, (error, results) => {
@@ -143,7 +233,7 @@ class SupplierController {
         } else {
           const newTotal = credit.creditTotal + body.creditAmount;
           const newAmount = credit.creditAmount + body.creditAmount;
-  
+
           sql = `UPDATE Credit_History SET creditTotal='${newTotal}', creditUpdate='${body.creditAmount}', creditAmount='${newAmount}', approvDate='${currentDate}', status='Accept' WHERE creditHisId = ${body.creditHisId}`;
           dbConnection.query(sql, (error, results) => {
             if (error) {
@@ -165,97 +255,213 @@ class SupplierController {
       return res.status(500).json(e);
     }
   }
-  
 
   updateCredit(req, res) {
     try {
       const body = req.body;
       const user = req.session.user;
-
-      const currentDate = new Date();
-      currentDate.setMinutes(currentDate.getMinutes() + (7 * 60));
+      const currentDate = formatDate();
 
       let credit;
-      sql = `SELECT * FROM credit WHERE creditId = ${body.creditId} AND supEmail LIKE '${user.userData.email}'`;
+      let sql = `SELECT * FROM credit WHERE creditId = ${body.creditId} AND supEmail LIKE '${user.userData.email}'`;
+
       dbConnection.query(sql, (error, results) => {
         if (error) {
           return res.status(500).json({ error: error.message });
         }
         credit = results[0];
-      });
 
-      if (body.newCreditTotal < credit.creditTotal - credit.creditAmount) {
-        return res.status(409).send("Invalid credit.");
-      }
-
-      const newTotal = credit.creditTotal + body.creditAmount;
-      const newAmount = credit.creditAmount + body.creditAmount;
-
-      const txId = '';
-
-      // sql = `UPDATE Credit_History SET creditTotal='${body.newCreditTotal}',dateAccept='${currentDate}',creditUpdateAmount='',dateUpdate='${currentDate}', status='Accept' WHERE creditHisId = ${body.creditHisId} AND supEmail LIKE '${user.userData.email}'`;
-      let sql = `INSERT INTO Credit_History(creditId,creditTotal, creditUpdate,creditAmount,approvDate,updateType,status,txId) VALUES ('${body.creditId}','${body.newCreditTotal}','${body.newCreditTotal - credit.creditTotal}','${currentDate}','${body.newCreditTotal - credit.creditTotal > 0 ? "Add" : "Decrease"},'Accept'. '${txId}')`;
-      dbConnection.query(sql, (error, results) => {
-        if (error) {
-          return res.status(500).json({ error: error.message });
-        } else {
-          sql = `UPDATE Credit SET creditTotal='${newTotal}',creditAmount='${newAmount}',dateUpdate='${currentDate}' WHERE creditId = ${body.creditId} AND supEmail LIKE '${user.userData.email}'`;
-          dbConnection.query(sql, (error, results) => {
-            if (error) {
-              return res.status(500).json({ error: error.message });
-            } else {
-              return res.status(200).json({ message: 'Data updated successfully' });
-            }
-          });
+        if (body.newCreditTotal < credit.creditTotal - credit.creditAmount) {
+          return res.status(409).send("Invalid credit.");
         }
+
+        // const newTotal = credit.creditTotal + body.creditAmount;
+        const newAmount = credit.creditAmount + (body.newCreditTotal - credit.creditTotal);
+        const txId = '';
+
+        sql = `INSERT INTO Credit_History(creditId, creditTotal, creditUpdate, creditAmount, approvDate, updateType, status, txId) VALUES ('${body.creditId}', '${body.newCreditTotal}', '${Math.abs(body.newCreditTotal - credit.creditTotal)}', '${newAmount}', '${currentDate}', '${body.newCreditTotal - credit.creditTotal > 0 ? "Add" : "Decrease"}', 'Accept', '${txId}')`;
+
+        dbConnection.query(sql, (error, results) => {
+          if (error) {
+            return res.status(500).json({ error: error.message });
+          } else {
+            sql = `UPDATE Credit SET creditTotal='${body.newCreditTotal}', creditAmount='${newAmount}', dateUpdate='${currentDate}' WHERE creditId = ${body.creditId} AND supEmail LIKE '${user.userData.email}'`;
+
+            dbConnection.query(sql, (error, results) => {
+              if (error) {
+                return res.status(500).json({ error: error.message });
+              } else {
+                return res.status(200).json({ message: 'Data updated successfully' });
+              }
+            });
+          }
+        });
       });
     } catch (e) {
       return res.status(500).json(e);
-
     }
   }
 
-  submitOrder(req, res) {
+
+  getOrder = async (req, res) => {
+    const user = req.session.user;
+
+    let sql = `SELECT 
+    \`order\`.orderId, 
+    \`order\`.cusEmail, 
+    \`order\`.supEmail, 
+    \`order\`.totalPrice, 
+    \`order\`.createDate, 
+    \`order\`.createTxId, 
+    \`order\`.sendDate, 
+    \`order\`.sendTxId, 
+    \`order\`.approvDate, 
+    \`order\`.approvTxId, 
+    \`order\`.status,
+    customers.fullname as cusName 
+    FROM \`order\` INNER JOIN customers ON order.cusEmail = customers.email WHERE supEmail LIKE '${user.userData.email}'`;
+    dbConnection.query(sql, async (error, results) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+      }
+      const ret = [];
+
+      for (const data of results) {
+        try {
+          const tmp = { ...data }
+          const query2 = `SELECT * FROM order_product INNER JOIN product on order_product.productId = product.productId WHERE orderId = ${data.orderId}`;
+          const result2 = await executeQuery(query2);
+
+          tmp['productList'] = result2;
+          ret.push(tmp);
+        } catch (error) {
+          console.error(error);
+          return res.status(500).send(error);
+        }
+      }
+      return res.status(200).send(ret);
+    });
+  }
+
+  submitOrder = async (req, res) => {
     try {
       const body = req.body;
       const user = req.session.user.userData;
 
-      const currentDate = new Date();
-      currentDate.setMinutes(currentDate.getMinutes() + (7 * 60));
+      const currentDate = formatDate();
 
       const sendTxId = '';
-      if (!sendTxId) {
-        return res.status(500).send("Create transaction error")
-      }
 
-      let sql = `UPDATE Order SET sendDate='${currentDate}',sendTxId='${sendTxId}',status='Sending' WHERE orderId = ${body.orderId} AND supEmail LIKE '${user.userData.email}'`;
+      //remove comment while connect contract
+      // if (!sendTxId) {
+      //   return res.status(500).send("Transaction ID is missing");
+      // }
+
+      const sql = `UPDATE \`order\` SET 
+      sendDate = '${currentDate}', 
+      sendTxId = '${sendTxId}', 
+      status = 'Sending' 
+      WHERE orderId = ${body.orderId} AND supEmail LIKE '${user.email}'`;
+
       dbConnection.query(sql, (error, results) => {
         if (error) {
-          return res.status(500).json({ error: error.message });
+          return res.status(500).json({ error: "Failed to update order status" });
         } else {
-          return res.status(200).json({ message: 'Data updated successfully' });
+          return res.status(200).send(results);
         }
       });
-    } catch (e) {
-      return res.status(500).json(e);
 
+    } catch (e) {
+      return res.status(500).json({ error: "Internal server error" });
     }
   }
 
-  rejectOrder(req, res) {
+  rejectOrder = async (req, res) => {
     try {
       const body = req.body;
       const user = req.session.user;
 
-      const currentDate = new Date();
-      currentDate.setMinutes(currentDate.getMinutes() + (7 * 60));
+      const currentDate = formatDate();
 
       const approvTxId = '';
-      if (!approvTxId) {
+      //remove comment while connect contract
+      // if (!approvTxId) {
+      //   return res.status(500).send("Transaction ID is missing");
+      // }
 
-      }
 
-      let sql = `UPDATE Order SET approvDate='${currentDate}',approvTxId='${approvTxId}',status='Reject' WHERE orderId = ${body.orderId} AND supEmail LIKE '${user.userData.email}'`;
+      let sql = `SELECT * FROM \`order\` WHERE orderId = ${body.orderId} AND supEmail LIKE '${user.userData.email}'`;
+      const order = await new Promise((resolve, reject) => {
+        dbConnection.query(sql, (error, results) => {
+          if (error) {
+            reject(error)
+          } else {
+            resolve(results[0]);
+          }
+        });
+      });
+
+      sql = `SELECT * FROM order_product WHERE orderId = ${body.orderId}`;
+      const orderProd = await new Promise((resolve, reject) => {
+        dbConnection.query(sql, (error, results) => {
+          if (error) {
+            reject(error)
+          } else {
+            resolve(results);
+          }
+        });
+      });
+
+      orderProd.forEach(async (product, index) => {
+        sql = `SELECT productQuantity FROM product WHERE productId = ${product.productId};`;
+
+        const prod = await new Promise((resolve, reject) => {
+          dbConnection.query(sql, (err, result) => {
+            if (err) {
+              reject(err);
+            }
+            resolve(result[0]);
+          });
+        });
+
+        sql = `UPDATE product SET productQuantity=${prod.productQuantity + product.quantity} WHERE productId = ${product.productId};`;
+
+        await new Promise((resolve, reject) => {
+          dbConnection.query(sql, (err, result) => {
+            if (err) {
+              reject(err);
+            }
+            resolve();
+          });
+        });
+      });
+
+
+      sql = `SELECT creditId,creditAmount FROM credit WHERE cusEmail LIKE '${order.cusEmail}' AND supEmail LIKE '${user.userData.email}'`;
+
+      const credit = await new Promise((resolve, reject) => {
+        dbConnection.query(sql, (err, result) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(result[0]);
+        });
+      });
+
+      sql = `UPDATE credit SET creditAmount='${credit?.creditAmount + order.totalPrice}' WHERE creditId = ${credit.creditId} AND supEmail LIKE '${user.userData.email}'`;
+
+      await new Promise((resolve, reject) => {
+        dbConnection.query(sql, (err, result) => {
+          if (err) {
+            console.error(err);
+            reject(err);
+          }
+          resolve();
+        });
+      });
+
+      sql = `UPDATE \`order\` SET approvDate='${currentDate}',approvTxId='${approvTxId}',status='Reject' WHERE orderId = ${body.orderId} AND supEmail LIKE '${user.userData.email}'`;
       dbConnection.query(sql, (error, results) => {
         if (error) {
           return res.status(500).json({ error: error.message });
@@ -270,51 +476,56 @@ class SupplierController {
 
   submitCreditPayment(req, res) {
     try {
-      const body = req.body;
-      const user = req.session.user
+        const body = req.body;
+        const user = req.session.user;
+        const currentDate = formatDate();
+        let credit;
+        let sql;
 
-      let creditHis;
-      sql = `SELECT * FROM Credit_History WHERE creditHisId = ${body.creditHisId}`;
-      dbConnection.query(sql, (error, results) => {
-        if (error) {
-          return res.status(500).json({ error: error.message });
-        }
-        creditHis = results[0];
-      });
-
-      const currentDate = new Date();
-      currentDate.setMinutes(currentDate.getMinutes() + (7 * 60));
-
-      // const newAmount = credit.creditAmount+body.totalPayment
-      // if(newAmount > credit.creditTotal){
-      //   return res.status(409).send("Invalid payment number")
-      // }
-
-      const creditTxId = '';
-
-      if (!creditTxId) {
-
-      }
-
-      sql = `UPDATE Credit_History SET ,approvDate='${currentDate}',status='Accept',txId='${creditTxId}' WHERE creditHisId = ${body.creditHisId}`;
-      dbConnection.query(sql, (error, results) => {
-        if (error) {
-          return res.status(500).json({ error: error.message });
-        } else {
-          sql = `UPDATE Credit SET creditAmount='${creditHis.creditAmount}',dateUpdate='${currentDate}' WHERE creditId = ${body.creditId} AND supEmail LIKE '${user.userData.email}'`;
-          dbConnection.query(sql, (error, results) => {
+        sql = `SELECT * FROM Credit WHERE creditId = ${body.creditId}`;
+        dbConnection.query(sql, (error, results) => {
             if (error) {
-              return res.status(500).json({ error: error.message });
-            } else {
-              return res.status(200).json({ message: 'Data updated successfully' });
+                return res.status(500).json({ error: error.message });
             }
-          });
-        }
-      });
+            credit = results[0];
+
+            if (body.status === 'Reject') {
+                sql = `UPDATE Credit_History SET approvDate='${currentDate}', status='Reject' WHERE creditHisId = ${body.creditHisId}`;
+
+                dbConnection.query(sql, (error, results) => {
+                    if (error) {
+                        return res.status(500).json({ error: error.message });
+                    }
+                    return res.status(200).json({ message: 'Data updated successfully' });
+                });
+            } else {
+                const creditTxId = '';
+
+                sql = `UPDATE Credit_History SET approvDate='${currentDate}', status='Accept', txId='${creditTxId}' WHERE creditHisId = ${body.creditHisId}`;
+
+                dbConnection.query(sql, (error, results) => {
+                    if (error) {
+                        return res.status(500).json({ error: error.message });
+                    } else {
+                        sql = `UPDATE Credit SET creditAmount='${credit.creditAmount + body.creditAmount}', dateUpdate='${currentDate}' WHERE creditId = ${body.creditId} AND supEmail LIKE '${user.userData.email}'`;
+
+                        dbConnection.query(sql, (error, results) => {
+                            if (error) {
+                                return res.status(500).json({ error: error.message });
+                            } else {
+                                return res.status(200).json({ message: 'Data updated successfully' });
+                            }
+                        });
+                    }
+                });
+            }
+        });
     } catch (e) {
-      return res.status(500).json(e);
+        return res.status(500).json(e);
     }
-  }
+}
+
+
 }
 
 module.exports = (new SupplierController()).router;

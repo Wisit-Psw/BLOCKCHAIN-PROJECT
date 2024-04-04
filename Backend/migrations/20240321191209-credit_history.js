@@ -63,9 +63,9 @@ module.exports = {
       }
     });
 
-    await queryInterface.sequelize.query(
-      'ALTER TABLE `Credit_History` MODIFY COLUMN `requestsDate` DATETIME NOT NULL DEFAULT DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR)'
-    );
+    // await queryInterface.sequelize.query(
+    //   'ALTER TABLE `Credit_History` MODIFY COLUMN `requestsDate` DATETIME NOT NULL DEFAULT DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR)'
+    // );
   },
 
   async down(queryInterface, Sequelize) {

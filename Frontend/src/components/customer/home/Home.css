@@ -105,7 +105,6 @@
   flex-wrap: wrap;
   overflow-y: auto;
   max-height: 80dvh;
-  justify-content: space-between;
   transition: all 0.3s;
 }
 
@@ -163,3 +162,9 @@
 .home-input-container {
   padding: 0 !important;
 }
+@media screen and (max-width: 650px) {
+    .product-list {
+      justify-content: space-between !important;
+    }
+  }
+  

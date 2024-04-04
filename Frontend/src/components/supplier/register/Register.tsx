@@ -4,6 +4,7 @@ import axios from 'axios';
 import { environments } from '../../../environment/environment';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import Alert from '../../commons/alert/Alert';
 
 const SupRegister = () => {
     const [emailInputValue, setEmailInputValue] = useState('');
@@ -13,6 +14,16 @@ const SupRegister = () => {
     const [passwordInputValue, setPasswordInputValue] = useState('');
     const [confirmPasswordInputValue, setConfirmPasswordInputValue] = useState('');
     const navigate = useNavigate();
+
+    const [alertProps, setAlertProps] = useState<AlertStructure>({} as AlertStructure);
+    const [isAlert, setisAlert] = useState(false);
+
+    const handleAlert = (structure: AlertStructure) => {
+        if (!isAlert) {
+            setAlertProps(structure)
+        }
+        setisAlert(!isAlert)
+    }
 
     const onRegisterClick = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -33,14 +44,37 @@ const SupRegister = () => {
             });
 
             if (!(response.status === 200)) {
-                alert('Registration Error: Something went wrong');
+                handleAlert({
+                    headerText: "สมัครสมาชิก",
+                    contentText: "สำเร็จ",
+                    btn1: {
+                        btnText: "ยืนยัน",
+                        btnFunc: () => {
+                            setisAlert(false);
+                            navigate('/login');
+                        }
+                    }
+                })
                 return
             }
 
-            alert('Registration successful')
-            navigate('/login');
+            handleAlert({
+                headerText: "สมัครสมาชิก",
+                contentText: "มีข้อผิดพลาดเกิดขึ้น",
+                btn1: {
+                    btnText: "ยืนยัน",
+                    btnFunc: () => { setisAlert(false) }
+                }
+            })
         } catch (error) {
-            alert('Registration Error: ' + (error as Error).message);
+            handleAlert({
+                headerText: "สมัครสมาชิก",
+                contentText: "มีข้อผิดพลาดเกิดขึ้น",
+                btn1: {
+                    btnText: "ยืนยัน",
+                    btnFunc: () => { setisAlert(false) }
+                }
+            })
             console.error('Registration error:', (error as Error).message);
             return
         }
@@ -48,14 +82,14 @@ const SupRegister = () => {
     }
     return (
         <div className="sup-reg-page">
-            <div className="sup-reg-container card" id="loginbox">
+            <div className="sup-reg-container " id="loginbox">
                 <div className="card-header">
-                    <div className="header-text">Sign up</div>
-                    <label className="header-detail">Suppiler</label>
+                    <div className="header-text">สมัครสมาชิก</div>
+                    <label className="header-detail">คนขาย</label>
                 </div>
                 <form onSubmit={onRegisterClick}>
                     <div className="form-group">
-                        <label htmlFor="email">Email</label>
+                        <label htmlFor="email">อีเมล</label>
                         <input
                             className="form-control"
                             value={emailInputValue}
@@ -66,7 +100,7 @@ const SupRegister = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="name">Name</label>
+                        <label htmlFor="name">ชื่อ</label>
                         <input
                             className="form-control"
                             value={nameInputValue}
@@ -77,7 +111,7 @@ const SupRegister = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="phone">Phone</label>
+                        <label htmlFor="phone">เบอร์</label>
                         <input
                             className="form-control"
                             value={phoneInputValue}
@@ -88,7 +122,7 @@ const SupRegister = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="phone">Address</label>
+                        <label htmlFor="phone">ที่อยู่</label>
                         <input
                             className="form-control"
                             value={addressInputValue}
@@ -99,7 +133,7 @@ const SupRegister = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password">รหัสผ่าน</label>
                         <input
                             className="form-control"
                             value={passwordInputValue}
@@ -110,7 +144,7 @@ const SupRegister = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="confirm-password">Password</label>
+                        <label htmlFor="confirm-password">ยื่นยันรหัสผ่าน</label>
                         <input
                             className="form-control"
                             value={confirmPasswordInputValue}
@@ -121,15 +155,24 @@ const SupRegister = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <Link to='/login' className='login-wrap'>Login</Link>
+                        <Link to='/login' className='login-wrap'>เข้าสู่ระบบ</Link>
                     </div>
                     <div className="responseLog">
                     </div>
 
-                    <button type="submit" className="sigin-btn bg-blue text-white">Sign up</button>
+                    <button type="submit" className="sigin-btn bg-blue text-white">สมัครสมาชิก</button>
                 </form>
             </div>
             <div className="card-footer"></div>
+
+            {isAlert && (
+                <Alert
+                    headerText={alertProps?.headerText || ''}
+                    contentText={alertProps?.contentText || ''}
+                    btn1={alertProps?.btn1}
+                    btn2={alertProps?.btn2}
+                />
+            )}
         </div>
     );
 };

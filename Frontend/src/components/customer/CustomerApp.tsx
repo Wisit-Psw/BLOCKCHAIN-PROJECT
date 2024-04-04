@@ -10,12 +10,10 @@ import Wallet from './wallet/Wallet';
 import Setting from './setting/Setting';
 import Cart from './cart/Cart';
 import Product from './product/Product';
-import { useEffect } from 'react';
+import WalletInfo from './wallet-info/WalletInfo';
+import HistoryInfo from './history-info/HistoryInfo';
 
 function CustomerApp() {
-
-    useEffect(() => {
-    })
 
     return (
         <>
@@ -27,7 +25,9 @@ function CustomerApp() {
                     <Route path="/" element={<Home />} />
                     {/* <Route path="/delivery" element={<Delivery />} /> */}
                     <Route path="/history" element={<History />} />
+                    <Route path="/history-info/:id" element={<HistoryInfo />} />
                     <Route path="/wallet" element={<Wallet />} />
+                    <Route path="/wallet-info/:id" element={<WalletInfo />} />
                     <Route path="/settings" element={<Setting />} />
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/product/:productId" element={<Product />} />

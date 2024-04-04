@@ -14,8 +14,9 @@ declare interface SupCreditReq {
     creditAmount: number;
     requestsDate: string;
     approvDate: string;
-    updateType: string;
-    status: string;
+    slipImage?:string;
+    updateType: "Add"|"Decrease"|"Used"|"Payment";
+    status: "Accept"|"Reject"|"Waiting";
     txId: string;
     cusEmail: string;
     cusName:string;

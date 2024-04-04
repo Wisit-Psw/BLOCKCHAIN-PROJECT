@@ -1,13 +1,21 @@
-declare interface orderProductData{
-    id:number;
-    name:string;
-    price:number;
-    quantity:number;
+declare interface orderProductData {
+    orderProdId: number;
+    orderId: number;
+    productId: number;
+    quantity: number;
+    productName: string;
+    productImage: string;
+    productDescription: string;
+    productPrice: number;
+    productQuantity: number;
+    supEmail: string;
 }
-declare interface OrderData{
+
+declare interface OrderData {
     orderId: number;
     cusEmail: string;
     cusName: string;
+    supEmail: string;
     shopName: string;
     totalPrice: number;
     createDate: string;
@@ -17,9 +25,9 @@ declare interface OrderData{
     approvDate: string;
     approvTxId: string;
     status: "Success" | "Sending" | "Waiting" | "Reject";
-    productList:orderProductData[];
+    productList: orderProductData[];
 }
 
-declare interface HistoryData{
-    orderData:OrderData;
+declare interface HistoryData {
+    orderData: OrderData;
 }

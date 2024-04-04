@@ -36,20 +36,16 @@ function Home() {
         try {
             const response = await axios.get<ShopData[]>(environments.paths.getShopList, { withCredentials: true });
             if (response) {
-                console.log(response.data)
                 const tmp = [...response.data];
                 setShopList(tmp)
-                console.log(shopList)
             }
 
             const queryString = window.location.search;
             const params = new URLSearchParams(queryString);
 
             const supEmail = params.get('supEmail');
-            // console.log(supEmail)
             if (supEmail) {
                 for (let index = 0; index < shopList.length; index++) {
-                    console.log(shopList[index].email, supEmail)
                     if (shopList[index].email === supEmail) {
                         selectShop(shopList[index]);
                     }
@@ -57,6 +53,14 @@ function Home() {
                 }
             }
         } catch (error) {
+            handleAlert({
+                headerText: "ขอเครดิต",
+                contentText: "มีข้อผิดพลาดเกิดขึ้น",
+                btn1: {
+                    btnText: "ยืนยัน",
+                    btnFunc: () => { setisAlert(false) }
+                }
+            })
             console.error(error);
         }
     };
@@ -68,6 +72,14 @@ function Home() {
                 setProductList(response.data);
             }
         } catch (error) {
+            handleAlert({
+                headerText: "ขอเครดิต",
+                contentText: "มีข้อผิดพลาดเกิดขึ้น",
+                btn1: {
+                    btnText: "ยืนยัน",
+                    btnFunc: () => { setisAlert(false) }
+                }
+            })
             console.error(error);
         }
     };
@@ -98,7 +110,14 @@ function Home() {
                 return
             }
         } catch (error) {
-            alert('Registration Error: ' + (error as Error).message);
+            handleAlert({
+                headerText: "ขอเครดิต",
+                contentText: "มีข้อผิดพลาดเกิดขึ้น",
+                btn1: {
+                    btnText: "ยืนยัน",
+                    btnFunc: () => { setisAlert(false) }
+                }
+            })
             console.error('Registration error:', (error as Error).message);
             return
         }

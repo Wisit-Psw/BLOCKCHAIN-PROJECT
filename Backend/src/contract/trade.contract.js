@@ -49,4 +49,4 @@ class TradeContract {
     }
 }
 
-module.exports = new TradeContract();
+// module.exports = new TradeContract();

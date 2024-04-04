@@ -16,6 +16,8 @@
   max-width: 500px;
   width: 90dvw !important;
   min-width: 350px;
+  padding: 1rem;
+  border-radius: 0.3rem;
   text-align: center;
   position: fixed;
   top: 50%;

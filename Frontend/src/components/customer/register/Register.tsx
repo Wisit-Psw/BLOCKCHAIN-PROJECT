@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { environments } from '../../../environment/environment';
 import { useNavigate } from 'react-router-dom';
+import Alert from '../../commons/alert/Alert';
 
 const CusRegister = () => {
     const [emailInputValue, setEmailInputValue] = useState('');
@@ -13,7 +14,17 @@ const CusRegister = () => {
     const [passwordInputValue, setPasswordInputValue] = useState('');
     const [confirmPasswordInputValue, setConfirmPasswordInputValue] = useState('');
     const navigate = useNavigate();
-    
+
+    const [alertProps, setAlertProps] = useState<AlertStructure>({} as AlertStructure);
+    const [isAlert, setisAlert] = useState(false);
+
+    const handleAlert = (structure: AlertStructure) => {
+        if (!isAlert) {
+            setAlertProps(structure)
+        }
+        setisAlert(!isAlert)
+    }
+
     const onRegisterClick = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -33,106 +44,139 @@ const CusRegister = () => {
             });
 
             if (!(response.status === 200)) {
-                alert('Registration Error: Something went wrong');
+                handleAlert({
+                    headerText: "สมัครสมาชิก",
+                    contentText: "มีข้อผิดพลาดเกิดขึ้น",
+                    btn1: {
+                        btnText: "ยืนยัน",
+                        btnFunc: () => {
+                            setisAlert(false);
+                            navigate('/login');
+                        }
+                    }
+                })
                 return
             }
 
-            alert('Registration successful')
-            navigate('/login');
+            handleAlert({
+                headerText: "สมัครสมาชิก",
+                contentText: "สมัครสมาชิกสำเร็จ",
+                btn1: {
+                    btnText: "ยืนยัน",
+                    btnFunc: () => {
+                        setisAlert(false);
+                        navigate('/login');
+                    }
+                }
+            })
         } catch (error) {
-            alert('Registration Error: ' + (error as Error).message);
+            handleAlert({
+                headerText: "สมัครสมาชิก",
+                contentText: "มีข้อผิดพลาดเกิดขึ้น",
+                btn1: {
+                    btnText: "ยืนยัน",
+                    btnFunc: () => { setisAlert(false) }
+                }
+            })
             console.error('Registration error:', (error as Error).message);
             return
         }
+
     }
 
     return (
         <div className="cus-reg-page">
-            <div className="cus-reg-container">
-                <div className="card bg-white" id="loginbox">
-                    <div className="card-header">
-                        <div className="header-text">Sign up</div>
-                        <label className="header-detail">Customer</label>
-                    </div>
-                    <form onSubmit={onRegisterClick}>
-                        <div className="form-group">
-                            <label htmlFor="email">Email</label>
-                            <input
-                                className="form-control"
-                                value={emailInputValue}
-                                onChange={(e) => setEmailInputValue(e.target.value)}
-                                name="email"
-                                // type="email"
-                                placeholder="Email"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="name">Name</label>
-                            <input
-                                className="form-control"
-                                value={nameInputValue}
-                                onChange={(e) => setNameInputValue(e.target.value)}
-                                name="name"
-                                type="name"
-                                placeholder="Full name"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="phone">Phone</label>
-                            <input
-                                className="form-control"
-                                value={phoneInputValue}
-                                onChange={(e) => setPhoneInputValue(e.target.value)}
-                                name="phone"
-                                type="tell"
-                                placeholder="Phone"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="phone">Address</label>
-                            <input
-                                className="form-control"
-                                value={addressInputValue}
-                                onChange={(e) => setAddressInputValue(e.target.value)}
-                                type="text"
-                                name="address"
-                                placeholder="Address"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="password">Password</label>
-                            <input
-                                className="form-control"
-                                value={passwordInputValue}
-                                onChange={(e) => setPasswordInputValue(e.target.value)}
-                                name="password"
-                                type="password"
-                                placeholder="Password"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="confirm-password">Password</label>
-                            <input
-                                className="form-control"
-                                value={confirmPasswordInputValue}
-                                onChange={(e) => setConfirmPasswordInputValue(e.target.value)}
-                                name="confirm-password"
-                                type="password"
-                                placeholder="Confirm password"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <Link to='/login' className='login-wrap'>Login</Link>
-                        </div>
-
-                        <div className="responseLog" id="responseLog">
-                        </div>
-
-                        <button type="submit" className="sigin-btn bg-blue text-white">Sign up</button>
-                    </form>
+            <div className="cus-reg-container" id="loginbox">
+                <div className="card-header">
+                    <div className="header-text">สมัครสมาชิก</div>
+                    <label className="header-detail">ลูกค้า</label>
                 </div>
+                <form onSubmit={onRegisterClick}>
+                    <div className="form-group">
+                        <label htmlFor="email">อีเมล</label>
+                        <input
+                            className="form-control"
+                            value={emailInputValue}
+                            onChange={(e) => setEmailInputValue(e.target.value)}
+                            name="email"
+                            // type="email"
+                            placeholder="Email"
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="name">ชื่อ</label>
+                        <input
+                            className="form-control"
+                            value={nameInputValue}
+                            onChange={(e) => setNameInputValue(e.target.value)}
+                            name="name"
+                            type="name"
+                            placeholder="Full name"
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="phone">เบอร์</label>
+                        <input
+                            className="form-control"
+                            value={phoneInputValue}
+                            onChange={(e) => setPhoneInputValue(e.target.value)}
+                            name="phone"
+                            type="tell"
+                            placeholder="Phone"
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="phone">ที่อยู่</label>
+                        <input
+                            className="form-control"
+                            value={addressInputValue}
+                            onChange={(e) => setAddressInputValue(e.target.value)}
+                            type="text"
+                            name="address"
+                            placeholder="Address"
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="password">รหัสผ่าน</label>
+                        <input
+                            className="form-control"
+                            value={passwordInputValue}
+                            onChange={(e) => setPasswordInputValue(e.target.value)}
+                            name="password"
+                            type="password"
+                            placeholder="Password"
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="confirm-password">ยื่นยันรหัสผ่าน</label>
+                        <input
+                            className="form-control"
+                            value={confirmPasswordInputValue}
+                            onChange={(e) => setConfirmPasswordInputValue(e.target.value)}
+                            name="confirm-password"
+                            type="password"
+                            placeholder="Confirm password"
+                        />
+                    </div>
+                    <div className="form-group">
+                        <Link to='/login' className='login-wrap'>เข้าสู่ระบบ</Link>
+                    </div>
+
+                    <div className="responseLog" id="responseLog">
+                    </div>
+
+                    <button type="submit" className="sigin-btn bg-blue text-white">สมัครสมาชิก</button>
+                </form>
                 <div className="card-footer"></div>
             </div>
+            {isAlert && (
+                <Alert
+                    headerText={alertProps?.headerText || ''}
+                    contentText={alertProps?.contentText || ''}
+                    btn1={alertProps?.btn1}
+                    btn2={alertProps?.btn2}
+                />
+            )}
         </div>
     );
 };

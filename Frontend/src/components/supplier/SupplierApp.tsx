@@ -11,6 +11,7 @@ import SupOrder from './order/SupOrder';
 import Product from './product/Product';
 import SupAdd from './add/SupAddProduct';
 import CreditReq from './credit-req/CreditReq';
+import SupCreditInfo from './credit-info/SupCreditInfo';
 
 
 function SupplierApp() {
@@ -25,6 +26,7 @@ function SupplierApp() {
             <div className="page-body">
                 <Routes>
                     <Route path="/" element={<SupHome />} />
+                    <Route path="/credit-info/:id" element={<SupCreditInfo />} />
                     <Route path="/add" element={<SupAdd />} />
                     <Route path="/credit" element={<SupCredit />} />
                     <Route path="/credit-req" element={<CreditReq />} />

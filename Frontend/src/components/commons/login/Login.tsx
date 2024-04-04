@@ -20,12 +20,12 @@ const LoginPage = ({ onLoginClick }: LoginProps) => {
         <div className="page">
             <div className="container card" id="loginbox">
                 <div className="card-header">
-                    <div className="header-text">Sign In</div>
-                    <label className="header-detail">Sign in to stay connected.</label>
+                    <div className="header-text">เข้าสู่ระบบ</div>
+                    <label className="header-detail">เข้าสู่ระบบเพื่อใช้งาน</label>
                 </div>
                 <form onSubmit={handleLogin}>
                     <div className="form-group">
-                        <label htmlFor="email">Email</label>
+                        <label htmlFor="email">อรเมล</label>
                         <input
                             className="form-control"
                             value={usernameInputValue}
@@ -36,7 +36,7 @@ const LoginPage = ({ onLoginClick }: LoginProps) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password">รหัสผ่าน</label>
                         <input
                             className="form-control"
                             value={passwordInputValue}

@@ -4,10 +4,16 @@ import { useEffect, useState } from 'react';
 import QuantityButton from '../../commons/quantity-button/QuantityButton';
 import axios from 'axios';
 import { environments } from '../../../environment/environment';
+import Alert from '../../commons/alert/Alert';
+
+
 function Product() {
     const { productId } = useParams();
     const [productData, setProductData] = useState({} as ProductData);
     const [quantity, setQuantity] = useState(1);
+
+    const [isAlert, setisAlert] = useState(false);
+    const [alertProps, setAlertProps] = useState<AlertStructure>({} as AlertStructure);
 
     const getProductData = async () => {
         try {
@@ -36,12 +42,33 @@ function Product() {
         }
     }
 
+    const handleAlert = (structure: AlertStructure) => {
+        if (!isAlert) {
+            setAlertProps(structure)
+        }
+        setisAlert(!isAlert)
+    }
+
     const addProductTocart = async () => {
-        await axios.post<ProductData>(`${environments.paths.addProductToCart}`, {
+        const res = await axios.post(`${environments.paths.addProductToCart}`, {
             productId: productData.productId,
             quantity: quantity,
             supEmail: productData.supEmail
         }, { withCredentials: true });
+
+        if(res.data){
+            handleAlert({
+                headerText: "เพิ่มสินค้าลงตะกร้า",
+                contentText: "เพิ่มสินค้าลงตะกร้าสำเร็จ",
+                btn1: {
+                    btnText: "ยืนยัน",
+                    btnFunc: () => {
+                        setisAlert(false);
+                    }
+                }
+            })
+        }
+
     }
 
     useEffect(() => {
@@ -88,6 +115,15 @@ function Product() {
                 </div>
                 <div className="btn text-white atc-btn" onClick={addProductTocart}>Add</div>
             </div>
+
+            {isAlert && (
+                <Alert
+                    headerText={alertProps?.headerText || ''}
+                    contentText={alertProps?.contentText || ''}
+                    btn1={alertProps?.btn1}
+                    btn2={alertProps?.btn2}
+                />
+            )}
         </div>
     )
 }

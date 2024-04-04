@@ -1,18 +1,24 @@
 declare interface walletHistoryData {
-    id: number;
-    typr: string;
-    amount: number;
-    total: number;
+    creditHisId: number;
+    creditId: number;
+    creditTotal: number;
+    creditUpdate: number;
+    creditAmount: number;
+    requestsDate: string;
+    approvDate: string;
+    updateType: "Add"|"Decrease"|"Used"|"Payment";
+    status: "Accept"|"Reject"|"Waiting";
+    txId: string;
 }
 
 declare interface WalletData {
     creditId: number;
     supEmail: string;
-    shopName:string;
-    shopImage:string;
+    shopName: string;
     cusEmail?: string;
+    cusName?:string;
     creditTotal: number;
     creditAmount?: number;
     dateUpdate: string;
-    // history: walletHistoryData[];
+    history?: walletHistoryData[];
 }

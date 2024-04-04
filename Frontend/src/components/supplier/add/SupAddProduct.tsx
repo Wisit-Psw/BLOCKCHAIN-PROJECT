@@ -4,12 +4,24 @@ import { useEffect, useState } from 'react';
 import { faCircleXmark, faAdd } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { environments } from '../../../environment/environment';
+import Alert from '../../commons/alert/Alert';
+
 function AddProduct() {
     const [prodImage, setprodImage] = useState('');
     const [productName, setProductName] = useState('');
     const [productPrice, setProductPrice] = useState(0);
     const [productQuantity, setProductQuantity] = useState(1);
     const [productDescription, setProductDescription] = useState('');
+
+    const [alertProps, setAlertProps] = useState<AlertStructure>({} as AlertStructure);
+    const [isAlert, setisAlert] = useState(false);
+
+    const handleAlert = (structure: AlertStructure) => {
+        if (!isAlert) {
+            setAlertProps(structure)
+        }
+        setisAlert(!isAlert)
+    }
 
     const handleInsertImage = () => {
         document.getElementById('product-img-input')?.click()
@@ -52,10 +64,20 @@ function AddProduct() {
 
     const addProduct = async () => {
         if (prodImage.trim() === '' || productName.trim() === '' || productPrice === 0 || productQuantity <= 0 || productDescription.trim() === '') {
-            alert("กรุณากรอกข้อมูลให้ถูกต้อง")
+
+            handleAlert(
+                {
+                    headerText: 'อัพเดทสินค้า',
+                    contentText: 'กรุณากรอกข้อมูลให้ถูกต้อง',
+                    btn1: {
+                        btnText: 'ยืนยัน',
+                        btnFunc: () => { setisAlert(false) }
+                    }
+                }
+            )
             return
         }
-        console.log(prodImage)
+
         const response = await axios.post(environments.paths.addProduct, {
             productImage: prodImage,
             productName: productName,
@@ -65,10 +87,31 @@ function AddProduct() {
         }, { withCredentials: true })
 
         if (response.status !== 201) {
-            alert('มีข้อผิดพลาดเกิดขึ้น');
+            handleAlert({
+                headerText: "เพิ่มสินค้า",
+                contentText: "มีข้อผิดพลาดเกิดขึ้น",
+                btn1: {
+                    btnText: "ยืนยัน",
+                    btnFunc: () => { setisAlert(false) }
+                }
+            })
             return
         }
-        alert('เพิ่มสินค้าเสร็จสิ้น')
+        handleAlert({
+            headerText: "เพิ่มสินค้า",
+            contentText: "เพิ่มสินค้าเสร็จสิ้น",
+            btn1: {
+                btnText: "ยืนยัน",
+                btnFunc: () => {
+                    setprodImage('');
+                    setProductName('');
+                    setProductPrice(0);
+                    setProductQuantity(1);
+                    setProductDescription('');
+                    setisAlert(false);
+                }
+            }
+        })
     }
 
     useEffect(() => {
@@ -128,6 +171,14 @@ function AddProduct() {
             <div className="add-product-btn-wrap">
                 <div className="btn team-btn text-white ap-btn" onClick={addProduct}>Add Product</div>
             </div>
+            {isAlert && (
+                <Alert
+                    headerText={alertProps?.headerText || ''}
+                    contentText={alertProps?.contentText || ''}
+                    btn1={alertProps?.btn1}
+                    btn2={alertProps?.btn2}
+                />
+            )}
         </div>
     )
 }

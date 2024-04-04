@@ -9,6 +9,7 @@
     transform: translate(-50%,-50%);
     width: 90% !important;
     opacity: 1 !important;
+    max-width: 500px !important;
 }
 
 .alert-modal-body{

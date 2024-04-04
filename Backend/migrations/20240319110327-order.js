@@ -72,9 +72,9 @@ module.exports = {
     });
 
     // Add interval to createDate after table creation
-    await queryInterface.sequelize.query(
-      'ALTER TABLE `Order` MODIFY COLUMN `createDate` DATETIME NOT NULL DEFAULT DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR)'
-    );
+    // await queryInterface.sequelize.query(
+    //   'ALTER TABLE `Order` MODIFY COLUMN `createDate` DATETIME NOT NULL DEFAULT DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR)'
+    // );
   },
 
   async down(queryInterface, Sequelize) {

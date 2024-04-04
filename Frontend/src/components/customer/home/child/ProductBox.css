@@ -2,7 +2,7 @@
   width: 41dvw;
   max-width: 200px;
   display: block;
-  margin: 0.5rem 0;
+  margin: 0.5rem;
   padding: 0.5rem;
   border-radius: 0.3rem;
   transition: all 0.3s;
@@ -22,8 +22,8 @@
 }
 
 .product-image {
-  width: 100%; 
-  height: 100%; 
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -38,4 +38,10 @@
   text-align: right;
   font-size: 1.2rem;
   color: var(--team-text);
+}
+
+@media screen and (max-width:650px) {
+    .product-container{
+        margin: 0.5rem 0;
+    }
 }

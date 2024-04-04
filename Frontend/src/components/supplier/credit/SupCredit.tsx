@@ -1,90 +1,56 @@
 
-import './SupCredit.css'
-import { useEffect, useState } from 'react';
+import './SupCredit.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight ,faSearch} from "@fortawesome/free-solid-svg-icons";
-// import SupCreditHistory from './child/SupCreditHistory';
+import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from 'react'
+import axios from 'axios';
+import { environments } from '../../../environment/environment';
+import { Link } from 'react-router-dom';
 
 function SupCredit() {
-    const [supCreditList, setsupCreditList] = useState([] as SupCreditData[]);
+    const [walletList, setWalletList] = useState([] as WalletData[]);
+
+    const getwalletList = async () => {
+        try {
+            const response = await axios.get(environments.paths.getSupCredit, { withCredentials: true });
+            if (response.data) {
+                setWalletList(response.data);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     useEffect(() => {
-        const supCreditDataTmp: SupCreditData[] = []
-        for (let index = 0; index < 100; index++) {
-            const elementShop: SupCreditData = {
-                id: index,
-                cusName: 'cus'+index,
-                creditTotal: 9999,
-                creditAmount: 9999,
-                history: [{
-                    id: 0,
-                    typr: 'Requests',
-                    amount: 3000,
-                    total: 3000,
-                }, {
-                    id: 1,
-                    typr: 'Payment',
-                    amount: 3000,
-                    total: 6000,
-                }, {
-                    id: 2,
-                    typr: 'Requests',
-                    amount: 3999,
-                    total: 9999,
-                }]
-            }
-            supCreditDataTmp.push(elementShop);
-        }
-        setsupCreditList(supCreditDataTmp)
+        getwalletList();
     }, [])
 
     return (
-        <div className='credit-page-container'>
-            <div className="sup-credit-search search-container cus-home-search text-light-gray">
-                <div className="search-icon">
-                    <FontAwesomeIcon icon={faSearch} />
-                </div>
-                <div className="search-box">
-                    <input
-                        type="text"
-                        className="search-input"
-                        placeholder="ค้นหา"
-                    />
-                </div>
-            </div>
-            {/* <div className="table">
-                <div className="thead">
-                    <div className="trow">
-                        <div className="th supplier">Customer</div>
-                        <div className="th used">Used</div>
-                        <div className="th amount">Amount</div>
-                        <div className="th total">Total</div>
+        <div className='wallet-page-container'>
+            {walletList.map((wallet: WalletData, index: number) => (
+                <div className='wallet-list' key={index}>
+                    <div className="wallet-list-shop-name">
+                        {wallet.cusName}
                     </div>
-                </div>
-                <div className="tbody">
-                    {supCreditList.map((supCredit: SupCreditData, index: number) => (
-                            <SupCreditHistory key={index} index={index} supCredit={supCredit} />
-                    ))}
-                </div>
-            </div> */}
-             {supCreditList.map((credit: SupCreditData, index: number) => (
-                <div className='credit-list'>
-                    <div className="credit-list-shop-name">
-                        {credit.cusName}
-                    </div>
-                    <div key={index} className='credit-list-info'>
-                        <div className="credit-info">
-                            <div className="credit-create-date row">
-                                <div className='credit-topic'>เครดิตทั้งหมด : </div>
-                                <div> {credit.creditTotal}</div>
+                    <div className='wallet-list-info'>
+                        <div className="wallet-info">
+                            <div className="wallet-create-date row">
+                                <div className='wallet-topic'>เครดิตทั้งหมด : </div>
+                                <div> {wallet.creditTotal}</div>
                             </div>
-                            <div className="credit-send-date row">
-                                <div className='credit-topic'>เครดิตคงเหลือ : </div>
-                                <div> {credit.creditAmount}</div>
+                            <div className="wallet-send-date row">
+                                <div className='wallet-topic'>เครดิตคงเหลือ : </div>
+                                <div> {wallet.creditAmount}</div>
+                            </div>
+                            <div className="wallet-send-date row">
+                                <div className='wallet-topic'>เครดิตที่ใช้ไป : </div>
+                                <div> {wallet.creditTotal - (wallet.creditAmount || 0)}</div>
                             </div>
                         </div>
-                        <div className="credit-list-shop-detail">
-                            <div className='credit-topic'><FontAwesomeIcon icon={faAngleRight} /></div>
+                        <div className="wallet-list-shop-detail">
+                            <Link to={"/credit-info/" + wallet.creditId}>
+                                <div className='wallet-topic'><FontAwesomeIcon icon={faAngleRight} /></div>
+                            </Link>
                         </div>
                     </div>
                 </div>
