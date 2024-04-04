@@ -57,6 +57,8 @@ class App {
   }
 
   setupRoutes() {
+    const [swaggerHandler, swaggerUI] = require('./src/swagger/main'); 
+    this.app.use("/api-docs", swaggerHandler, swaggerUI);
     this.app.use('/auth', require('./src/controller/Auth.controller'));
     this.app.use('/customer', require('./src/controller/Customer.controller'));
     this.app.use('/supplier', require('./src/controller/Suppiler.controller'));
