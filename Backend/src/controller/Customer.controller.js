@@ -96,11 +96,11 @@ class UserController {
       const hashPass = await bcrypt.hash(password, 10)
       const sql = `INSERT INTO customers (email, fullname, phone, address, password) VALUES ('${email}','${name}','${phone}','${address}','${hashPass}')`;
 
-      dbConnection.query(sql, (error, results) => {
+      dbConnection.query(sql, async (error, results) => {
         if (error) {
           return res.status(500).json({ error: error.message });
         } else {
-          contract.writeContract("registerBuyer", stringToByte(hashSha256(email, 16)));
+          contract.writeContract("registerBuyer", stringToByte(await hashSha256(email, 16)));
           return res.status(200).json({ message: 'Data inserted successfully' });
         }
       });
@@ -383,12 +383,12 @@ class UserController {
         });
       });
 
-      const orderListHashed = stringToByte(hashSha256(JSON.stringify(body.productList), 32), 32);
+      const orderListHashed = stringToByte(await hashSha256(JSON.stringify(body.productList), 32), 32);
 
       const createTxId = (await contract.writeContract(
         "orderProceed", 
-        stringToByte(hashSha256(body.supEmail, 16), 16), 
-        stringToByte(hashSha256(user.userData.email, 16), 16), 
+        stringToByte(await hashSha256(body.supEmail, 16), 16), 
+        stringToByte(await hashSha256(user.userData.email, 16), 16), 
         orderListHashed,
         0)).transactionHash;
 
@@ -520,8 +520,8 @@ class UserController {
             } else {
               const approvTxId = (await contract.writeContract(
                 "orderProceed", 
-                stringToByte(hashSha256(body.supEmail, 16), 16), 
-                stringToByte(hashSha256(user.userData.email, 16), 16), 
+                stringToByte(await hashSha256(body.supEmail, 16), 16), 
+                stringToByte(await hashSha256(user.userData.email, 16), 16), 
                 cacheOrder[body.orderId],
                 2)).transactionHash;
               // if (!approvTxId) {

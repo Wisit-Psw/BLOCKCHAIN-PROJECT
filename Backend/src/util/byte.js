@@ -1,3 +1,5 @@
+const hashSha256 = require('./hash');
+
 function hexZeroPad(value, length) {
     if (typeof(value) !== "string") {
         throw new Error('allow only string')

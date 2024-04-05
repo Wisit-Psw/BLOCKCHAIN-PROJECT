@@ -97,7 +97,7 @@ class SupplierController {
     const hashPass = await bcrypt.hash(password, 10)
     const sql = `INSERT INTO supplier (email, shopName, phone, address, password) VALUES ('${email}','${name}','${phone}','${address}','${hashPass}')`;
 
-    dbConnection.query(sql, (error, results) => {
+    dbConnection.query(sql, async (error, results) => {
       if (error) {
         let statusCode = 500;
         if (error.code === 'ER_DUP_ENTRY') {
@@ -105,7 +105,7 @@ class SupplierController {
         }
         return res.status(statusCode).json({ error: error.message });
       } else {
-        contract.writeContract("registerSeller", stringToByte(hashSha256(email, 16)));
+        contract.writeContract("registerSeller", stringToByte(await hashSha256(email, 16)));
         return res.status(200).json({ message: 'Data inserted successfully' });
       }
     });
@@ -228,8 +228,8 @@ class SupplierController {
           const txId = (await contract.writeContract(
             "lendCreditProceed",
             false,
-            stringToByte(hashSha256(user.userData.email, 16), 16), 
-            stringToByte(hashSha256(body.cusEmail, 16), 16), 
+            stringToByte(await hashSha256(user.userData.email, 16), 16), 
+            stringToByte(await hashSha256(body.cusEmail, 16), 16), 
             body.creditAmount)).transactionHash;
 
           sql = `UPDATE Credit_History SET txId='${txId}', approvDate='${currentDate}', status='Reject', creditAmount='${credit.creditAmount}' WHERE creditHisId = ${body.creditHisId}`;
@@ -243,8 +243,8 @@ class SupplierController {
           const txId = (await contract.writeContract(
             "lendCreditProceed",
             true,
-            stringToByte(hashSha256(user.userData.email, 16), 16), 
-            stringToByte(hashSha256(body.cusEmail, 16), 16), 
+            stringToByte(await hashSha256(user.userData.email, 16), 16), 
+            stringToByte(await hashSha256(body.cusEmail, 16), 16), 
             body.creditAmount)).transactionHash;
 
           const newTotal = credit.creditTotal + body.creditAmount;
@@ -370,8 +370,8 @@ class SupplierController {
 
       const sendTxId = (await contract.writeContract(
         "orderProceed", 
-        stringToByte(hashSha256(body.email, 16), 16), 
-        stringToByte(hashSha256(user.userData.email, 16), 16), 
+        stringToByte(await hashSha256(body.email, 16), 16), 
+        stringToByte(await hashSha256(user.userData.email, 16), 16), 
         cacheOrder[body.orderId],
         1)).transactionHash;
 
@@ -409,8 +409,8 @@ class SupplierController {
 
       const approvTxId = (await contract.writeContract(
         "orderProceed", 
-        stringToByte(hashSha256(body.supEmail, 16), 16), 
-        stringToByte(hashSha256(user.userData.email, 16), 16), 
+        stringToByte(await hashSha256(body.supEmail, 16), 16), 
+        stringToByte(await hashSha256(user.userData.email, 16), 16), 
         cacheOrder[body.orderId],
         3)).transactionHash;
 
@@ -525,8 +525,8 @@ class SupplierController {
             } else {
                 const creditTxId = (await contract.writeContract(
                   "payLoanCredit",
-                  stringToByte(hashSha256(user.userData.email, 16), 16), 
-                  stringToByte(hashSha256(credit.cusEmail, 16), 16), 
+                  stringToByte(await hashSha256(user.userData.email, 16), 16), 
+                  stringToByte(await hashSha256(credit.cusEmail, 16), 16), 
                   body.creditAmount)).transactionHash;
 
                 

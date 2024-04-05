@@ -1,7 +1,17 @@
 const crypto = require('crypto');
 
-function hashSha256(value, length){
-    return crypto.createHash('sha256', process.env.HASH_SECRET).update(value).digest().toString().substring(0, length)
-}
+async function hashSha256(message, length) {
+    // encode as UTF-8
+    const msgBuffer = new TextEncoder().encode(message);                    
 
+    // hash the message
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+
+    // convert ArrayBuffer to Array
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+    // convert bytes to hex string                  
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex.slice(0, length);
+}
 module.exports = hashSha256;
