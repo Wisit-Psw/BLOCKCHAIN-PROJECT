@@ -13,8 +13,6 @@ const socketServer = require('./src/module/socket')
 let env = (require('dotenv').config()).parsed;
 const PORT = env.PORT || 3000;
 
-
-
 class App {
   constructor() {
     this.app = express();

@@ -219,7 +219,7 @@ function SupCreditInfo() {
                     <div className="backdrop">
                         <div className="sup-credit-update-modal ">
                             <div className="modal-header">
-                                ชำระเงิน
+                                แก้ไขเครดิต
                             </div>
                             <div className="modal-body">
                                 <div className="sup-credit-info-wrap" >

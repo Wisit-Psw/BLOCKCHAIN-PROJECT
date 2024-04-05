@@ -25,7 +25,7 @@ function Cart() {
     return (
         <div className='cart-page-container'>
             <div className="table">
-                <div className="tbody">
+                <div className="tbody fullpage">
                     {cartList.map((cart: CartData, index: number) => (
                         <ProductRow key={index} indexProps={index} cartProps={cart} getCartData={getCartData}/>
                     ))}

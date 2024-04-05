@@ -167,7 +167,7 @@ function Home() {
                             padding: '0',
                             overflow: 'hidden'
                         } : {
-                            height: '60dvh'
+                            height: currentShop ? '62dvh' : "74dvh"
                         }}>
                         {shopList && shopList.map((shop, index) => (
                             // <div className='shop-list-order' key={index} onClick={() => {

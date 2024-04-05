@@ -1,5 +1,8 @@
 .cart-page-container {
     width: 100% !important;
+    .fullpage{
+        height: 82dvh;
+    }
 }
 
 .table {
