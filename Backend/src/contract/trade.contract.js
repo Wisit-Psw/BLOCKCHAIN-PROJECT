@@ -30,18 +30,20 @@ class TradeContract {
                     delete event.returnValues[String(i)];
                 }
                 delete event.returnValues['__length__'];
-                if (event.returnValues['timeStamp']){
-                    event.returnValues['timeStamp'] = Number(event.returnValues['timeStamp']);
+                for(const k in event.returnValues){
+                    if(typeof event.returnValues[k] === 'bigint'){
+                        event.returnValues[k] = String(event.returnValues[k]);
+                    }
                 }
                 return { 
                     name: event.event,
                     block: {
                         hash: event.blockHash,
-                        number: Number(event.blockNumber)
+                        number: String(event.blockNumber)
                     },
                     transaction: {
                         hash: event.transactionHash,
-                        index: Number(event.transactionIndex) 
+                        index: String(event.transactionIndex) 
                     },
                     value: event.returnValues
                 }
