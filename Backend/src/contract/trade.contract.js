@@ -29,20 +29,23 @@ class TradeContract {
                 for(let i = 0; i < length; i++){
                     delete event.returnValues[String(i)];
                 }
-    
+                delete event.returnValues['__length__'];
+                if (event.returnValues['timeStamp']){
+                    event.returnValues['timeStamp'] = Number(event.returnValues['timeStamp']);
+                }
                 return { 
                     name: event.event,
                     block: {
                         hash: event.blockHash,
-                        number: event.blockNumber
+                        number: Number(event.blockNumber)
                     },
                     transaction: {
                         hash: event.transactionHash,
-                        index: event.transactionIndex 
+                        index: Number(event.transactionIndex) 
                     },
                     value: event.returnValues
                 }
-            }catch{
+            }catch(e){
                 return {}
             }
         }))

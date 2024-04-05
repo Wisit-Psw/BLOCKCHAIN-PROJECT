@@ -674,6 +674,18 @@
           "application/json"
         ]
       }
+    },
+    "/event-log": {
+      "get": {
+        "tags": [
+          "Event"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   }
 }

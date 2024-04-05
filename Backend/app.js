@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const sequelize = require('./database/connection');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
+const contract = require('./src/contract/trade.contract');
 
 let env = (require('dotenv').config()).parsed
 PORT = env.PORT || 3000
@@ -65,6 +66,10 @@ class App {
     this.app.use('/product', require('./src/controller/Product.controller'));
     this.app.use('/cart', require('./src/controller/Cart.controller'));
     this.app.use('/cart-product', require('./src/controller/CartPorduct.controller'));
+
+    this.app.get('/event-log', (req, res) => {
+      return contract.getEventLogs().then(e => res.json(e));
+    })
 
   }
 
