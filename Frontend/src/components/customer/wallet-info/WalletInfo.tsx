@@ -218,7 +218,7 @@ function WalletInfo() {
                                 <div className="wallet-info-label">
                                     รหัสรายการ :
                                 </div>
-                                {info.txId}
+                                <div className="txid">{info.txId} </div>
                             </div>
                             <div className="wallet-info-wrap" >
                                 <div className="wallet-info-label">

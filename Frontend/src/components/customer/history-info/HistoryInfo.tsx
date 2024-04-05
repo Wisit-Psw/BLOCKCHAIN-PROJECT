@@ -123,7 +123,7 @@ function HistoryInfo() {
                         </div>
                         <div className="history-info-create-date row">
                             <div className='history-info-topic'>รหัสการสั่งซื้อ : </div>
-                            <div>{(order.createTxId)}</div>
+                            <div className='txid'>{(order.createTxId)}</div>
                         </div>
                         <div className="history-info-send-date row">
                             <div className='history-info-topic'>วันที่จัดส่ง : </div>
@@ -131,7 +131,7 @@ function HistoryInfo() {
                         </div>
                         <div className="history-info-create-date row">
                             <div className='history-info-topic'>รหัสการอนุมัติ : </div>
-                            <div>{(order.sendTxId)}</div>
+                            <div className='txid'>{(order.sendTxId)}</div>
                         </div>
                         <div className="history-info-approv-date row">
                             <div className='history-info-topic'>วันที่รับสินค้า : </div>
@@ -139,7 +139,7 @@ function HistoryInfo() {
                         </div>
                         <div className="history-info-create-date row">
                             <div className='history-info-topic'>รหัสการเซ็นรับ : </div>
-                            <div>{(order.approvTxId)}</div>
+                            <div className='txid'>{(order.approvTxId)}</div>
                         </div>
                         <div className="history-info-price row">
                             <div className='history-info-topic'>ราคารวม : </div>

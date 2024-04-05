@@ -8,6 +8,7 @@ const stringToByte = require('../util/byte');
 const hashSha256 = require('../util/hash');
 const contract = require('../contract/trade.contract');
 const cacheOrder = require('../module/cache');
+const socketServer = require('../module/socket')
 
 const executeQuery = (sql) => {
   return new Promise((resolve, reject) => {
@@ -44,7 +45,7 @@ class SupplierController {
     this.router.post('/register', this.register);
     this.router.get('/credit-req', rolesGuard.isSupplier, this.getCreditReq);
     this.router.get('/order', rolesGuard.isSupplier, this.getOrder);
-    this.router.get('/order-info/:id', rolesGuard.isCustomer, this.getOrderInfo);
+    this.router.get('/order-info/:id', rolesGuard.isSupplier, this.getOrderInfo);
     // this.router.get('/order-info', rolesGuard.isSupplier, this.getOrderInfo);
     this.router.get('/credit', rolesGuard.isSupplier, this.getCredit);
     this.router.get('/credit-info/:id', rolesGuard.isSupplier, this.getCreditInfo);
@@ -238,6 +239,11 @@ class SupplierController {
             if (error) {
               return res.status(500).json({ error: error.message });
             }
+            socketServer.io.emit(body.cusEmail + "-noti", {
+              header: "คำขอเครดิต",
+              content: "คำขอเครดิตถูกปฏิเสธจาก " + user.userData.name,
+              path: "/wallet-info/"+body.creditId
+            });
             return res.status(200).json({ message: 'Data updated successfully' });
           });
         } else {
@@ -261,6 +267,11 @@ class SupplierController {
                 if (error) {
                   return res.status(500).json({ error: error.message });
                 } else {
+                  socketServer.io.emit(body.cusEmail + "-noti", {
+                    header: "คำขอเครดิต",
+                    content: "ได้รับเครดิตเพิ่มจาก " + user.userData.name,
+                    path: "/wallet-info/"+body.creditId
+                  });
                   return res.status(200).json({ message: 'Data updated successfully' });
                 }
               });
@@ -378,7 +389,7 @@ class SupplierController {
     \`order\`.approvTxId, 
     \`order\`.status,
     customers.fullname as cusName 
-    FROM \`order\` INNER JOIN supplier ON order.supEmail = supplier.email 
+    FROM \`order\` INNER JOIN customers ON order.cusEmail = customers.email 
     WHERE orderId = ${orderId} AND supEmail LIKE '${user.userData.email}'`;
 
     dbConnection.query(sql, async (error, results) => {
@@ -408,7 +419,6 @@ class SupplierController {
 
       const currentDate = formatDate();
 
-      console.log(body)
       let sendTxId;
       try{
         sendTxId = (await contract.writeContract(
@@ -422,8 +432,6 @@ class SupplierController {
         console.error(e)
         return res.status(500).send(e.message)
       }
-      
-        console.log(sendTxId)
 
       //remove comment while connect contract
       // if (!sendTxId) {
@@ -434,12 +442,16 @@ class SupplierController {
       sendTxId = '${sendTxId}', 
       status = 'Sending' 
       WHERE orderId = ${body.orderId} AND supEmail LIKE '${user.userData.email}'`;
-      console.log(sql)
 
       dbConnection.query(sql, (error, results) => {
         if (error) {
           return res.status(500).json({ error: "Failed to update order status" });
         } else {
+          socketServer.io.emit(body.cusEmail + "-noti", {
+            header: "การสั่งซื้อ",
+            content: "การสั่งซื้อได้รับอนุมัติจาก " + user.userData.name,
+            path: "/history-info/"+body.orderId
+          });
           return res.status(200).send(results);
         }
       });
@@ -539,6 +551,11 @@ class SupplierController {
         if (error) {
           return res.status(500).json({ error: error.message });
         } else {
+          socketServer.io.emit(body.cusEmail + "-noti", {
+            header: "การสั่งซื้อ",
+            content: "การสั่งซื้อถูกปฏิเสธจาก " + user.userData.name,
+            path: "/history-info/"+body.orderId
+          });
           return res.status(200).json({ message: 'Data updated successfully' });
         }
       });
@@ -569,6 +586,11 @@ class SupplierController {
                     if (error) {
                         return res.status(500).json({ error: error.message });
                     }
+                    socketServer.io.emit(body.cusEmail + "-noti", {
+                      header: "การชำระเงิน",
+                      content: "การชำระเงินถูกปฏิเสธจาก " + user.userData.name,
+                      path: "/wallet-info/"+credit.creditId
+                    });
                     return res.status(200).json({ message: 'Data updated successfully' });
                 });
             } else {
@@ -590,6 +612,11 @@ class SupplierController {
                             if (error) {
                                 return res.status(500).json({ error: error.message });
                             } else {
+                              socketServer.io.emit(body.cusEmail + "-noti", {
+                                header: "การชำระเงิน",
+                                content: "การชำระเงินได้รับอนุมัติจาก " + user.userData.name,
+                                path: "/wallet-info/"+credit.creditId
+                              });
                                 return res.status(200).json({ message: 'Data updated successfully' });
                             }
                         });

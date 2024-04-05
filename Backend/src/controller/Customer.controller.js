@@ -7,6 +7,7 @@ const contract = require('../contract/trade.contract');
 const stringToByte = require('../util/byte');
 const hashSha256 = require('../util/hash');
 const cacheOrder = require('../module/cache');
+const socketServer = require('../module/socket')
 
 const executeQuery = (sql) => {
   return new Promise((resolve, reject) => {
@@ -343,6 +344,11 @@ class UserController {
         if (historyError) {
           return res.status(500).send(historyError);
         }
+        socketServer.io.emit(body.supEmail + "-noti", {
+          header: "คำขอเครดิต",
+          content: "มีคำขอเครดิตใหม่จาก " + user.userData.name,
+          path: "/credit-req"
+        });
         return res.status(200).send(historyResult);
       });
     }
@@ -352,9 +358,6 @@ class UserController {
     try {
       const body = req.body;
       const user = req.session.user;
-
-      console.log(body.productList)
-
 
       let sql = `SELECT creditId,creditAmount FROM credit WHERE supEmail LIKE '${body.supEmail}' AND cusEmail LIKE '${user.userData.email}'`;
 
@@ -371,8 +374,6 @@ class UserController {
         return res.status(409).send("Credit is not enough");
       }
 
-      
-
       sql = `UPDATE credit SET creditAmount='${credit.creditAmount - body.totalPrice}' WHERE creditId = ${credit.creditId} AND cusEmail LIKE '${user.userData.email}'`;
 
       await new Promise((resolve, reject) => {
@@ -388,9 +389,9 @@ class UserController {
       const orderListHashed = stringToByte(await hashSha256(JSON.stringify(body.productList), 32), 32);
 
       const createTxId = (await contract.writeContract(
-        "orderProceed", 
-        stringToByte(await hashSha256(body.supEmail, 16), 16), 
-        stringToByte(await hashSha256(user.userData.email, 16), 16), 
+        "orderProceed",
+        stringToByte(await hashSha256(body.supEmail, 16), 16),
+        stringToByte(await hashSha256(user.userData.email, 16), 16),
         orderListHashed,
         0)).transactionHash;
 
@@ -480,6 +481,12 @@ class UserController {
           });
         });
 
+        socketServer.io.emit(body.supEmail + "-noti", {
+          header: "ออเดอร์",
+          content: "มีคำสั่งซื้อใหม่จาก " + user.userData.name,
+          path: "/order-info/" + orderId
+        });
+
         return res.status(200).send("Data inserted successfully.");
       }
     } catch (e) {
@@ -521,9 +528,9 @@ class UserController {
               return res.status(500).json({ error: error.message });
             } else {
               const approvTxId = (await contract.writeContract(
-                "orderProceed", 
-                stringToByte(await hashSha256(body.supEmail, 16), 16), 
-                stringToByte(await hashSha256(user.userData.email, 16), 16), 
+                "orderProceed",
+                stringToByte(await hashSha256(body.supEmail, 16), 16),
+                stringToByte(await hashSha256(user.userData.email, 16), 16),
                 cacheOrder[body.orderId],
                 2)).transactionHash;
               // if (!approvTxId) {
@@ -535,6 +542,11 @@ class UserController {
                 if (error) {
                   return res.status(500).json({ error: error.message });
                 } else {
+                  socketServer.io.emit(body.supEmail + "-noti", {
+                    header: "การส่งสินค้า",
+                    content: "ออเดอร์ที่ "+body.orderId+" ได้รับสินค้าแล้ว",
+                    path: "/order-info/" + body.orderId
+                  });
                   return res.status(200).json({ message: 'Data updated successfully' });
                 }
               });
@@ -544,7 +556,6 @@ class UserController {
       });
     });
   }
-
 
   creditPayment(req, res) {
     const body = req.body;
@@ -584,7 +595,11 @@ class UserController {
           if (error) {
             return res.status(500).json({ error: error.message });
           }
-
+          socketServer.io.emit(body.supEmail + "-noti", {
+            header: "คำขอเครดิต",
+            content: "มีการชำระเงินใหม่จาก " + user.userData.name,
+            path: "/credit-req"
+          });
           return res.status(200).json({ message: 'Data updated successfully' });
         });
       });

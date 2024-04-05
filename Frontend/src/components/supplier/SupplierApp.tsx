@@ -12,14 +12,16 @@ import Product from './product/Product';
 import SupAdd from './add/SupAddProduct';
 import CreditReq from './credit-req/CreditReq';
 import SupCreditInfo from './credit-info/SupCreditInfo';
-
+import SupHistoryInfo from './history-info/HistoryInfo';
+import Notification from '../commons/notification/Notification';
 
 function SupplierApp() {
     useEffect(() => {
 
-      })
+    })
     return (
         <>
+            <Notification></Notification>
             <div className="page-header">
                 <NavBar />
             </div>
@@ -32,6 +34,7 @@ function SupplierApp() {
                     <Route path="/credit-req" element={<CreditReq />} />
                     <Route path="/settings" element={<Setting />} />
                     <Route path="/order" element={<SupOrder />} />
+                    <Route path="/order-info/:id" element={<SupHistoryInfo />} />
                     <Route path="/product/:productId" element={<Product />} />
                 </Routes>
             </div>

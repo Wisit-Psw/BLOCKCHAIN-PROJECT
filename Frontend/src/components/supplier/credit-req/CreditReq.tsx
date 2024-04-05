@@ -220,7 +220,6 @@ function CreditReq() {
                 }
             }
         }
-        console.log(alertStructure)
         handleAlert(alertStructure)
     }
 

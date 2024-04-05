@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Alert from '../../../commons/alert/Alert';
 import axios from 'axios';
 import { environments } from '../../../../environment/environment';
+import { Link } from 'react-router-dom';
 
 interface OrderRowProps {
     index: number,
@@ -22,7 +23,6 @@ const historyStatus = {
 function OrderRow(props: OrderRowProps) {
 
     const { index, order, getOrderData } = props;
-    const [isProductListShow, setProductListShow] = useState<boolean>(true);
 
     const [isAlert, setisAlert] = useState(false);
     const [alertProps, setAlertProps] = useState<AlertStructure>({} as AlertStructure);
@@ -45,7 +45,7 @@ function OrderRow(props: OrderRowProps) {
     const sumitAcceptReq = async () => {
         const response = await axios.post(environments.paths.submitOrder, {
             orderId: order.orderId,
-            cusEmail:order.cusEmail
+            cusEmail: order.cusEmail
         }, { withCredentials: true });
         if (response.status === 200) {
             handleAlert({
@@ -95,7 +95,7 @@ function OrderRow(props: OrderRowProps) {
     const sumitRejectReq = async () => {
 
         const response = await axios.post(environments.paths.rejectOrder, {
-            cusEmail:order.cusEmail,
+            cusEmail: order.cusEmail,
             orderId: order.orderId
         }, { withCredentials: true });
         if (response.status === 200) {
@@ -131,20 +131,6 @@ function OrderRow(props: OrderRowProps) {
         setisAlert(!isAlert)
     }
 
-    const showProductList = () => {
-        const orderListEle = document.getElementById("orderList" + index);
-        if (orderListEle) {
-            setProductListShow(!isProductListShow);
-            if (isProductListShow) {
-                orderListEle.style.height = '10rem';
-                orderListEle.style.overflow = 'auto';
-            } else {
-                orderListEle.style.height = '0px';
-                orderListEle.style.overflow = 'hidden';
-            }
-        }
-    }
-
     return (
         <div className='sup-order-list'>
             <div className="sup-order-info-wrap row order-id">
@@ -163,7 +149,9 @@ function OrderRow(props: OrderRowProps) {
                     </div>
                 </div>
                 <div className="sup-order-list-shop-detail">
-                    <div className='sup-order-topic' onClick={showProductList}><FontAwesomeIcon icon={faAngleRight} /></div>
+                    <Link to={"/order-info/" + order.orderId}>
+                        <div className='sup-order-topic'><FontAwesomeIcon icon={faAngleRight} /></div>
+                    </Link>
                 </div>
             </div>
             {order.status === "Waiting" && (

@@ -6,20 +6,33 @@ const sequelize = require('./database/connection');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 const contract = require('./src/contract/trade.contract');
+const http = require('http');
 
-let env = (require('dotenv').config()).parsed
-PORT = env.PORT || 3000
+const socketServer = require('./src/module/socket')
+
+let env = (require('dotenv').config()).parsed;
+const PORT = env.PORT || 3000;
+
+
 
 class App {
   constructor() {
     this.app = express();
+    this.server = http.createServer(this.app);
+    this.setupMiddleware();
+    this.start();
+    this.setupRoutes();
 
+    socketServer.setServer(this.server);
+  }
+
+  setupMiddleware() {
     this.app.use(cors({
       origin: [
-      /^http:\/\/localhost($|:\d+$)/,
-      /^http:\/\/192\.168\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)($|:\d+$)/,
-    ],
-      methods: ['GET', 'POST','PUT','DELETE'],
+        /^http:\/\/localhost($|:\d+$)/,
+        /^http:\/\/192\.168\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)($|:\d+$)/,
+      ],
+      methods: ['GET', 'POST', 'PUT', 'DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization'],
       credentials: true
     }));
@@ -35,10 +48,9 @@ class App {
       },
       apis: ['app.js'], // Path to the API files
     };
-    
+
     const specs = swaggerJsdoc(options);
     this.app.use('/api', swaggerUi.serve, swaggerUi.setup(specs));
-    
 
     this.app.use(bodyParser.json({ limit: '10mb' }));
     this.app.use(session({
@@ -52,13 +64,10 @@ class App {
       console.log(`${req.method} ${req.url} status ${res.statusCode} `);
       next();
     });
-
-    this.setupRoutes();
-    this.start()
   }
 
   setupRoutes() {
-    const [swaggerHandler, swaggerUI] = require('./src/swagger/main'); 
+    const [swaggerHandler, swaggerUI] = require('./src/swagger/main');
     this.app.use("/api-docs", swaggerHandler, swaggerUI);
     this.app.use('/auth', require('./src/controller/Auth.controller'));
     this.app.use('/customer', require('./src/controller/Customer.controller'));
@@ -68,17 +77,21 @@ class App {
     this.app.use('/cart-product', require('./src/controller/CartPorduct.controller'));
 
     this.app.get('/event-log', (req, res) => {
-      return contract.getEventLogs().then(e => res.json(e));
-    })
-
+      try {
+        return contract.getEventLogs().then(e => res.json(e));
+      }
+      catch (e) {
+        console.error(e)
+      }
+    });
   }
 
   start() {
-    this.app.listen(PORT, async () => {
+    this.server.listen(PORT, async () => {
       await sequelize.authenticate();
       console.log(`Server is running on http://localhost:${PORT}`);
     });
   }
 }
 
-new App()
+module.exports = (new App());

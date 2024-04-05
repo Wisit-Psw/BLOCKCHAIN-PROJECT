@@ -100,6 +100,7 @@
 
 .wallet-info-label {
   width: 130px;
+  overflow: auto;
 }
 
 .wallet-history-label {

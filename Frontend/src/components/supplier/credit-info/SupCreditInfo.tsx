@@ -202,7 +202,7 @@ function SupCreditInfo() {
                                 <div className="sup-credit-info-label">
                                     รหัสรายการ :
                                 </div>
-                                {info.txId}
+                                <div className="txid">{info.txId} </div>
                             </div>
                             <div className="sup-credit-info-wrap" >
                                 <div className="sup-credit-info-label">

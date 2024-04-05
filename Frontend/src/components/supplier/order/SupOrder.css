@@ -47,6 +47,7 @@
 
 .sup-order-topic {
   min-width: 100px;
+  color:var(--team-text);
 }
 
 .sup-order-list-shop-detail {

@@ -12,11 +12,13 @@ import Cart from './cart/Cart';
 import Product from './product/Product';
 import WalletInfo from './wallet-info/WalletInfo';
 import HistoryInfo from './history-info/HistoryInfo';
+import Notification from '../commons/notification/Notification';
 
 function CustomerApp() {
 
     return (
         <>
+        <Notification></Notification>
             <div className="page-header">
                 <NavBar />
             </div>

@@ -28,7 +28,7 @@
   --secondary-text: #65676B;
 
   /* --team-text-topic:#36438D;
-  --team-bg:#dee0eb;
+  --team-bg:#dde1f6;
   --team-ele-bg: #fff;
   --team-text: rgb(87, 87, 87);
   --team-btn:#36438D; */
@@ -47,8 +47,8 @@
 
   /* --team-text-topic:#fff;
   --team-bg: #ffffff;
-  --team-ele-bg: #00aa9f;
-  --team-text: #121212c4;
+  --team-ele-bg: #00d6c7;
+  --team-text: #222222dd;
   --team-btn:#ff7e39; */
 
   /* --team-text-topic:#ff6f61;
@@ -894,6 +894,11 @@ a {
   max-width: 600px;
   text-align: center;
   font-size: 1.25rem;
+}
+
+.txid{
+  width: 100%;
+  overflow: scroll;
 }
 
 @media screen and (max-width:1400px) {

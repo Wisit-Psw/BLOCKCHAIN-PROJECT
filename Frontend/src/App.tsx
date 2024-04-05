@@ -34,6 +34,7 @@ function App() {
 
   return (
     <>
+      {/* <Notification></Notification> */}
       {userCliend.userData?.isCustomer && !userCliend.userData?.isSupplier && (
         <Routes>
           <Route path="/*" element={<CustomerApp />} />

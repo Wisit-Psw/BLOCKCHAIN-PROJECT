@@ -1,0 +1,28 @@
+.noti-modal {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  transition: ease-out all 0.5s;
+
+  width: 80dvw;
+  max-width: 500px;
+
+  color: var(--team-text);
+  padding: 1rem;
+  border-radius: 0.3rem;
+  border: 1px solid var(--team-text);
+  background-color: var(--team-ele-bg);
+  z-index: 999999;
+}
+
+.noti-header {
+  font-size: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--team-text);
+}
+
+.noti-content {
+  padding-top: 0.5rem;
+  font-size: 1.1rem;
+}

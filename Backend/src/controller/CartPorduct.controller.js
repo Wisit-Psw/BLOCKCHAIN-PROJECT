@@ -87,7 +87,6 @@ class CartProductController {
                 sql = `INSERT INTO cart_product(cartId, productId, quantity) VALUES (${cartId},${productId},${quantity})`;
             } else {
                 const updatedQuantity = cartProd.quantity + quantity;
-                console.log(product.productQuantity, updatedQuantity)
                 if (product.productQuantity < updatedQuantity) {
                     return res.status(409).send("สินค้าไม่เพียงพอ");
                 }

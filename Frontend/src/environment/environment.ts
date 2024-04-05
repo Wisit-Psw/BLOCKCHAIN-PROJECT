@@ -40,6 +40,7 @@ class environment {
 
         getSupCredit: this.baseUrl + '/supplier/credit',
         getSupCreditInfo: this.baseUrl + '/supplier/credit-info',
+        getSupOrderInfo: this.baseUrl + '/supplier/order-info',
         updateCreditTotal: this.baseUrl + '/supplier/update-credit',
         submitCreditPayment: this.baseUrl + '/supplier/submit-credit-payment'
 

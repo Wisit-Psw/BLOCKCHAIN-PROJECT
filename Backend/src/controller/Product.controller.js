@@ -63,7 +63,6 @@ class PrductController {
     const sql = `INSERT INTO product (productName,productImage, productDescription, productPrice, productQuantity, supEmail) VALUES ('${productName}','${productImage}','${productDescription}','${productPrice}','${productQuantity}','${user.userData.email}')`;
     dbConnection.query(sql, (error, results) => {
       if (error) {
-        console.log(error)
         return res.status(500).json({ error: error.message });
       } else {
         return res.status(201).json({ message: 'Data inserted successfully' });
