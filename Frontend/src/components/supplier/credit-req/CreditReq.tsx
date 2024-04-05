@@ -70,6 +70,7 @@ function CreditReq() {
     const submitAcceptReq = async (req: SupCreditReq) => {
         try {
             const response = await axios.post(environments.paths.creditApproval, {
+                cusEmail:req.cusEmail,
                 creditHisId: req.creditHisId,
                 creditId: req.creditId,
                 creditAmount: creditVal ? creditVal : req.creditUpdate,
