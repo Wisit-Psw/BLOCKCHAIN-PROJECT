@@ -1,7 +1,7 @@
 function hexZeroPad(value, length) {
     if (typeof(value) !== "string") {
         throw new Error('allow only string')
-    } else if (!isHexString(value)) {
+    } else if (!isHexString(value, length)) {
         throw new Error("invalid hex string");
     }
 
@@ -16,7 +16,7 @@ function hexZeroPad(value, length) {
     return value;
 }
 
-function isHexString(value) {
+function isHexString(value, length) {
     if (typeof(value) !== "string" || !value.match(/^0x[0-9A-Fa-f]*$/)) {
         return false
     }

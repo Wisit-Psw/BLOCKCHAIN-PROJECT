@@ -334,6 +334,9 @@
     },
     "/supplier/register": {
       "post": {
+        "tags": [
+          "Supplier"
+        ],
         "responses": {
           "200": {
             "description": "OK"
