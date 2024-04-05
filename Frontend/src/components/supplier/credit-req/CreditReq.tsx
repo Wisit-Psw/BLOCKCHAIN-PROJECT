@@ -122,6 +122,7 @@ function CreditReq() {
     const submitPayReq = async (req: SupCreditReq) => {
         try {
             const response = await axios.post(environments.paths.submitCreditPayment, {
+                cusEmail:req.cusEmail,
                 creditHisId: req.creditHisId,
                 creditId: req.creditId,
                 creditAmount: req.creditUpdate,
@@ -173,6 +174,7 @@ function CreditReq() {
     const submiRejectReq = async (req: SupCreditReq) => {
         try {
             const response = await axios.post(environments.paths.submitCreditPayment, {
+                cusEmail:req.cusEmail,
                 creditHisId: req.creditHisId,
                 creditId: req.creditId,
                 creditAmount: req.creditUpdate,

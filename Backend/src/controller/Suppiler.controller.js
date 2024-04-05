@@ -44,6 +44,7 @@ class SupplierController {
     this.router.post('/register', this.register);
     this.router.get('/credit-req', rolesGuard.isSupplier, this.getCreditReq);
     this.router.get('/order', rolesGuard.isSupplier, this.getOrder);
+    this.router.get('/order-info/:id', rolesGuard.isCustomer, this.getOrderInfo);
     // this.router.get('/order-info', rolesGuard.isSupplier, this.getOrderInfo);
     this.router.get('/credit', rolesGuard.isSupplier, this.getCredit);
     this.router.get('/credit-info/:id', rolesGuard.isSupplier, this.getCreditInfo);
@@ -360,32 +361,80 @@ class SupplierController {
     });
   }
 
+  getOrderInfo = async (req, res) => {
+    const orderId = req.params.id
+    const user = req.session.user;
+
+    let sql = `SELECT 
+    \`order\`.orderId, 
+    \`order\`.cusEmail, 
+    \`order\`.supEmail, 
+    \`order\`.totalPrice, 
+    \`order\`.createDate, 
+    \`order\`.createTxId, 
+    \`order\`.sendDate, 
+    \`order\`.sendTxId, 
+    \`order\`.approvDate, 
+    \`order\`.approvTxId, 
+    \`order\`.status,
+    customers.fullname as cusName 
+    FROM \`order\` INNER JOIN supplier ON order.supEmail = supplier.email 
+    WHERE orderId = ${orderId} AND supEmail LIKE '${user.userData.email}'`;
+
+    dbConnection.query(sql, async (error, results) => {
+      if (error || !results[0]) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+      }
+      const ret = { ...results[0] };
+
+      try {
+        const query2 = `SELECT * FROM order_product INNER JOIN product on order_product.productId = product.productId WHERE orderId = ${ret.orderId}`;
+        const result2 = await executeQuery(query2);
+
+        ret['productList'] = result2;
+      } catch (error) {
+        console.error(error);
+        return res.status(500).send(error);
+      }
+      return res.status(200).send(ret);
+    });
+  }
+
   submitOrder = async (req, res) => {
     try {
       const body = req.body;
-      const user = req.session.user.userData;
+      const user = req.session.user;
 
       const currentDate = formatDate();
 
-
-      const sendTxId = (await contract.writeContract(
-        "orderProceed", 
-        stringToByte(await hashSha256(body.email, 16), 16), 
-        stringToByte(await hashSha256(user.userData.email, 16), 16), 
-        cacheOrder[body.orderId],
-        1)).transactionHash;
-
+      console.log(body)
+      let sendTxId;
+      try{
+        sendTxId = (await contract.writeContract(
+          "orderProceed", 
+          stringToByte(await hashSha256(user.userData.email, 16), 16), 
+          stringToByte(await hashSha256(body.cusEmail, 16), 16), 
+          cacheOrder[body.orderId],
+          1)).transactionHash;
+  
+      }catch(e){
+        console.error(e)
+        return res.status(500).send(e.message)
+      }
+      
+        console.log(sendTxId)
 
       //remove comment while connect contract
       // if (!sendTxId) {
       //   return res.status(500).send("Transaction ID is missing");
       // }
-
       const sql = `UPDATE \`order\` SET 
       sendDate = '${currentDate}', 
       sendTxId = '${sendTxId}', 
       status = 'Sending' 
-      WHERE orderId = ${body.orderId} AND supEmail LIKE '${user.email}'`;
+      WHERE orderId = ${body.orderId} AND supEmail LIKE '${user.userData.email}'`;
+      console.log(sql)
 
       dbConnection.query(sql, (error, results) => {
         if (error) {
@@ -409,8 +458,8 @@ class SupplierController {
 
       const approvTxId = (await contract.writeContract(
         "orderProceed", 
-        stringToByte(await hashSha256(body.supEmail, 16), 16), 
         stringToByte(await hashSha256(user.userData.email, 16), 16), 
+        stringToByte(await hashSha256(body.cusEmail, 16), 16), 
         cacheOrder[body.orderId],
         3)).transactionHash;
 
@@ -529,7 +578,6 @@ class SupplierController {
                   stringToByte(await hashSha256(credit.cusEmail, 16), 16), 
                   body.creditAmount)).transactionHash;
 
-                
                 sql = `UPDATE Credit_History SET approvDate='${currentDate}', status='Accept', txId='${creditTxId}' WHERE creditHisId = ${body.creditHisId}`;
 
                 dbConnection.query(sql, (error, results) => {

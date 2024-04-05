@@ -13,7 +13,7 @@ const historyStatus = {
     Sending: "กำลังจัดส่ง"
 }
 
-function SupHistoryInfo() {
+function HistoryInfo() {
     const { id } = useParams();
 
     const [order, setOrder] = useState<OrderData>({} as OrderData);
@@ -202,6 +202,6 @@ function SupHistoryInfo() {
     )
 }
 
-export default SupHistoryInfo
+export default HistoryInfo
 
 

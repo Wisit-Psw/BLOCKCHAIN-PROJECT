@@ -44,7 +44,8 @@ function OrderRow(props: OrderRowProps) {
 
     const sumitAcceptReq = async () => {
         const response = await axios.post(environments.paths.submitOrder, {
-            orderId: order.orderId
+            orderId: order.orderId,
+            cusEmail:order.cusEmail
         }, { withCredentials: true });
         if (response.status === 200) {
             handleAlert({
@@ -94,6 +95,7 @@ function OrderRow(props: OrderRowProps) {
     const sumitRejectReq = async () => {
 
         const response = await axios.post(environments.paths.rejectOrder, {
+            cusEmail:order.cusEmail,
             orderId: order.orderId
         }, { withCredentials: true });
         if (response.status === 200) {

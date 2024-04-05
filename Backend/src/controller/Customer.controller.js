@@ -353,6 +353,8 @@ class UserController {
       const body = req.body;
       const user = req.session.user;
 
+      console.log(body.productList)
+
 
       let sql = `SELECT creditId,creditAmount FROM credit WHERE supEmail LIKE '${body.supEmail}' AND cusEmail LIKE '${user.userData.email}'`;
 
