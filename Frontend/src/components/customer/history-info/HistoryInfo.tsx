@@ -6,6 +6,13 @@ import { useState, useEffect } from 'react'
 import Alert from '../../commons/alert/Alert';
 // import OrderRow from './child/OrderRow';
 
+const historyStatus = {
+    Success: "สำเร็จ",
+    Reject: "ถูกปฏิเสธ",
+    Waiting: "รอการยืนยัน",
+    Sending: "กำลังจัดส่ง"
+}
+
 function HistoryInfo() {
     const { id } = useParams();
 
@@ -140,7 +147,7 @@ function HistoryInfo() {
                         </div>
                         <div className="history-info-status row">
                             <div className='history-info-topic'>สถานะ : </div>
-                            <div>{order.status}</div>
+                            <div>{historyStatus[order.status]}</div>
                         </div>
                         {order.status === 'Sending' && (
                             <div className="btn-wrap">

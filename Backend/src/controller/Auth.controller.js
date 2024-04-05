@@ -59,11 +59,12 @@ class Auth {
             if (!passwordMatch) {
                 return res.status(401).json({ error: 'Invalid credentials.' });
             }
+
             userData = {
                 isSupplier: !!supplier,
                 isCustomer: !!customer,
                 userData: {
-                    name: user.fullname,
+                    name: user.fullname || user.shopName,
                     phone: user.phone,
                     email: user.email,
                     address: user.address,

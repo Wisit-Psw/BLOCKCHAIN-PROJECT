@@ -43,10 +43,10 @@ const CusRegister = () => {
                 withCredentials: true
             });
 
-            if (!(response.status === 200)) {
+            if (response.status === 200) {
                 handleAlert({
                     headerText: "สมัครสมาชิก",
-                    contentText: "มีข้อผิดพลาดเกิดขึ้น",
+                    contentText: "สมัครสมาชิกสำเร็จ",
                     btn1: {
                         btnText: "ยืนยัน",
                         btnFunc: () => {
@@ -57,10 +57,9 @@ const CusRegister = () => {
                 })
                 return
             }
-
             handleAlert({
                 headerText: "สมัครสมาชิก",
-                contentText: "สมัครสมาชิกสำเร็จ",
+                contentText: "มีข้อผิดพลาดเกิดขึ้น",
                 btn1: {
                     btnText: "ยืนยัน",
                     btnFunc: () => {
@@ -69,6 +68,7 @@ const CusRegister = () => {
                     }
                 }
             })
+            
         } catch (error) {
             handleAlert({
                 headerText: "สมัครสมาชิก",

@@ -43,7 +43,7 @@ const SupRegister = () => {
                 withCredentials: true
             });
 
-            if (!(response.status === 200)) {
+            if (response.status === 200) {
                 handleAlert({
                     headerText: "สมัครสมาชิก",
                     contentText: "สำเร็จ",
@@ -85,7 +85,7 @@ const SupRegister = () => {
             <div className="sup-reg-container " id="loginbox">
                 <div className="card-header">
                     <div className="header-text">สมัครสมาชิก</div>
-                    <label className="header-detail">คนขาย</label>
+                    <label className="header-detail">ร้านค้า</label>
                 </div>
                 <form onSubmit={onRegisterClick}>
                     <div className="form-group">

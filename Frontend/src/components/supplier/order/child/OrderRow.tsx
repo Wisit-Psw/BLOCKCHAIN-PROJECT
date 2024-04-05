@@ -12,6 +12,13 @@ interface OrderRowProps {
     getOrderData: () => void
 }
 
+const historyStatus = {
+    Success: "สำเร็จ",
+    Reject: "ถูกปฏิเสธ",
+    Waiting: "รอการยืนยัน",
+    Sending: "กำลังจัดส่ง"
+}
+
 function OrderRow(props: OrderRowProps) {
 
     const { index, order, getOrderData } = props;
@@ -150,7 +157,7 @@ function OrderRow(props: OrderRowProps) {
                     </div>
                     <div className="sup-order-info-wrap row">
                         <div className='sup-order-topic'>สถานะ : </div>
-                        <div> {order.status}</div>
+                        <div> {historyStatus[order.status]}</div>
                     </div>
                 </div>
                 <div className="sup-order-list-shop-detail">

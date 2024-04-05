@@ -25,7 +25,7 @@ const LoginPage = ({ onLoginClick }: LoginProps) => {
                 </div>
                 <form onSubmit={handleLogin}>
                     <div className="form-group">
-                        <label htmlFor="email">อรเมล</label>
+                        <label htmlFor="email">อีเมล</label>
                         <input
                             className="form-control"
                             value={usernameInputValue}
