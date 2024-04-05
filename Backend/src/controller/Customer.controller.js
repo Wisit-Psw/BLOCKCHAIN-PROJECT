@@ -3,6 +3,10 @@ const bcrypt = require('bcryptjs');
 const router = express.Router();
 const dbConnection = require('../module/dbConection')
 const rolesGuard = require('../guard/roles.guards');
+const contract = require('../contract/trade.contract');
+const stringToByte = require('../util/byte');
+const hashSha256 = require('../util/hash');
+const cacheOrder = require('../module/cache');
 
 const executeQuery = (sql) => {
   return new Promise((resolve, reject) => {
@@ -96,6 +100,7 @@ class UserController {
         if (error) {
           return res.status(500).json({ error: error.message });
         } else {
+          contract.writeContract("registerBuyer", stringToByte(hashSha256(email, 16)));
           return res.status(200).json({ message: 'Data inserted successfully' });
         }
       });
@@ -347,7 +352,7 @@ class UserController {
     try {
       const body = req.body;
       const user = req.session.user;
-      const createTxId = '';
+
 
       let sql = `SELECT creditId,creditAmount FROM credit WHERE supEmail LIKE '${body.supEmail}' AND cusEmail LIKE '${user.userData.email}'`;
 
@@ -364,6 +369,8 @@ class UserController {
         return res.status(409).send("Credit is not enough");
       }
 
+      
+
       sql = `UPDATE credit SET creditAmount='${credit.creditAmount - body.totalPrice}' WHERE creditId = ${credit.creditId} AND cusEmail LIKE '${user.userData.email}'`;
 
       await new Promise((resolve, reject) => {
@@ -375,6 +382,15 @@ class UserController {
           resolve();
         });
       });
+
+      const orderListHashed = stringToByte(hashSha256(JSON.stringify(body.productList), 32), 32);
+
+      const createTxId = (await contract.writeContract(
+        "orderProceed", 
+        stringToByte(hashSha256(body.supEmail, 16), 16), 
+        stringToByte(hashSha256(user.userData.email, 16), 16), 
+        orderListHashed,
+        0)).transactionHash;
 
       let orderId;
       sql = 'INSERT INTO `order` (cusEmail, supEmail, totalPrice, createTxId) VALUES (?, ?, ?, ?)';
@@ -388,6 +404,7 @@ class UserController {
             reject(err);
           }
           orderId = result.insertId;
+          cacheOrder[orderId] = orderListHashed;
           resolve();
         });
       });
@@ -476,7 +493,7 @@ class UserController {
     let credit;
     let sql = `SELECT * FROM credit WHERE cusEmail = '${user.userData.email}' AND supEmail LIKE '${body.supEmail}'`;
 
-    dbConnection.query(sql, (error, results) => {
+    dbConnection.query(sql, async (error, results) => {
       if (error) {
         return res.status(500).json({ error: error.message });
       }
@@ -497,11 +514,16 @@ class UserController {
           return res.status(500).json({ error: error.message });
         } else {
           sql = `UPDATE credit SET dateUpdate='${currentDate}' WHERE creditId = ${credit.creditId} AND cusEmail LIKE '${user.userData.email}'`;
-          dbConnection.query(sql, (error, results) => {
+          dbConnection.query(sql, async (error, results) => {
             if (error) {
               return res.status(500).json({ error: error.message });
             } else {
-              const approvTxId = '';
+              const approvTxId = (await contract.writeContract(
+                "orderProceed", 
+                stringToByte(hashSha256(body.supEmail, 16), 16), 
+                stringToByte(hashSha256(user.userData.email, 16), 16), 
+                cacheOrder[body.orderId],
+                2)).transactionHash;
               // if (!approvTxId) {
               //   return res.status(500).send("Create transaction error");
               // }

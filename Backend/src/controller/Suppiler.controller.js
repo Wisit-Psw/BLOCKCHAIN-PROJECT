@@ -7,6 +7,7 @@ const rolesGuard = require('../guard/roles.guards');
 const stringToByte = require('../util/byte');
 const hashSha256 = require('../util/hash');
 const contract = require('../contract/trade.contract');
+const cacheOrder = require('../module/cache');
 
 const executeQuery = (sql) => {
   return new Promise((resolve, reject) => {
@@ -104,6 +105,7 @@ class SupplierController {
         }
         return res.status(statusCode).json({ error: error.message });
       } else {
+        contract.writeContract("registerSeller", stringToByte(hashSha256(email, 16)));
         return res.status(200).json({ message: 'Data inserted successfully' });
       }
     });
@@ -213,7 +215,7 @@ class SupplierController {
       let credit;
       let sql = `SELECT * FROM credit WHERE creditId = ${body.creditId} AND supEmail LIKE '${user.userData.email}'`;
 
-      dbConnection.query(sql, (error, results) => {
+      dbConnection.query(sql, async (error, results) => {
         if (error) {
           return res.status(500).json({ error: error.message });
         }
@@ -223,7 +225,14 @@ class SupplierController {
         credit = results[0];
 
         if (body.status === 'Reject') {
-          sql = `UPDATE Credit_History SET approvDate='${currentDate}', status='Reject', creditAmount='${credit.creditAmount}' WHERE creditHisId = ${body.creditHisId}`;
+          const txId = (await contract.writeContract(
+            "lendCreditProceed",
+            false,
+            stringToByte(hashSha256(user.userData.email, 16), 16), 
+            stringToByte(hashSha256(body.cusEmail, 16), 16), 
+            body.creditAmount)).transactionHash;
+
+          sql = `UPDATE Credit_History SET txId='${txId}', approvDate='${currentDate}', status='Reject', creditAmount='${credit.creditAmount}' WHERE creditHisId = ${body.creditHisId}`;
           dbConnection.query(sql, (error, results) => {
             if (error) {
               return res.status(500).json({ error: error.message });
@@ -231,10 +240,17 @@ class SupplierController {
             return res.status(200).json({ message: 'Data updated successfully' });
           });
         } else {
+          const txId = (await contract.writeContract(
+            "lendCreditProceed",
+            true,
+            stringToByte(hashSha256(user.userData.email, 16), 16), 
+            stringToByte(hashSha256(body.cusEmail, 16), 16), 
+            body.creditAmount)).transactionHash;
+
           const newTotal = credit.creditTotal + body.creditAmount;
           const newAmount = credit.creditAmount + body.creditAmount;
 
-          sql = `UPDATE Credit_History SET creditTotal='${newTotal}', creditUpdate='${body.creditAmount}', creditAmount='${newAmount}', approvDate='${currentDate}', status='Accept' WHERE creditHisId = ${body.creditHisId}`;
+          sql = `UPDATE Credit_History SET txId='${txId}', creditTotal='${newTotal}', creditUpdate='${body.creditAmount}', creditAmount='${newAmount}', approvDate='${currentDate}', status='Accept' WHERE creditHisId = ${body.creditHisId}`;
           dbConnection.query(sql, (error, results) => {
             if (error) {
               return res.status(500).json({ error: error.message });
@@ -351,7 +367,14 @@ class SupplierController {
 
       const currentDate = formatDate();
 
-      const sendTxId = '';
+
+      const sendTxId = (await contract.writeContract(
+        "orderProceed", 
+        stringToByte(hashSha256(body.email, 16), 16), 
+        stringToByte(hashSha256(user.userData.email, 16), 16), 
+        cacheOrder[body.orderId],
+        1)).transactionHash;
+
 
       //remove comment while connect contract
       // if (!sendTxId) {
@@ -384,11 +407,12 @@ class SupplierController {
 
       const currentDate = formatDate();
 
-      const approvTxId = '';
-      //remove comment while connect contract
-      // if (!approvTxId) {
-      //   return res.status(500).send("Transaction ID is missing");
-      // }
+      const approvTxId = (await contract.writeContract(
+        "orderProceed", 
+        stringToByte(hashSha256(body.supEmail, 16), 16), 
+        stringToByte(hashSha256(user.userData.email, 16), 16), 
+        cacheOrder[body.orderId],
+        3)).transactionHash;
 
 
       let sql = `SELECT * FROM \`order\` WHERE orderId = ${body.orderId} AND supEmail LIKE '${user.userData.email}'`;
@@ -483,7 +507,7 @@ class SupplierController {
         let sql;
 
         sql = `SELECT * FROM Credit WHERE creditId = ${body.creditId}`;
-        dbConnection.query(sql, (error, results) => {
+        dbConnection.query(sql, async (error, results) => {
             if (error) {
                 return res.status(500).json({ error: error.message });
             }
@@ -499,8 +523,13 @@ class SupplierController {
                     return res.status(200).json({ message: 'Data updated successfully' });
                 });
             } else {
-                const creditTxId = '';
+                const creditTxId = (await contract.writeContract(
+                  "payLoanCredit",
+                  stringToByte(hashSha256(user.userData.email, 16), 16), 
+                  stringToByte(hashSha256(credit.cusEmail, 16), 16), 
+                  body.creditAmount)).transactionHash;
 
+                
                 sql = `UPDATE Credit_History SET approvDate='${currentDate}', status='Accept', txId='${creditTxId}' WHERE creditHisId = ${body.creditHisId}`;
 
                 dbConnection.query(sql, (error, results) => {
