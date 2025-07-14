@@ -1,2 +1,2 @@
-![Structure](/Group 336.png)
-![Structure](/Group 337.png)
+![Structure](Group%20336.png)
+![Structure](Group%20337.png)
