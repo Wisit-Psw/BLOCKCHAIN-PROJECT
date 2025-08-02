@@ -1,31 +1,112 @@
-#Baengpun System Flow and Diagram (with Descriptions)
-##1. Baengpun: System Structure
-![Structure](Group%20336.png)
-###Figure 1: Baengpun System Structure - Shows system components such as DApp, API Gateway, Service Layer, Database, zk-Rollup Layer2 and Ethereum Layer1.
-👤 Users: Community users who make transactions such as receiving/transferring credit or withdrawing.
-🧑‍💻 Baengpun DApp (UI Layer): Frontend user interface that displays credit and transaction information.
-🌐 API Gateway: Connection point between DApp and Backend Services via HTTPS
-🛠 Service Layer: Process business logic such as crediting, authentication
-🔄 Transaction Service: Receive and manage transaction orders such as credit transfers, 
-withdrawal queues
-🗄 Database Layer: Connect to MongoDB and Redis databases
-🍃 MongoDB: Stores user data, transaction history, credit policies
-⚡ Redis: Cache For quick information such as your latest credit balance
-🌀 zk-Rollup (Layer2): Merge multiple transactions and create a zk-proof
-🧠 Prover: Create a zk-proof from batch transactions
-🚚 Relayer: Send zk-proof to Smart Contract on Ethereum Layer1
-🛑 Monitoring: Check the status of all Node Sequencer, Prover, Relayer.
-⛓️ Layer1 Ethereum: The main blockchain layer (Mainnet) that accepts zk-proof for verification.
-📜 Rollup Smart Contract: Zk-proof L1 contract
-💸 Exit/Withdraw Contract: Allow users to withdraw credit from Layer 2 back to Layer 1.
+# 🧊 Baengpun System Flow and Diagram
 
-##2. Flow Diagram Baengpun
-![Structure](Group%20337.png)
-###Figure 2: Flow Diagram Baengpun - Shows the transaction flow from the user to zk-Rollup Layer2 and confirmation on Ethereum Layer1.
-1️⃣ Users (Community): Connect Wallet (MetaMask) to verify your identity
-2️⃣ Baengpun DApp: Send transactions via API Gateway or directly connect to Layer 2 Smart Contract.
-3️⃣ API Gateway: Verify request validity (Authentication, Rate Limiting)
-4️⃣ Service Layer: Credit Service Check credit limit, Transaction Service Manage transaction orders, Queue Withdraw Requests, Batch Transactions
-5️⃣ MongoDB + Redis: MongoDB stores the actual data, Redis caches the credit balance data for speed.
-6️⃣ Layer2 zk-Rollup: Prover creates zk-proof, Relayer sends proof to Ethereum L1.
-7️⃣ Layer1 Ethereum: Rollup Contract is zk-proof and Exit/Withdraw Contract allows users to claim token.
+> Comprehensive system architecture and transaction flow for the Baengpun platform.
+
+---
+
+## 📚 Table of Contents
+
+- [1. System Structure](#1-🔧-baengpun-system-structure)
+  - [1.1 Components Overview](#🔹-components)
+- [2. Flow Diagram](#2-🔁-baengpun-transaction-flow)
+  - [2.1 Step-by-Step Flow](#🔢-step-by-step-flow)
+
+---
+
+## 1. 🔧 Baengpun System Structure
+
+<details>
+  <summary><strong>Click to expand structure diagram and descriptions</strong></summary>
+
+![Baengpun System Structure](Group%20336.png)  
+**Figure 1:** *Baengpun System Structure — Shows system components such as DApp, API Gateway, Service Layer, Database, zk-Rollup Layer 2, and Ethereum Layer 1.*
+
+### 🔹 Components
+
+- 👤 **Users**  
+  Community users who make transactions such as receiving/transferring credit or withdrawing.
+
+- 🧑‍💻 **Baengpun DApp (UI Layer)**  
+  Frontend interface that displays credit and transaction information.
+
+- 🌐 **API Gateway**  
+  Connection point between the DApp and Backend Services via HTTPS.
+
+- 🛠 **Service Layer**  
+  Processes business logic such as crediting and authentication.
+
+- 🔄 **Transaction Service**  
+  Handles transaction orders like credit transfers and withdrawal queues.
+
+- 🗄 **Database Layer**  
+  Interfaces with MongoDB and Redis databases.
+
+  - 🍃 **MongoDB**  
+    Stores user data, transaction history, and credit policies.
+
+  - ⚡ **Redis**  
+    Cache for quick access to recent data such as current credit balance.
+
+- 🌀 **zk-Rollup (Layer 2)**  
+  Combines multiple transactions and generates a zk-proof.
+
+  - 🧠 **Prover**  
+    Creates zk-proofs from batch transactions.
+
+  - 🚚 **Relayer**  
+    Sends zk-proofs to the Smart Contract on Ethereum Layer 1.
+
+- 🛑 **Monitoring**  
+  Observes the health and status of all nodes: Sequencer, Prover, and Relayer.
+
+- ⛓️ **Layer 1: Ethereum Mainnet**  
+  The base blockchain layer that verifies zk-proofs.
+
+  - 📜 **Rollup Smart Contract**  
+    Validates zk-proofs on Layer 1.
+
+  - 💸 **Exit/Withdraw Contract**  
+    Enables users to withdraw credit from Layer 2 back to Layer 1.
+
+</details>
+
+---
+
+## 2. 🔁 Baengpun Transaction Flow
+
+<details>
+  <summary><strong>Click to expand flow diagram and step-by-step process</strong></summary>
+
+![Baengpun Flow Diagram](Group%20337.png)  
+**Figure 2:** *Baengpun Flow Diagram — Illustrates the transaction flow from the user through zk-Rollup Layer 2 to final confirmation on Ethereum Layer 1.*
+
+### 🔢 Step-by-Step Flow
+
+1️⃣ **Users (Community)**  
+Connect Wallet (e.g., MetaMask) to verify identity.
+
+2️⃣ **Baengpun DApp**  
+Initiate transactions via the API Gateway or connect directly to the Layer 2 Smart Contract.
+
+3️⃣ **API Gateway**  
+Validates requests — handles authentication and rate limiting.
+
+4️⃣ **Service Layer**  
+- *Credit Service:* Checks user credit limits.  
+- *Transaction Service:* Manages transactions, withdrawal queues, and batching.
+
+5️⃣ **MongoDB + Redis**  
+- *MongoDB:* Stores persistent user and transaction data.  
+- *Redis:* Provides fast-access cached data like current credit balances.
+
+6️⃣ **Layer 2 zk-Rollup**  
+- *Prover:* Generates zk-proofs from batched transactions.  
+- *Relayer:* Sends zk-proofs to Layer 1 Ethereum.
+
+7️⃣ **Layer 1 Ethereum**  
+- *Rollup Contract:* Verifies zk-proofs.  
+- *Exit/Withdraw Contract:* Allows users to claim and withdraw tokens.
+
+</details>
+
+---
