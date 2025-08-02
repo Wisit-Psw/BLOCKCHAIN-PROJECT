@@ -4,15 +4,6 @@
 
 ---
 
-## 📚 Table of Contents
-
-- [1. System Structure](#1-🔧-baengpun-system-structure)
-  - [1.1 Components Overview](#🔹-components)
-- [2. Flow Diagram](#2-🔁-baengpun-transaction-flow)
-  - [2.1 Step-by-Step Flow](#🔢-step-by-step-flow)
-
----
-
 ## 1. 🔧 Baengpun System Structure
 
 <details>
